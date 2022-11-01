@@ -96,15 +96,9 @@ public class GameManager : MonoBehaviour
 	// 물질적 다리 생성
 	private void CreateBridge(GameObject SetP1, GameObject SetP2)
 	{
-		float distance = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
 		GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.BridgeCube);
 		dummy.GetComponent<BridgeLook>().SettingP(SetP1,SetP2);
-		dummy.transform.localScale = new Vector3(0.25f, 0.2f, distance * 0.8f);
-		dummy.transform.parent = SetP1.transform;
-		//Debug.Log(Quaternion.Euler(Vector3.Normalize(SetP2.transform.position - SetP1.transform.position)));
-		dummy.transform.position = SetP1.transform.position + (SetP1.transform.position - SetP2.transform.position) * 0.5f;
-		dummy.transform.rotation = Quaternion.LookRotation(SetP2.transform.position);
-		
+		dummy.transform.parent = SetP1.transform;		
 	}
 
 	// 길이 계산. 중립 지형이랑 적,아군의 지형간의 길이 계산

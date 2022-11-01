@@ -11,7 +11,7 @@ public class BridgeLook : MonoBehaviour
     { P1 = p1; P2 = p2; }
     void Update()
     {
-        this.transform.rotation = Quaternion.LookRotation(P2.transform.position);
+        this.transform.LookAt(P2.transform.position);
         this.transform.position = P1.transform.position + (P2.transform.position - P1.transform.position) * 0.5f;
         distance = Vector3.Distance(P1.transform.position, P2.transform.position);
         this.transform.localScale = new Vector3(0.25f, 0.2f, distance * 0.8f);
