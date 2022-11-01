@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
 	// 싱글톤
     private static GameManager instance;
-	
+
 	private void Awake()
 	{
 		if (null == instance)
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
 					CreateBridge(marker.markerObj[enemyP], marker.markerObj[arrBridge[i]]);
 			}
 
-			CreateBridge_For_MidlePoints(bridgelen);
+
 		}
 		else
 		{ Debug.Log("마커를 더 찍어주셈"); }
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
 	{
 		GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.BridgeCube);
 		dummy.GetComponent<BridgeLook>().SettingP(SetP1,SetP2);
-		dummy.transform.parent = stdPoint.transform;		
+		dummy.transform.parent = SetP1.transform;		
 	}
 
 	// 길이 계산. 중립 지형이랑 적,아군의 지형간의 길이 계산
@@ -136,44 +136,6 @@ public class GameManager : MonoBehaviour
 					arrBridge[j] = temp_i;
 				}
 			}
-		}
-	}
-
-	// 중립 지형의 다리생성
-	private void CreateBridge_For_MidlePoints(int bridgeLen)
-	{
-		int maxCreate = 0;
-		GameObject[] arrNone = new GameObject[bridgeLen];
-
-		int k = 0;
-		// 중립 지형을 저장하는 배열 생성
-		for (int i = 0; i < marker.markerLen; i++)
-		{
-			if (marker.markerTeam[i] == TEAM.NONE)
-			{ arrNone[k] = marker.markerObj[i]; k++; }
-		}
-
-		for (int i = 1; i < bridgeLen; i++) { maxCreate += i; }
-
-		GameObject[,] bridgeCreateCases = new GameObject[maxCreate,2];
-		
-		// 모든 다리 생성의 경우의 수를 각각 저장.
-		k = 0;
-		for (int i = 0; i < bridgeLen-1; i++)
-		{
-			for (int j = i + 1; j < bridgeLen; j++)
-			{
-				bridgeCreateCases[k, 0] = arrNone[i];
-				bridgeCreateCases[k, 1] = arrNone[j];
-				k++;
-			}
-		}
-		int fixedCreate = UnityEngine.Random.Range(0,maxCreate);
-
-		for (int i = 0; i < maxCreate; i++) {
-			//if (i == fixedCreate) CreateBridge(bridgeCreateCases[i,0],bridgeCreateCases[i,1]);
-			//else if (7 > UnityEngine.Random.Range(0,10))
-				CreateBridge(bridgeCreateCases[i,0],bridgeCreateCases[i,1]);
 		}
 	}
 }
