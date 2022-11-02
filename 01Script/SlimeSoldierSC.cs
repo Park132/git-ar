@@ -22,7 +22,7 @@ public class SlimeSoldierSC : Slime_Stat
 		nav.destination = order.Destination_Point.transform.position;
 	}
 
-	protected override void SlimeScaleChange()
+	public override void SlimeScaleChange()
 	{
 		base.SlimeScaleChange();
 		box.size = this.transform.localScale * 0.5f;
@@ -37,6 +37,7 @@ public class SlimeSoldierSC : Slime_Stat
 		nav.destination = order.Destination_Point.transform.position;
 		nav.speed = order.Speed;
 		this.Attack = order.AttackDamage;
+		this.transform.LookAt(order.Destination_Point.transform.position);
 	}
 
 	public override IEnumerator Damaged(int damage)
@@ -57,8 +58,17 @@ public class SlimeSoldierSC : Slime_Stat
 		if (other.transform.gameObject == order.Destination_Point)
 		{
 			SlimeBaseSC desSB = order.Destination_Point.GetComponent<SlimeBaseSC>();
-			desSB.Damage_Start(this.Attack);
-			Destroy(this.gameObject);
+			if (desSB.state != order.team)
+			{
+				desSB.Damage_Start(this.Attack);
+				Destroy(this.gameObject);
+			}
+			else
+			{
+				desSB.Health += this.Attack;
+				desSB.SlimeScaleChange();
+				Destroy(this.gameObject);
+			}
 		}
 	}
 }

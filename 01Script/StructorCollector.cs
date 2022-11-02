@@ -7,6 +7,8 @@ using System;
 
 public enum TEAM
 { PLAYER, ENEMY, NONE }
+public enum GAMESTATE
+{ READY, START, PAUSE }
 public class StructorCollector : MonoBehaviour
 {
     [Serializable] public struct SoldierSetting

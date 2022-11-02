@@ -32,7 +32,7 @@ public class Click_ctrl : MonoBehaviour
 			return instance; 
 		}
 	}
-	//				//////
+	////////
 
 	private void Start()
 	{
@@ -55,19 +55,23 @@ public class Click_ctrl : MonoBehaviour
 			{
 				if (hit.transform.CompareTag("SlimeBase"))
 				{
-					
+
 					GameObject hit_object = hit.transform.gameObject;
-					Debug.Log(hit_object.name);
 					//µð¹ö±ë¿ë
 					if (Input.GetMouseButtonDown(0))
 					{
-						SetClickPoint(hit_object);
+						if (GameManager.Instance.gameState == GAMESTATE.START)
+						{
+							SetClickPoint(hit_object);
 
-						//AddOutline(hit_object);
-						//Debug.Log(hit_object.name); hit_object.SendMessage("Damage_Start", 1, SendMessageOptions.DontRequireReceiver);
-						//SetDestination(hit_object);
+							//AddOutline(hit_object);
+							//Debug.Log(hit_object.name); hit_object.SendMessage("Damage_Start", 1, SendMessageOptions.DontRequireReceiver);
+							//SetDestination(hit_object);
+						}
 					}
 				}
+				else
+				{ des.SetP1 = null; des.SetP2 = null; }
 			}
 		}
 #endif
@@ -116,6 +120,7 @@ public class Click_ctrl : MonoBehaviour
 			
 			dummy.transform.parent = stdPoint.transform;
 			dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.PLAYER);
+			des.SetP1 = null; des.SetP2 = null;
 		}
 	}
 

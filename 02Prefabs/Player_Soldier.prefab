@@ -166,10 +166,9 @@ GameObject:
   - component: {fileID: 2144636584519402439}
   - component: {fileID: 2144636584519402437}
   - component: {fileID: 1472474325766854916}
-  - component: {fileID: 8618597872524295294}
   m_Layer: 0
-  m_Name: Slime_01
-  m_TagString: Untagged
+  m_Name: Player_Soldier
+  m_TagString: Slime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -277,19 +276,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &8618597872524295294
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4669415005380806261}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2
-  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &5728503075335211358
 GameObject:
   m_ObjectHideFlags: 0

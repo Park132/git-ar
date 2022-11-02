@@ -29,7 +29,7 @@ public class Slime_Stat : MonoBehaviour
 		{ colors[i] = rds[i].material.color; }
 	}
 
-	protected void Start()
+	protected virtual void Start()
 	{
 		SlimeScaleChange();
 	}
@@ -45,9 +45,9 @@ public class Slime_Stat : MonoBehaviour
 	}
 
 	// 슬라임의 최대 최소 크기 제한
-	protected virtual void SlimeScaleChange()
+	public virtual void SlimeScaleChange()
 	{
-		this.transform.localScale = Vector3.one * (Mathf.Max(0.5f, Mathf.Min(Health * 0.05f, 3)));		
+		this.transform.localScale = Vector3.one * (Mathf.Max(0.6f, Mathf.Min(Health * 0.03f, 1.5f)));
 	}
 
 	// 데미지를 받을 시 약간의 붉은색 이후 돌아옴

@@ -11,6 +11,8 @@ public class SlimeBridge : MonoBehaviour
     private float DelayAttack;
     private bool once;
 
+    public IEnumerator SpawnIE;
+
 	private void Start()
 	{
         once = false; DelayAttack = 1.5f;
@@ -26,23 +28,33 @@ public class SlimeBridge : MonoBehaviour
             sordierOrder.Destination_Point = des.SetP2;
             sordierOrder.team = settingT;
             sordierOrder.AttackDamage = 1;
-            sordierOrder.Speed = 0.5f;
+            sordierOrder.Speed = 1f;
 
             if (ReferenceEquals(des.SetP1, null) || ReferenceEquals(des.SetP2, null))
                 Destroy(this.gameObject);
             SPB = sordierOrder.Start_Point.GetComponent<SlimeBaseSC>();
             DPB = sordierOrder.Start_Point.GetComponent<SlimeBaseSC>();
-            StartCoroutine(SpawnSoldier());
+            SpawnIE = SpawnSoldier();
+            StartCoroutine(SpawnIE);
         }
     }
 
     private IEnumerator SpawnSoldier()
     {
-        yield return new WaitForSeconds(DelayAttack);
-        SPB.Health--;
-        GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.Prefabs[0]);
-        dummy.transform.parent = this.transform;
-        dummy.GetComponent<SlimeSoldierSC>().Setting(sordierOrder);
-        StartCoroutine(SpawnSoldier());
+        while (true)
+        {
+            yield return new WaitForSeconds(DelayAttack);
+            if (SPB.Health > 5 && GameManager.Instance.gameState == GAMESTATE.START)
+            {
+                SPB.Health--;
+                SPB.SlimeScaleChange();
+                GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.Prefabs[0]);
+                dummy.transform.parent = this.transform;
+                dummy.transform.position = sordierOrder.Start_Point.transform.position;
+                dummy.GetComponent<SlimeSoldierSC>().Setting(sordierOrder);
+            }
+        }
     }
+
+    public void StopSpawn() { StopCoroutine(SpawnIE); }
 }
