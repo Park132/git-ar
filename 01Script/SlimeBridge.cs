@@ -28,7 +28,7 @@ public class SlimeBridge : MonoBehaviour
             sordierOrder.Destination_Point = des.SetP2;
             sordierOrder.team = settingT;
             sordierOrder.AttackDamage = 1;
-            sordierOrder.Speed = 1f;
+            sordierOrder.Speed = 0.01f;
 
             if (ReferenceEquals(des.SetP1, null) || ReferenceEquals(des.SetP2, null))
                 Destroy(this.gameObject);

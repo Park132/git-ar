@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class SlimeBaseSC : Slime_Stat
 {
-    public bool Clicked;
+    public PANSTATE clickState;
 	public GameObject[] bases;
 	private TEAM finalAttack;
 	private bool canChanged = false;
 	private IEnumerator recharging;
+	public MeshRenderer Pan;
+	private Color32[] arrColor;
+	
 
 	protected override void Start()
 	{
@@ -16,6 +19,11 @@ public class SlimeBaseSC : Slime_Stat
 		if (this.state == TEAM.NONE) canChanged = true;
 		recharging = ReChargeSlime();
 		StartCoroutine(recharging);
+		
+		arrColor = new Color32[] { new Color32(43, 97, 19, 255),
+		new Color32(102, 188, 66, 255),new Color32(50, 152, 186, 255)
+		,new Color(210, 198, 54, 255)};
+		this.ChangeState(PANSTATE.UNCLICKED);
 	}
 
 	private IEnumerator ReChargeSlime()
@@ -29,6 +37,13 @@ public class SlimeBaseSC : Slime_Stat
 				this.SlimeScaleChange();
 			}
 		}
+	}
+
+	public void ChangeState(PANSTATE s)
+	{
+		if (s != PANSTATE.NONE)
+		{ this.clickState = s; }
+		Pan.material.color = arrColor[(int)clickState];
 	}
 
 	// 마지막으로 공격을 한 슬라임의 팀으로 변경. 초기 체력 10 지급.

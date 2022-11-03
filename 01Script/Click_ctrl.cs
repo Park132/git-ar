@@ -37,7 +37,7 @@ public class Click_ctrl : MonoBehaviour
 	private void Start()
 	{
 		// outline Material을 생성
-		outline = new Material(Shader.Find("Mingyu/Outline"));
+		//outline = new Material(Shader.Find("Mingyu/Outline"));
 		stdPoint = GameObject.FindGameObjectWithTag("StandardPoint");
 
 		des.SetP1 = null; des.SetP2 = null;
@@ -71,7 +71,19 @@ public class Click_ctrl : MonoBehaviour
 					}
 				}
 				else
-				{ des.SetP1 = null; des.SetP2 = null; }
+				{
+					if (!ReferenceEquals(des.SetP1, null))
+					{
+						des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED);
+						BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PANSTATE.UNCLICKED);
+						des.SetP1 = null;
+					}
+					if (!ReferenceEquals(des.SetP2, null))
+					{
+						des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED);
+						des.SetP2 = null;
+					}
+				}
 			}
 		}
 #endif
@@ -83,44 +95,68 @@ public class Click_ctrl : MonoBehaviour
 
 		// 기지의 클릭 횟수를 확인.
 		// 이 후 오브젝트를 저장 혹은 삭제
-		if (!sbSC.Clicked)	// 클릭이 되지 않은 기지
+		if (sbSC.clickState == PANSTATE.UNCLICKED || sbSC.clickState == PANSTATE.CANCLICK)	// 클릭이 되지 않은 기지
 		{
 			if (ReferenceEquals(des.SetP1, null))	// 출발 지점 적용
 			{
 				// 출발 지점 즉 플레이어의 공격이 시작되는 지점은 무조건 플레이어
 				if (sbSC.state == TEAM.PLAYER)
-				{ des.SetP1 = obj; sbSC.Clicked = true; }
+				{ des.SetP1 = obj; sbSC.ChangeState(PANSTATE.CLICKED);
+					BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PANSTATE.CANCLICK);
+				}
 			}
 			else // 출발 지점이 선택이 됨. 즉 공격 지점 
 			{
 				if (!ReferenceEquals(des.SetP2, null)) // SetP2에 지정한 적이 있는 경우 삭제
-				{ des.SetP2.GetComponent<SlimeBaseSC>().Clicked = false; }
-				des.SetP2 = obj; sbSC.Clicked = true;
+				{ des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED); }
+				des.SetP2 = obj; sbSC.ChangeState(PANSTATE.CLICKED);
 				OrderAttack();
-				
 			}
 		}
 		else
 		{
 			if (ReferenceEquals(obj, des.SetP1))
-			{ des.SetP1 = null; }
+			{
+				BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PANSTATE.UNCLICKED);
+				des.SetP1 = null;
+				if (!ReferenceEquals(null, des.SetP2))
+				{ des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED);
+					des.SetP2 = null;
+				}
+				
+			}
 			else if (ReferenceEquals(obj, des.SetP2))
 			{ des.SetP2 = null; }
-			sbSC.Clicked = false;
+			sbSC.ChangeState(PANSTATE.UNCLICKED);
 		}
 	}
 
 	// 지점 공격. 체력을 1 깍으면서 공격
 	private void OrderAttack()
 	{
-		if (ReferenceEquals(null, GameObject.Find(des.SetP1.name + "_bridge_" + des.SetP2.name)))
+		BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PANSTATE.UNCLICKED);
+		if (BridgeManager.Instance.CheckBridge(des.SetP1.transform.parent.gameObject, des.SetP2.transform.parent.gameObject))
 		{
-			GameObject dummy = GameObject.Instantiate(bridge);
-			dummy.name = des.SetP1.name + "_bridge_" + des.SetP2.name;
-			
-			dummy.transform.parent = stdPoint.transform;
-			dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.PLAYER);
-			des.SetP1 = null; des.SetP2 = null;
+			if (ReferenceEquals(null, GameObject.Find(des.SetP1.name + "_attack_" + des.SetP2.name)))
+			{
+				Debug.Log("none attack obj");
+				GameObject dummy = GameObject.Instantiate(bridge);
+				dummy.name = des.SetP1.name + "_attack_" + des.SetP2.name;
+
+				dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+				dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.PLAYER);
+			}
+		}
+		if (!ReferenceEquals(des.SetP1, null))
+		{
+			des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED);
+			BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PANSTATE.UNCLICKED);
+			des.SetP1 = null;
+		}
+		if (!ReferenceEquals(des.SetP2, null))
+		{
+			des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PANSTATE.UNCLICKED);
+			des.SetP2 = null;
 		}
 	}
 

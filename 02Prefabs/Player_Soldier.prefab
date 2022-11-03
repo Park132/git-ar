@@ -164,7 +164,6 @@ GameObject:
   - component: {fileID: 2144636584519402436}
   - component: {fileID: 2144636584519402443}
   - component: {fileID: 2144636584519402439}
-  - component: {fileID: 2144636584519402437}
   - component: {fileID: 1472474325766854916}
   m_Layer: 0
   m_Name: Player_Soldier
@@ -238,28 +237,7 @@ MonoBehaviour:
   Health: 1
   Attack: 1
   state: 0
---- !u!195 &2144636584519402437
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4669415005380806261}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.4
-  m_Speed: 1
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  speed: 0
 --- !u!54 &1472474325766854916
 Rigidbody:
   m_ObjectHideFlags: 0

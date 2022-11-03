@@ -6,6 +6,8 @@ using System;
 public class GameManager : MonoBehaviour
 {
 	public GameObject stdPoint;
+	public GameObject bridgeObjs;
+	public GameObject attackObjs;
 	public GAMESTATE gameState;
 	
 	public StructorCollector.Markers marker;
@@ -13,7 +15,6 @@ public class GameManager : MonoBehaviour
 
 	// ΩÃ±€≈Ê /////
     private static GameManager instance;
-	
 	private void Awake()
 	{
 		if (null == instance)
@@ -25,7 +26,6 @@ public class GameManager : MonoBehaviour
 		{ Destroy(this.gameObject); }
 		gameState = GAMESTATE.READY;
 	}
-
 	public static GameManager Instance { 
 		get { return instance; }
 	}

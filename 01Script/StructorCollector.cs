@@ -9,6 +9,8 @@ public enum TEAM
 { PLAYER, ENEMY, NONE }
 public enum GAMESTATE
 { READY, START, PAUSE }
+public enum PANSTATE
+{ UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, NONE }
 public class StructorCollector : MonoBehaviour
 {
     [Serializable] public struct SoldierSetting
