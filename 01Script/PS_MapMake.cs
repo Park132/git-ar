@@ -5,6 +5,7 @@ using UnityEngine;
 public class PS_MapMake : MonoBehaviour
 {
     public GameObject wall; // 벽으로 생성될 오브젝트, 추후의 배열로 선언될 예정
+    public GameObject centerm1;
     public GameObject wall_marker1;
     public GameObject wall_marker2;
 
@@ -18,6 +19,8 @@ public class PS_MapMake : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MapInit(c1, c2);
+        /*
         Vector3 center_pos = new Vector3((c2.position.x + c1.position.x) / 2, 0, (c2.position.z + c1.position.z) / 2); // 타원의 중점
 
         Debug.Log("center : " + center_pos);
@@ -48,6 +51,7 @@ public class PS_MapMake : MonoBehaviour
             Instantiate(wall, wall_marker1.transform.position, wall_marker1.transform.rotation);
             Instantiate(wall, wall_marker2.transform.position, wall_marker2.transform.rotation);
         }
+        */
     }
     //-------------------------
     // https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=whitejopd&logNo=70167518161
@@ -66,5 +70,45 @@ public class PS_MapMake : MonoBehaviour
     // 1안의 문제점을 고칠 수 있을 것 같음
     // 
     //----------------------2 안
+    void MapInit(Transform v1, Transform v2)
+    {
+        centerm1.transform.position = new Vector3((v2.position.x + v1.position.x) / 2, (v2.position.y + v1.position.y) / 2, (v2.position.z + v1.position.z) / 2);
+        Debug.Log("Position of Center : " + centerm1.transform.position);
 
+        //=========================================================================================
+        /*                                                                                        =
+         타원의 방정식                                                                            =
+        (x-x0)^2 / a^2 + (y-y0)^2 / b^2 = 1                                                       =
+         */                                                                                       
+        //=========================================================================================
+
+        int A1 = (int)(-a + centerm1.transform.position.x); // 제일 왼쪽 정점
+        int A2 = (int)(a + centerm1.transform.position.x); // 제일 오른쪽 정점
+
+        int B1 = (int)(-b + centerm1.transform.position.z); // 제일 아래쪽 정점
+        int B2 = (int)(b + centerm1.transform.position.z); // 제일 위쪽 정점
+
+        //=========================================================================================
+        // A1에서 A2까지의 x값들을 반복문으로 돌린다.
+        // 이때 x값에 의한 결과인 y값이 2개(양수, 음수)가 나올 것이고 그곳에 오브젝트를 생성할 것임
+        //=========================================================================================
+
+        // y값을 구해내는 방정식 1
+        for(int i = A1; i<= A2; i++)
+        {
+            float y1 = Mathf.Sqrt((b * b) - ((b * b) / (a * a) + (b * b) % (a * a)) * (i * i));
+            Debug.Log("i : " + i);
+            Debug.Log("y1 : " + y1);
+            Debug.Log("y2 : " + -y1);
+        }
+    }
+
+    void MapInit2()
+    {
+        // 이 방법은 타원으로 맵이 그려진 것처럼 보여주는 방법임
+        // 타원 방정식은 실제로 쓰지 않지만, 타원방정식을 이용한 것처럼 보여줌
+        // 아 ㅋㅋ 그냥 그렇게 보여지는 것처럼 잔머리 굴리자구요 ㅋㅋ
+        
+        // 중점을 포인트로 잡고 회전하면서 위치를 리턴, 회전할 때마다 다른 회전각과 다른 길이를 줌으로써 타원을 그려보게 하기
+    }
 }
