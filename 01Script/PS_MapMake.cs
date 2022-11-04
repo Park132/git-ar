@@ -8,6 +8,7 @@ public class PS_MapMake : MonoBehaviour
     public GameObject centerm1;
     public GameObject wall_marker1;
     public GameObject wall_marker2;
+    public GameObject wall_marker3;
 
     public Transform c1; // 정점 1
     public Transform c2; // 정점 2
@@ -19,7 +20,8 @@ public class PS_MapMake : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MapInit(c1, c2);
+        //MapInit(c1, c2);
+        MapInit2();
         /*
         Vector3 center_pos = new Vector3((c2.position.x + c1.position.x) / 2, 0, (c2.position.z + c1.position.z) / 2); // 타원의 중점
 
@@ -110,5 +112,18 @@ public class PS_MapMake : MonoBehaviour
         // 아 ㅋㅋ 그냥 그렇게 보여지는 것처럼 잔머리 굴리자구요 ㅋㅋ
         
         // 중점을 포인트로 잡고 회전하면서 위치를 리턴, 회전할 때마다 다른 회전각과 다른 길이를 줌으로써 타원을 그려보게 하기
+        for(int i = -1; i <= 1; i+=2)
+        {
+            for (int j = -1; j <= 1; j += 2)
+            {
+                wall_marker1.transform.position = new Vector3(i * 2, 0, j * 2 * Mathf.Sqrt(3));
+                wall_marker2.transform.position = new Vector3(i * (5 / 2 + 5 % 2), 0, j * (5 / 2 + 5 % 2) * Mathf.Sqrt(2));
+                wall_marker3.transform.position = new Vector3(i * 3 * Mathf.Sqrt(3), 0, j * 3);
+
+                Instantiate(wall, wall_marker1.transform.position, wall_marker1.transform.rotation);
+                Instantiate(wall, wall_marker2.transform.position, wall_marker2.transform.rotation);
+                Instantiate(wall, wall_marker3.transform.position, wall_marker3.transform.rotation);
+            }
+        }
     }
 }
