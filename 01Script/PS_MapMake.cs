@@ -6,15 +6,11 @@ public class PS_MapMake : MonoBehaviour
 {
     public GameObject wall; // 벽으로 생성될 오브젝트, 추후의 배열로 선언될 예정
     public GameObject centerm1;
+
     public GameObject wall_marker1;
-    public GameObject wall_marker2;
-    public GameObject wall_marker3;
 
     public Transform c1; // 정점 1
     public Transform c2; // 정점 2
-    // public Transform center;
-    public int a = 7; // a의 가중치 x축
-    public int b = 4; // b의 가중치 z축
 
 
     // Start is called before the first frame update
@@ -23,68 +19,12 @@ public class PS_MapMake : MonoBehaviour
         MapInit3(c1, c2, 10, 7);
     }
 
-    void MapInit(Transform v1, Transform v2)
-    {
-        centerm1.transform.position = new Vector3((v2.position.x + v1.position.x) / 2, (v2.position.y + v1.position.y) / 2, (v2.position.z + v1.position.z) / 2);
-        Debug.Log("Position of Center : " + centerm1.transform.position);
-
-        //=========================================================================================
-        /*                                                                                        =
-         타원의 방정식                                                                            =
-        (x-x0)^2 / a^2 + (y-y0)^2 / b^2 = 1                                                       =
-         */                                                                                       
-        //=========================================================================================
-
-        int A1 = (int)(-a + centerm1.transform.position.x); // 제일 왼쪽 정점
-        int A2 = (int)(a + centerm1.transform.position.x); // 제일 오른쪽 정점
-
-        int B1 = (int)(-b + centerm1.transform.position.z); // 제일 아래쪽 정점
-        int B2 = (int)(b + centerm1.transform.position.z); // 제일 위쪽 정점
-
-        //=========================================================================================
-        // A1에서 A2까지의 x값들을 반복문으로 돌린다.
-        // 이때 x값에 의한 결과인 y값이 2개(양수, 음수)가 나올 것이고 그곳에 오브젝트를 생성할 것임
-        //=========================================================================================
-
-        // y값을 구해내는 방정식 1
-        for(int i = A1; i<= A2; i++)
-        {
-            float y1 = Mathf.Sqrt((b * b) - ((b * b) / (a * a) + (b * b) % (a * a)) * (i * i));
-            Debug.Log("i : " + i);
-            Debug.Log("y1 : " + y1);
-            Debug.Log("y2 : " + -y1);
-        }
-    } // 1안
-
-    void MapInit2()
-    {
-        // 이 방법은 타원으로 맵이 그려진 것처럼 보여주는 방법임
-        // 타원 방정식은 실제로 쓰지 않지만, 타원방정식을 이용한 것처럼 보여줌
-        // 아 ㅋㅋ 그냥 그렇게 보여지는 것처럼 잔머리 굴리자구요 ㅋㅋ
-        
-        // 중점을 포인트로 잡고 회전하면서 위치를 리턴, 회전할 때마다 다른 회전각과 다른 길이를 줌으로써 타원을 그려보게 하기
-        for(int i = -1; i <= 1; i+=2)
-        {
-            for (int j = -1; j <= 1; j += 2)
-            {
-                wall_marker1.transform.position = new Vector3(i * 2, 0, j * 2 * Mathf.Sqrt(3));
-                wall_marker2.transform.position = new Vector3(i * (5 / 2 + 5 % 2), 0, j * (5 / 2 + 5 % 2) * Mathf.Sqrt(2));
-                wall_marker3.transform.position = new Vector3(i * 3 * Mathf.Sqrt(3), 0, j * 3);
-
-                Instantiate(wall, wall_marker1.transform.position, wall_marker1.transform.rotation);
-                Instantiate(wall, wall_marker2.transform.position, wall_marker2.transform.rotation);
-                Instantiate(wall, wall_marker3.transform.position, wall_marker3.transform.rotation);
-            }
-        }
-    } // 2안
-
     void MapInit3(Transform o1, Transform o2, float a, float b) // 3안
     {
         // 물체1의 위치, 물체2의 위치, x축 가중치, z축 가중치
         // 삼각함수로 구현해내는 방안
         
         centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, 0, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
-
 
         for(int i = 0; i<= 360; i+=20) //19개 생성
         {
