@@ -12,6 +12,8 @@ public class SlimeSoldierSC : Slime_Stat
 	private GameObject destination = null;
 	private Vector3 moveVec;
 
+	// public ParticleSystem hit_effect; // PS_ 베이스 또는 병사와 부딛혔을 때, 발생하는 이펙트
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -81,4 +83,9 @@ public class SlimeSoldierSC : Slime_Stat
 			}
 		}
 	}
+
+	void Effect_hit() // PS_부딛혔을 때, 이펙트를 발생시킬 함수
+    {
+		// Instantiate(hit_effect, this.transform.position, this.transform.rotation);
+    }
 }
