@@ -34,20 +34,13 @@ public class Slime_Stat : MonoBehaviour
 		SlimeScaleChange();
 	}
 
-	protected virtual void Update()
-	{
-		// 디버깅용
-		if (Input.GetKeyDown("a"))
-		{
-			Damage_Start(1);
-
-		}
-	}
 
 	// 슬라임의 최대 최소 크기 제한
 	public virtual void SlimeScaleChange()
 	{
-		this.transform.localScale = Vector3.one * (Mathf.Max(0.6f, Mathf.Min(Health * 0.03f, 1.5f)));
+		float sizeDummy = (Mathf.Max(3f, Mathf.Min(Health * 0.15f, 7.5f)));
+		this.transform.localScale = Vector3.one * sizeDummy;
+
 	}
 
 	// 데미지를 받을 시 약간의 붉은색 이후 돌아옴

@@ -14,7 +14,7 @@ public class BridgeLook : MonoBehaviour
         this.transform.LookAt(P2.transform.position);
         this.transform.position = P1.transform.position + (P2.transform.position - P1.transform.position) * 0.5f;
         distance = Vector3.Distance(P1.transform.position, P2.transform.position);
-        this.transform.localScale = new Vector3(0.25f, 0.1f, distance - 0.8f);
+        this.transform.localScale = new Vector3(1.25f, 0.5f, distance - 4f);
 
     }
 }

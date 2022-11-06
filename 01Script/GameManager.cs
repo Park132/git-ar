@@ -5,10 +5,12 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-	public GameObject stdPoint;
+	public GameObject stdPoint, enePoint;
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
+	public List<GameObject> arrNone;
 	public GAMESTATE gameState;
+	public float distanceEP = 0;
 	
 	public StructorCollector.Markers marker;
 
@@ -34,12 +36,23 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		stdPoint = GameObject.FindGameObjectWithTag("StandardPoint");
+		enePoint = GameObject.FindGameObjectWithTag("EnemyPoint");
 		marker.markerObj = new List<GameObject>();
 		marker.markerExist = new List<bool>();
 		marker.markerTeam = new List<TEAM>();
+		arrNone = new List<GameObject>();
 		marker.markerLen = 0;
 	}
 
+	private void Update()
+	{
+		if (gameState == GAMESTATE.START)
+		{
+			distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
+		}
+	}
+
+	// Start BUtton으로 버튼 클릭 시 다리 생성 및 게임 조작이 가능.
 	public void StartButton()
 	{
 		int playerP = -1, enemyP = -1;
@@ -57,6 +70,13 @@ public class GameManager : MonoBehaviour
 		// 아군 적군 베이스캠프 확인 완료시
 		if (playerP != -1 && enemyP != -1)
 		{
+			arrNone.Clear();
+			for (int i = 0; i < marker.markerLen; i++)
+			{
+				if (marker.markerTeam[i] == TEAM.NONE && marker.markerExist[i])
+				{ arrNone.Add(marker.markerObj[i]); }
+			}
+
 			BridgeManager.Instance.BridgeCalc(playerP,enemyP);
 
 			gameState = GAMESTATE.START;

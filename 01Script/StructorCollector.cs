@@ -9,10 +9,12 @@ public enum TEAM
 { PLAYER, ENEMY, NONE }
 public enum GAMESTATE
 { READY, START, PAUSE }
-public enum PANSTATE
-{ UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, NONE }
+public enum PLATESTATE
+{ UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, CANCLE = 4 }
 public class StructorCollector : MonoBehaviour
 {
+    public const float BASESPEED = 0.025f;
+    public const float BASEDELAYATTACK = 1.5f;
     [Serializable] public struct SoldierSetting
     {
         public GameObject Start_Point, Destination_Point;

@@ -6,7 +6,7 @@ public class SlimeBridge : MonoBehaviour
 {
     
     
-    private StructorCollector.SoldierSetting sordierOrder;
+    private StructorCollector.SoldierSetting soldierOrder;
     private SlimeBaseSC SPB, DPB;
     private float DelayAttack;
     private bool once;
@@ -15,7 +15,7 @@ public class SlimeBridge : MonoBehaviour
 
 	private void Start()
 	{
-        once = false; DelayAttack = 1.5f;
+        once = false; DelayAttack = StructorCollector.BASEDELAYATTACK;
 	}
 	// 구조체를 받아온 후 초기값 세팅.
 	public void SetSD(StructorCollector.DestinationSet des, TEAM settingT)
@@ -24,16 +24,16 @@ public class SlimeBridge : MonoBehaviour
         {
             once = true;
             
-            sordierOrder.Start_Point = des.SetP1;
-            sordierOrder.Destination_Point = des.SetP2;
-            sordierOrder.team = settingT;
-            sordierOrder.AttackDamage = 1;
-            sordierOrder.Speed = 0.01f;
+            soldierOrder.Start_Point = des.SetP1;
+            soldierOrder.Destination_Point = des.SetP2;
+            soldierOrder.team = settingT;
+            soldierOrder.AttackDamage = 1;
+            soldierOrder.Speed = StructorCollector.BASESPEED;
 
             if (ReferenceEquals(des.SetP1, null) || ReferenceEquals(des.SetP2, null))
                 Destroy(this.gameObject);
-            SPB = sordierOrder.Start_Point.GetComponent<SlimeBaseSC>();
-            DPB = sordierOrder.Start_Point.GetComponent<SlimeBaseSC>();
+            SPB = soldierOrder.Start_Point.GetComponent<SlimeBaseSC>();
+            DPB = soldierOrder.Start_Point.GetComponent<SlimeBaseSC>();
             SpawnIE = SpawnSoldier();
             StartCoroutine(SpawnIE);
         }
@@ -46,15 +46,27 @@ public class SlimeBridge : MonoBehaviour
             yield return new WaitForSeconds(DelayAttack);
             if (SPB.Health > 5 && GameManager.Instance.gameState == GAMESTATE.START)
             {
-                SPB.Health--;
+                SPB.Health-=soldierOrder.AttackDamage;
                 SPB.SlimeScaleChange();
                 GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.Prefabs[0]);
                 dummy.transform.parent = this.transform;
-                dummy.transform.position = sordierOrder.Start_Point.transform.position;
-                dummy.GetComponent<SlimeSoldierSC>().Setting(sordierOrder);
+                dummy.transform.position = soldierOrder.Start_Point.transform.position;
+                dummy.GetComponent<SlimeSoldierSC>().Setting(soldierOrder);
             }
         }
     }
 
-    public void StopSpawn() { StopCoroutine(SpawnIE); }
+    public void SettingAtkSpeedDelay(int atk, float speed, float delay)
+    {
+        soldierOrder.Speed = speed;
+        soldierOrder.AttackDamage = atk;
+        this.DelayAttack = delay;
+    }
+
+    public void CancleAttack() {
+        StopCoroutine(SpawnIE);
+        for (int i = 0; i < this.transform.childCount; i++)
+        {this.transform.GetChild(0).parent = GameManager.Instance.attackObjs.transform;}
+        Destroy(this.gameObject, 1f);
+    }
 }

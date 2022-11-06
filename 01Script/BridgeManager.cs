@@ -42,6 +42,7 @@ public class BridgeManager : MonoBehaviour
 	public void BridgeCalc(int playerP, int enemyP)
 	{
 		bridgeArr[0].Clear(); bridgeArr[1].Clear();
+		bridgeCount = 0;
 		for (int i = 0; i < GameManager.Instance.bridgeObjs.transform.childCount; i++)
 			Destroy(GameManager.Instance.bridgeObjs.transform.GetChild(i).gameObject);
 		int PEbridgelen = 0;
@@ -123,28 +124,28 @@ public class BridgeManager : MonoBehaviour
 	private void CreateBridge_For_MidlePoints(int bridgeLen)
 	{
 		int maxCreate = 0;
-		GameObject[] arrNone = new GameObject[bridgeLen];
-
+		//GameObject[] arrNone = new GameObject[bridgeLen];
+		/*
 		int k = 0;
 		// 중립 지형을 저장하는 배열 생성
 		for (int i = 0; i < GameManager.Instance.marker.markerLen; i++)
 		{
 			if (GameManager.Instance.marker.markerTeam[i] == TEAM.NONE && GameManager.Instance.marker.markerExist[i])
 			{ arrNone[k] = GameManager.Instance.marker.markerObj[i]; k++; }
-		}
+		}*/
 
 		for (int i = 1; i < bridgeLen; i++) { maxCreate += i; }
 
 		GameObject[,] bridgeCreateCases = new GameObject[maxCreate, 2];
 
 		// 모든 다리 생성의 경우의 수를 각각 저장.
-		k = 0;
+		int k = 0;
 		for (int i = 0; i < bridgeLen - 1; i++)
 		{
 			for (int j = i + 1; j < bridgeLen; j++)
 			{
-				bridgeCreateCases[k, 0] = arrNone[i];
-				bridgeCreateCases[k, 1] = arrNone[j];
+				bridgeCreateCases[k, 0] = GameManager.Instance.arrNone[i];
+				bridgeCreateCases[k, 1] = GameManager.Instance.arrNone[j];
 				k++;
 			}
 		}
@@ -170,14 +171,45 @@ public class BridgeManager : MonoBehaviour
 		}
 		return false;
 	}
-	public void ConnectedPanChange(GameObject P1, PANSTATE s)
+
+	// 클릭 지점과 연결된 지점들의 색을 변경하는 구문
+	public void ConnectedPanChange(GameObject P1, PLATESTATE s)
 	{
 		for (int i = 0; i < bridgeCount; i++)
 		{
-			if (bridgeArr[0][i].Equals(P1))
-				bridgeArr[1][i].GetComponentInChildren<SlimeBaseSC>().ChangeState(s);
-			if (bridgeArr[1][i].Equals(P1))
-				bridgeArr[0][i].GetComponentInChildren<SlimeBaseSC>().ChangeState(s);
+			GameObject dummy = CheckConnect(P1, i);
+			if (!ReferenceEquals(dummy,null))
+				dummy.GetComponentInChildren<SlimeBaseSC>().ChangeState(s);
 		}
 	}
+
+	public void ConnectedPanChange(GameObject P1, PLATESTATE s, bool a)
+	{
+		ConnectedPanChange(P1, s);
+		if (a)
+		{
+			for (int i = 0; i < bridgeCount; i++)
+			{
+				GameObject dummy = CheckConnect(P1, i);
+				if (!ReferenceEquals(dummy, null))
+				{
+					string name1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject.name;
+					string name2 = dummy.GetComponentInChildren<SlimeBaseSC>().gameObject.name;
+					if (GameManager.Instance.attackObjs.transform.Find(name1 + "_attack_" + name2))
+						dummy.GetComponentInChildren<SlimeBaseSC>().ChangeState(PLATESTATE.CANCLE);
+					else
+						dummy.GetComponentInChildren<SlimeBaseSC>().ChangeState(s);
+				}
+			}
+		}
+	}
+	private GameObject CheckConnect(GameObject P1, int i)
+	{
+		if (bridgeArr[0][i].Equals(P1))
+			return bridgeArr[1][i];
+		else if (bridgeArr[1][i].Equals(P1))
+			return bridgeArr[0][i];
+		return null;
+	}
+
 }

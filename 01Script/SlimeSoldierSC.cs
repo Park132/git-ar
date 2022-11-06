@@ -8,7 +8,6 @@ public class SlimeSoldierSC : Slime_Stat
 	//private NavMeshAgent nav;
 	protected Animator anim;
 	private StructorCollector.SoldierSetting order;
-	public float speed;
 	private GameObject destination = null;
 	private Vector3 moveVec;
 
@@ -20,20 +19,20 @@ public class SlimeSoldierSC : Slime_Stat
 		Destroy(this.gameObject, 10f);
 	}
 
-	protected override void Update()
+	protected void Update()
 	{
 		//nav.destination = order.Destination_Point.transform.position;
 		if (!ReferenceEquals(destination, null))
 		{
 			moveVec = (destination.transform.position - this.transform.position).normalized;
-			this.transform.position += moveVec * speed;
+			this.transform.position += moveVec * order.Speed;
 		}
 	}
 
 	public override void SlimeScaleChange()
 	{
 		base.SlimeScaleChange();
-		box.size = this.transform.localScale * 0.5f;
+		box.size = Vector3.one *0.5f;
 		//nav.radius = this.transform.localScale.x * 0.5f;
 	}
 
@@ -45,9 +44,8 @@ public class SlimeSoldierSC : Slime_Stat
 		//nav.destination = order.Destination_Point.transform.position;
 		//nav.speed = order.Speed;
 		this.destination = order.Destination_Point;
-		this.speed = order.Speed;
-		this.Attack = order.AttackDamage;
 		this.transform.LookAt(order.Destination_Point.transform.position);
+		Debug.Log(order.Speed);
 	}
 
 	public override IEnumerator Damaged(int damage)
@@ -70,12 +68,12 @@ public class SlimeSoldierSC : Slime_Stat
 			SlimeBaseSC desSB = order.Destination_Point.GetComponent<SlimeBaseSC>();
 			if (desSB.state != order.team)
 			{
-				desSB.Damage_Start(this.Attack);
+				desSB.Damage_Start(order.AttackDamage);
 				Destroy(this.gameObject);
 			}
 			else
 			{
-				desSB.Health += this.Attack;
+				desSB.Health += order.AttackDamage;
 				desSB.SlimeScaleChange();
 				Destroy(this.gameObject);
 			}
