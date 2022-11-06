@@ -31,6 +31,7 @@ public class PS_MapMake : MonoBehaviour
             wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), 0, centerm1.transform.position.z + b*Mathf.Sin(i));
             Instantiate(wall, wall_marker1.transform.position, wall_marker1.transform.rotation);
         }
+        // fetch origin을 위한 그냥 쓴 주석
     }
 
     
