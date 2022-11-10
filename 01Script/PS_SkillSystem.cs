@@ -25,8 +25,22 @@ public class PS_SkillSystem : MonoBehaviour
     public int skill_type = 0;
     public int skill_level = 0;
 
+    private int currentClickType = 0;
+    private int currentClickLevel = 0;
+
+    public GameObject[] skillEffect_prefabs;
+    //0-버프(생산), 1-디버프(생산), 2-버프(이동속도), 3-디버프(이동속도)
+
+    //싱글톤 ///
+    private static PS_SkillSystem instance;
+
     private void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this.gameObject);
+
         skill_storage = new int[] { 0, 0, 0 };
         skill_type_storage = new int[] { 0, 0, 0 };
         skill_level_storage = new int[] { 0, 0, 0 };
@@ -41,6 +55,15 @@ public class PS_SkillSystem : MonoBehaviour
             19, 20, // 경로공격 / skill_type = 6
             21, 22, 23, 24 // 다리잠금
         };
+    }
+
+    public static PS_SkillSystem Instance
+    {
+        get {
+            if (instance != null)
+                return instance;
+            return null;
+        }
     }
 
     void Update()
@@ -61,6 +84,7 @@ public class PS_SkillSystem : MonoBehaviour
             s_btn3.SetActive(false);
     }
 
+    // 스킬 저장 함수
     public void ReadSkillDB(int index)
     {
         for(int i = 0; i<24; i++)
@@ -217,7 +241,68 @@ public class PS_SkillSystem : MonoBehaviour
         Debug.Log("skill_type_storage : " + skill_type_storage[index]);
         Debug.Log("skill_level_storage : " + skill_level_storage[index]);
     }
+
+    //---------------------------스킬 사용 함수
     
+    public void SkillClick(int type, int level)
+    {
+        switch(type)
+        {
+            case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+    }
+
+    public void BuffSkillClick(int type, int level) // 클릭 1번
+    {
+        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+        {
+            SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponent<SlimeBaseSC>();
+            dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
+        }
+        currentClickType = type;
+        currentClickLevel = level;
+    }
+    public void SkillUse() // 클릭 2번
+    {
+        Ray ray;
+        RaycastHit hit;
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        if(Physics.Raycast(ray, out hit))
+        {
+            SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
+            // <----- 여기서 부터 하면 될듯
+        }
+
+        switch (currentClickType)
+        {
+            case 1:// 버프(생산)
+                GameObject dummy_effect1 = Instantiate(skillEffect_prefabs[0], hit.transform.position, hit.transform.rotation); // 이펙트 생성
+                StartCoroutine(PassiveSkill(dummy_effect1)); // 이펙트 생성 후 5초 뒤 삭제
+                break;
+            case 2: // 디버프(생산
+                GameObject dummy_effect2 = Instantiate(skillEffect_prefabs[1], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect2));
+                break;
+            case 3: // 버프 (이동 속도)
+                GameObject dummy_effect3 = Instantiate(skillEffect_prefabs[2], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect3));
+                break;
+            case 4: // 디버프 (이동속도)
+                GameObject dummy_effect4 = Instantiate(skillEffect_prefabs[3], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect4));
+                break;
+        }
+    }
+
     public void OnSkButton1()
     {
         
@@ -233,5 +318,10 @@ public class PS_SkillSystem : MonoBehaviour
 
     }
 
-
+    IEnumerator PassiveSkill(GameObject obj)
+    {
+        yield return new WaitForSecondsRealtime(5f);
+        Destroy(obj.gameObject);
+        StopCoroutine("PassiveSkill");
+    }
 }
