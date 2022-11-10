@@ -6,8 +6,8 @@ public class SlimeBaseSC : Slime_Stat
 {
     public PLATESTATE clickState;
 	public GameObject[] bases;
-	public float rechargeDelay;
-	public int rechargeHP;
+	public float rechargeDelay; // ¼Óµµ
+	public int rechargeHP; // ¾ç
 	private TEAM finalAttack, currentTeam;
 	private bool canChanged = false;
 	private IEnumerator recharging;
