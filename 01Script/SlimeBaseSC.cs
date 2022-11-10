@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SlimeBaseSC : Slime_Stat
 {
+	// 깃허브 테스트ggggg
     public PLATESTATE clickState;
 	public GameObject[] bases;
 	public float rechargeDelay; // 속도
