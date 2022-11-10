@@ -245,7 +245,7 @@ public class PS_SkillSystem : MonoBehaviour
 
     //---------------------------스킬 사용 함수
     
-    public void SkillClick(int type, int level)
+    public void SkillClick(int type, int level) // ??
     {
         switch(type)
         {
@@ -261,7 +261,7 @@ public class PS_SkillSystem : MonoBehaviour
         }
     }
 
-    public void BuffSkillClick(int type, int level) // 클릭 1번
+    public void BuffSkillClick(int type, int level) // 클릭 1번 / 미완성
     {
         for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
         {
@@ -271,18 +271,57 @@ public class PS_SkillSystem : MonoBehaviour
         currentClickType = type;
         currentClickLevel = level;
     }
-    public void SkillUse() // 클릭 2번
+    public void SkillUse() // 클릭 2번 / 미완성
     {
         Ray ray;
         RaycastHit hit;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
+
+        SlimeBaseSC dummy_base;
+
         if(Physics.Raycast(ray, out hit))
         {
-            SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
-            // <----- 여기서 부터 하면 될듯
+            dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
+            
+            if(currentClickType == 1)
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.2f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.0f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 0.8f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 0.6f));
+                        break;
+                }
+            }
+            else if(currentClickType == 2)
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.8f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 2.1f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 2.4f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 3.0f));
+                        break;
+                }
+            }
         }
 
+        // 이펙트 생성
         switch (currentClickType)
         {
             case 1:// 버프(생산)
@@ -302,11 +341,16 @@ public class PS_SkillSystem : MonoBehaviour
                 StartCoroutine(PassiveSkill(dummy_effect4));
                 break;
         }
+        
     }
 
-    public void OnSkButton1()
+    public void OnSkButton1() //아직 미완성
     {
-        
+        BuffSkillClick(skill_type_storage[0], skill_level_storage[0]);
+
+        skill_type_storage[0] = 0;
+        skill_level_storage[0] = 0;
+        skill_storage[0] = 0;
     }
 
     public void OnSkButton2()
@@ -321,8 +365,17 @@ public class PS_SkillSystem : MonoBehaviour
 
     IEnumerator PassiveSkill(GameObject obj)
     {
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(10f);
         Destroy(obj.gameObject);
         StopCoroutine("PassiveSkill");
+    }
+
+    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val)
+    {
+        sc.rechargeDelay = val;
+        yield return new WaitForSecondsRealtime(10f);
+        sc.rechargeDelay = StructorCollector.BASERECHARGEDELAY;
+        StopCoroutine("ApplyingSkill");
+        
     }
 }
