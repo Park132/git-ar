@@ -14,7 +14,9 @@ public class BridgeManager : MonoBehaviour
 	// ΩÃ±€≈Ê /////
 	private static BridgeManager instance;
 	public List<List<GameObject>> bridgeArr;
+	public GameObject bridge_obj;
 	public int bridgeCount;
+	
 	private void Awake()
 	{
 		if (instance == null)

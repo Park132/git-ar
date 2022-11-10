@@ -6,6 +6,7 @@ using System;
 public class GameManager : MonoBehaviour
 {
 	public GameObject stdPoint, enePoint;
+	public SlimeBaseSC stdPointSB, enePointSB;
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour
 	{
 		stdPoint = GameObject.FindGameObjectWithTag("StandardPoint");
 		enePoint = GameObject.FindGameObjectWithTag("EnemyPoint");
+		stdPointSB = stdPoint.GetComponentInChildren<SlimeBaseSC>();
+		enePointSB = enePoint.GetComponentInChildren<SlimeBaseSC>();
 		marker.markerObj = new List<GameObject>();
 		marker.markerExist = new List<bool>();
 		marker.markerTeam = new List<TEAM>();

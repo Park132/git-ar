@@ -66,7 +66,7 @@ public class SlimeBridge : MonoBehaviour
     public void CancleAttack() {
         StopCoroutine(SpawnIE);
         for (int i = 0; i < this.transform.childCount; i++)
-        {this.transform.GetChild(0).parent = GameManager.Instance.attackObjs.transform;}
+        {this.transform.GetChild(i).parent = GameManager.Instance.attackObjs.transform;}
         Destroy(this.gameObject, 1f);
     }
 }

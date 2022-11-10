@@ -19,6 +19,7 @@ public class StructorCollector : MonoBehaviour
 {
     public const float BASESPEED = 0.025f;
     public const float BASEDELAYATTACK = 1.5f;
+    public const float BASERECHARGEDELAY = 1.5f;
     [Serializable] public struct SoldierSetting
     {
         public GameObject Start_Point, Destination_Point;

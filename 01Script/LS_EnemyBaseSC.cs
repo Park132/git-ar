@@ -23,13 +23,14 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	
 	public ENEMYTYPE e_type;
 	private ENEMYCHAR e_char;
-	private int minBaseDestination;
+	private int minAttackCount;
 	private int skills;
 	private int emergencyHP;
 	private float delayThink;
 	private List<GameObject> arrObj;
 	private List<List<GameObject>> attackList;
 	private int attackListCount;
+	private StructorCollector.DestinationSet des;
 
 	private void Start()
 	{
@@ -50,14 +51,14 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		switch (e_type)
 		{
 			case ENEMYTYPE.TUTORIAL:
-				this.minBaseDestination = 1;
+				this.minAttackCount = 1;
 				this.e_char = ENEMYCHAR.DEFENSIVE;
 				delayThink = 2f;
 				skills = 1;
 				emergencyHP = 5;
 				break;
 			case ENEMYTYPE.NORMAL:
-				this.minBaseDestination = 2;
+				this.minAttackCount = 1;
 				this.e_char = ENEMYCHAR.DEFENSIVE;
 				delayThink = 1f;
 				skills = 2;
@@ -70,10 +71,19 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 	private IEnumerator UpdateAI()
 	{
-		if (GameManager.Instance.arrEnemy.Count < minBaseDestination)
+		// 현재 공격을 minAttackCount보다 적게 하는지 확인.
+		if (this.attackListCount < minAttackCount)
 		{
-
+			this.AttackAI();
 		}
+		else
+		{
+			for (int i = 0; i < this.attackListCount; i++)
+			{
+				
+			}
+		}
+
 		yield return new WaitForSeconds(delayThink);
 	}
 
@@ -112,10 +122,13 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 		if (!ReferenceEquals(destP, null))
 		{
-
+			attackList[0].Add(startP); attackList[1].Add(destP);
+			attackListCount++;
+			OrderAttack(startP, destP);
 		}
 	}
 
+	// P1이 P2를 공격하는 리스트가 있는지 확인.
 	private bool CheckAttack(GameObject P1, GameObject P2)
 	{
 		for (int i = 0; i < attackListCount; i++)
@@ -126,40 +139,45 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		return false;
 	}
 
-
+	
+	// 특정 조건 때 두개의 지점을 잇는 다리가 존재하며, 공격을 하지 않음을 전제로 실행.
 	private void OrderAttack(GameObject P1, GameObject P2)
 	{
-		GameObject SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
-		GameObject SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
+		des.SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
+		des.SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
 
-		bool exist = false;
-		SlimeBaseSC p1_sc = SetP1.GetComponent<SlimeBaseSC>();
-		for (int i = 0; i < p1_sc.atkObj.Count; i++)
-		{
-			if (p1_sc.atkObj[i].name.Equals(SetP1.name + "_attack_" + SetP2.name))
-			{ exist = true; break; }
-		}
 
-		if (!exist)
-		{
-			GameObject dummy = GameObject.Instantiate(bridge);
-			dummy.name = des.SetP1.name + "_attack_" + des.SetP2.name;
+		GameObject dummy = GameObject.Instantiate(BridgeManager.Instance.bridge_obj);
+		dummy.name = des.SetP1.name + "_attack_" + des.SetP2.name;
 
-			dummy.transform.parent = GameManager.Instance.attackObjs.transform;
-			dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.PLAYER);
-			des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
-			des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
-		}
-		if (!ReferenceEquals(des.SetP1, null))
+		dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+		dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
+		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
+		des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
+	}
+
+	// 특정 조건 때 두개의 지점을 잇는 다리가 존재한다는 전제로 실행.
+	private void OrderStopAttack(GameObject P1, GameObject P2)
+	{
+		des.SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
+		des.SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
+
+		GameObject dummy = GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + des.SetP2.name).gameObject;
+		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Remove(dummy);
+		dummy.GetComponent<SlimeBridge>().CancleAttack();
+		int dummy_index = FindAttackIndex(P1, P2);
+		if (dummy_index != -1)
+		{ attackList[0].RemoveAt(dummy_index); attackList[1].RemoveAt(dummy_index); }
+	}
+
+	// P1은 무조건 출발, P2는 도착 지점. attackList의 인덱스 두개를 변경하기 위해 필요한 함수
+	private int FindAttackIndex(GameObject P1, GameObject P2)
+	{
+		for (int i = 0; i < this.attackListCount; i++)
 		{
-			des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
-			BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PLATESTATE.UNCLICKED);
-			des.SetP1 = null;
+			if (attackList[0][i].Equals(P1) && attackList[1][i].Equals(P2))
+				return i;
 		}
-		if (!ReferenceEquals(des.SetP2, null))
-		{
-			des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
-			des.SetP2 = null;
-		}
+		return -1;
 	}
 }

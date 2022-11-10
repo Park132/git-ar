@@ -6,6 +6,8 @@ public class SlimeBaseSC : Slime_Stat
 {
     public PLATESTATE clickState;
 	public GameObject[] bases;
+	public float rechargeDelay;
+	public int rechargeHP;
 	private TEAM finalAttack, currentTeam;
 	private bool canChanged = false;
 	private IEnumerator recharging;
@@ -26,6 +28,8 @@ public class SlimeBaseSC : Slime_Stat
 
 		currentTeam = TEAM.NONE;
 		multipleNum = 1;
+		rechargeHP = 1;
+		rechargeDelay = StructorCollector.BASERECHARGEDELAY;
 		atkObj = new List<GameObject>();
 		arrColor = new Color32[] { new Color32(43, 97, 19, 255),
 		new Color32(102, 188, 66, 255),new Color32(50, 152, 186, 255)
@@ -43,26 +47,43 @@ public class SlimeBaseSC : Slime_Stat
 
 	protected void Update()
 	{
-		if (!canChanged && GameManager.Instance.gameState == GAMESTATE.START)
+		if (GameManager.Instance.gameState == GAMESTATE.START)
 		{
-			this.area.transform.localScale = Vector3.one * (GameManager.Instance.distanceEP/5)/1.8f;
-			nearCount = 0;
-			for (int i = 0; i < GameManager.Instance.arrNone.Count; i++)
+			// 초반 중립진영이 아닌 즉 각 팀의 베이스 캠프일 경우
+			if (!canChanged)
 			{
-				float dummy_dis = Vector3.Distance(GameManager.Instance.arrNone[i].transform.position, this.transform.position);
-				// 중립 진영과의 거리가 원 내부에 있다면 nearCount 추가
-				if (GameManager.Instance.distanceEP / 2 +0.5f >= dummy_dis)
-					nearCount++;
-				// 중립 진영이 플레이어/적군 진영의 거리보다 더 멀리 떨어져있다면 빼기
-				else if (dummy_dis >= GameManager.Instance.distanceEP)
-					nearCount--;
+				nearCount = 0;
+				this.area.transform.localScale = Vector3.one * (GameManager.Instance.distanceEP / 5) / 1.8f;
+				for (int i = 0; i < GameManager.Instance.arrNone.Count; i++)
+				{
+					float dummy_dis = Vector3.Distance(GameManager.Instance.arrNone[i].transform.position, this.transform.position);
+					// 중립 진영과의 거리가 원 내부에 있다면 nearCount 추가
+					if (GameManager.Instance.distanceEP / 2 + 0.5f >= dummy_dis)
+						nearCount++;
+					// 중립 진영이 플레이어/적군 진영의 거리보다 더 멀리 떨어져있다면 빼기
+					else if (dummy_dis >= GameManager.Instance.distanceEP)
+						nearCount--;
+				}
 			}
+			// 초반에 중립진영이었으나, 현재 중립이 아닌 각 팀에 속해있을 경우.
+			else if (this.state != TEAM.NONE)
+			{
+				switch (this.state)
+				{
+					case TEAM.PLAYER:
+						nearCount = GameManager.Instance.stdPointSB.currentNearCount;
+						break;
+					case TEAM.ENEMY:
+						nearCount = GameManager.Instance.enePointSB.currentNearCount;
+						break;
+				}
+			}
+
 			if (currentNearCount != nearCount)
 			{
 				multipleNum = GameManager.Instance.marker.markerLen - nearCount;
 				for (int i = 0; i < atkObj.Count; i++)
-				{ChangeSoldierPower(atkObj[i]);}
-
+				{ ChangeSoldierPower(atkObj[i]); }
 			}
 			currentNearCount = nearCount;
 		}
@@ -72,10 +93,10 @@ public class SlimeBaseSC : Slime_Stat
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(3f);
+			yield return new WaitForSeconds(rechargeDelay);
 			if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
 			{
-				this.Health++;
+				this.Health+=rechargeHP;
 				this.SlimeScaleChange();
 			}
 		}
