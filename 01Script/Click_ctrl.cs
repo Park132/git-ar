@@ -95,7 +95,9 @@ public class Click_ctrl : MonoBehaviour
 
 		// 기지의 클릭 횟수를 확인.
 		// 이 후 오브젝트를 저장 혹은 삭제
-		if (sbSC.clickState == PLATESTATE.UNCLICKED || sbSC.clickState == PLATESTATE.CANCLICK)  // 클릭이 되지 않은 기지
+
+		// 클릭이 되지 않은 기지
+		if (sbSC.clickState == PLATESTATE.UNCLICKED || sbSC.clickState == PLATESTATE.CANCLICK)  
 		{
 			if (ReferenceEquals(des.SetP1, null))   // 출발 지점 적용
 			{
@@ -114,6 +116,7 @@ public class Click_ctrl : MonoBehaviour
 				OrderAttack();
 			}
 		}
+		// 취소할 기지 선택
 		else if (sbSC.clickState == PLATESTATE.CANCLE)
 		{
 			GameObject dummy = GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + obj.name).gameObject;
@@ -124,6 +127,11 @@ public class Click_ctrl : MonoBehaviour
 			
 			des.SetP1 = null;
 		}
+		else if (sbSC.clickState == PLATESTATE.CANUSESKILL)
+        {
+			PS_SkillSystem.Instance.SkillUse();
+        }
+		// 혹시모를 오류 방지용
 		else
 		{
 			if (ReferenceEquals(obj, des.SetP1))
