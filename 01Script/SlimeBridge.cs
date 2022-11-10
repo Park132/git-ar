@@ -46,9 +46,17 @@ public class SlimeBridge : MonoBehaviour
             yield return new WaitForSeconds(DelayAttack);
             if (SPB.Health > 5 && GameManager.Instance.gameState == GAMESTATE.START)
             {
+                int dummy_t = -1;
                 SPB.Health-=soldierOrder.AttackDamage;
                 SPB.SlimeScaleChange();
-                GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.Prefabs[0]);
+                switch (soldierOrder.team)
+                {
+                    case TEAM.PLAYER: dummy_t = 0;
+                        break;
+                    case TEAM.ENEMY: dummy_t = 1;
+                        break;
+                }
+                GameObject dummy = GameObject.Instantiate(PrefabManager.Instance.Prefabs[dummy_t]);
                 dummy.transform.parent = this.transform;
                 dummy.transform.position = soldierOrder.Start_Point.transform.position;
                 dummy.GetComponent<SlimeSoldierSC>().Setting(soldierOrder);
@@ -65,8 +73,8 @@ public class SlimeBridge : MonoBehaviour
 
     public void CancleAttack() {
         StopCoroutine(SpawnIE);
-        for (int i = 0; i < this.transform.childCount; i++)
+        for (int i = this.transform.childCount-1; i >= 0; i--)
         {this.transform.GetChild(i).parent = GameManager.Instance.attackObjs.transform;}
-        Destroy(this.gameObject, 1f);
+        Destroy(this.gameObject);
     }
 }
