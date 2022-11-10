@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LS_EnemyBaseSC : MonoBehaviour
 {
-
+	// ∞≥∞∞¿∫ ±Í«„∫Í ∏¡«“!
 	// ΩÃ±€≈Ê /////
 	private static LS_EnemyBaseSC instance;
 
@@ -80,7 +80,14 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		{
 			for (int i = 0; i < this.attackListCount; i++)
 			{
-				
+				SlimeBaseSC dummy_sl = attackList[1][i].GetComponentInChildren<SlimeBaseSC>();
+				if (dummy_sl.state == TEAM.ENEMY)
+				{
+					if (dummy_sl.Health > this.emergencyHP)
+					{
+						this.OrderStopAttack(attackList[0][i], attackList[1][i]);
+					}
+				}
 			}
 		}
 
