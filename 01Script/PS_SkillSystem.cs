@@ -6,6 +6,7 @@ using TMPro;
 
 public class PS_SkillSystem : MonoBehaviour
 {
+    // Fucking Github ass
     public int[] skill_storage; // 인식한 스킬 정보 -> 스킬타입과 단계, 버튼 표시에 이용
     public int[] skill_type_storage;
     public int[] skill_level_storage;
