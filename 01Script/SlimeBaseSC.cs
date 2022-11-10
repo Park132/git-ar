@@ -6,7 +6,7 @@ public class SlimeBaseSC : Slime_Stat
 {
     public PLATESTATE clickState;
 	public GameObject[] bases;
-	private TEAM finalAttack;
+	private TEAM finalAttack, currentTeam;
 	private bool canChanged = false;
 	private IEnumerator recharging;
 	public MeshRenderer plate;
@@ -15,7 +15,7 @@ public class SlimeBaseSC : Slime_Stat
 	[SerializeField]private int nearCount, currentNearCount;
 	public List<GameObject> atkObj;
 	private float multipleNum;
-
+	
 
 	protected override void Start()
 	{
@@ -24,6 +24,7 @@ public class SlimeBaseSC : Slime_Stat
 		recharging = ReChargeSlime();
 		StartCoroutine(recharging);
 
+		currentTeam = TEAM.NONE;
 		multipleNum = 1;
 		atkObj = new List<GameObject>();
 		arrColor = new Color32[] { new Color32(43, 97, 19, 255),
@@ -104,15 +105,22 @@ public class SlimeBaseSC : Slime_Stat
 			if (Health <= 1 && canChanged)
 			{
 				int visibleNum = 0;
+				bool changeT = (currentTeam == TEAM.NONE) ? false : true;
 				switch (finalAttack)
 				{
 					case TEAM.PLAYER:
 						this.state = TEAM.PLAYER;
 						visibleNum = 1;
+						if (changeT)
+						{GameManager.Instance.arrEnemy.Remove(this.gameObject);}
+						GameManager.Instance.arrPlayer.Add(this.gameObject);
 						break;
 					case TEAM.ENEMY:
 						this.state = TEAM.ENEMY;
 						visibleNum = 2;
+						if (changeT)
+						{ GameManager.Instance.arrPlayer.Remove(this.gameObject); }
+						GameManager.Instance.arrEnemy.Add(this.gameObject);
 						break;
 				}
 				for (int i = 0; i < 3; i++)
@@ -120,6 +128,7 @@ public class SlimeBaseSC : Slime_Stat
 					if (i == visibleNum) bases[i].SetActive(true);
 					else bases[i].SetActive(false);
 				}
+				
 				this.Health = 10;
 			}
 		}

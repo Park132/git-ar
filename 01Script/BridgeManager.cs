@@ -203,7 +203,9 @@ public class BridgeManager : MonoBehaviour
 			}
 		}
 	}
-	private GameObject CheckConnect(GameObject P1, int i)
+
+	// 매개변수로 받아온 P1이 i번째 다리와 연관이 있는지 확인.
+	public GameObject CheckConnect(GameObject P1, int i)
 	{
 		if (bridgeArr[0][i].Equals(P1))
 			return bridgeArr[1][i];
