@@ -13,7 +13,7 @@ public class SlimeBridge : MonoBehaviour
 
     public IEnumerator SpawnIE;
 
-	private void Start()
+	protected void Start()
 	{
         once = false; DelayAttack = StructorCollector.BASEDELAYATTACK;
 	}
@@ -39,7 +39,7 @@ public class SlimeBridge : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnSoldier()
+    protected IEnumerator SpawnSoldier()
     {
         while (true)
         {

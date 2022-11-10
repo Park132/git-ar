@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 	public GameObject stdPoint, enePoint;
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
-	public List<GameObject> arrNone;
+	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
 	public float distanceEP = 0;
 	
@@ -75,6 +75,10 @@ public class GameManager : MonoBehaviour
 			{
 				if (marker.markerTeam[i] == TEAM.NONE && marker.markerExist[i])
 				{ arrNone.Add(marker.markerObj[i]); }
+				else if (marker.markerTeam[i] == TEAM.PLAYER && marker.markerExist[i])
+				{ arrPlayer.Add(marker.markerObj[i]); }
+				else if (marker.markerTeam[i] == TEAM.ENEMY && marker.markerExist[i])
+				{ arrEnemy.Add(marker.markerObj[i]); }
 			}
 
 			BridgeManager.Instance.BridgeCalc(playerP,enemyP);

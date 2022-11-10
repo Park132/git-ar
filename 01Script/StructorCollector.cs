@@ -11,6 +11,10 @@ public enum GAMESTATE
 { READY, START, PAUSE }
 public enum PLATESTATE
 { UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, CANCLE = 4 }
+public enum ENEMYTYPE
+{ TUTORIAL, NORMAL }
+public enum ENEMYCHAR
+{DEFENSIVE, AGRESSIVE  }
 public class StructorCollector : MonoBehaviour
 {
     public const float BASESPEED = 0.025f;
