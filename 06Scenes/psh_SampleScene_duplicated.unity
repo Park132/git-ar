@@ -1925,6 +1925,8 @@ MonoBehaviour:
   - {fileID: 1032120795}
   - {fileID: 2031819815}
   - {fileID: 852436366}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1736439959}
   area: {fileID: 0}
   nearCount: 0
@@ -2223,6 +2225,8 @@ MonoBehaviour:
   - {fileID: 570444867}
   - {fileID: 876569814}
   - {fileID: 920771274}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1489115834}
   area: {fileID: 0}
   nearCount: 0
@@ -3707,6 +3711,11 @@ MonoBehaviour:
   btn3_txt: {fileID: 1157110830}
   skill_type: 0
   skill_level: 0
+  skillEffect_prefabs:
+  - {fileID: 8102283741915897119, guid: f7098a6ba891769439cb752adb1e8cfd, type: 3}
+  - {fileID: 4053851971849427656, guid: fc206958ee5c9dc40936974f2099d957, type: 3}
+  - {fileID: 2288128745563404498, guid: b67ca6e8f2bec3648b7a2baabda4f385, type: 3}
+  - {fileID: 7844174737468775757, guid: 4c86b6ad01b3b794e84f8e9f6ffc563a, type: 3}
 --- !u!1001 &1423282300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4169,9 +4178,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stdPoint: {fileID: 0}
   enePoint: {fileID: 0}
+  stdPointSB: {fileID: 0}
+  enePointSB: {fileID: 0}
   bridgeObjs: {fileID: 661092722}
   attackObjs: {fileID: 1381059652}
   arrNone: []
+  arrPlayer: []
+  arrEnemy: []
   gameState: 0
   distanceEP: 0
   marker:
@@ -4191,6 +4204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0381ea46f9ca71c4fba33539cd89e34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bridge_obj: {fileID: 0}
   bridgeCount: 0
 --- !u!1001 &1707944646
 PrefabInstance:
@@ -4702,6 +4716,8 @@ MonoBehaviour:
   - {fileID: 311576491}
   - {fileID: 798230493}
   - {fileID: 419033619}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1962429208}
   area: {fileID: 0}
   nearCount: 0
@@ -5201,6 +5217,8 @@ MonoBehaviour:
   - {fileID: 1707944648}
   - {fileID: 660802624}
   - {fileID: 1528365495}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1533630898}
   area: {fileID: 0}
   nearCount: 0

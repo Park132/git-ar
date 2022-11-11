@@ -245,7 +245,7 @@ public class PS_SkillSystem : MonoBehaviour
 
     //---------------------------스킬 사용 함수
     
-    public void SkillClick(int type, int level)
+    public void SkillClick(int type, int level) // 구현중
     {
         switch(type)
         {
@@ -280,7 +280,44 @@ public class PS_SkillSystem : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
-            // <----- 여기서 부터 하면 될듯
+            
+            if(currentClickType ==1)
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.2f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.0f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 0.8f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 0.6f));
+                        break;
+
+                } 
+            } else if(currentClickType == 2)
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 1.8f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 2.1f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 2.4f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillProduce(dummy_base, 3.0f));
+                        break;
+                }
+            }
+
         }
 
         switch (currentClickType)
@@ -324,5 +361,13 @@ public class PS_SkillSystem : MonoBehaviour
         yield return new WaitForSecondsRealtime(5f);
         Destroy(obj.gameObject);
         StopCoroutine("PassiveSkill");
+    }
+
+    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val)
+    {
+        sc.rechargeDelay = val;
+        yield return new WaitForSecondsRealtime(10f);
+        sc.rechargeDelay = StructorCollector.BASERECHARGEDELAY;
+        StopCoroutine("ApplyingSkillProduce");
     }
 }
