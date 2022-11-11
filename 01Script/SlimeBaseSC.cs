@@ -9,14 +9,14 @@ public class SlimeBaseSC : Slime_Stat
 	public GameObject[] bases;
 	public float rechargeDelay; // 속도
 	public int rechargeHP; // 양
-	private TEAM finalAttack;
+	private TEAM finalAttack, currentTeam;
 	private bool canChanged = false;
 	private IEnumerator recharging;
 	public MeshRenderer plate;
 	public GameObject area;
 	private Color32[] arrColor;
 	[SerializeField]private int nearCount, currentNearCount;
-	public List<GameObject> atkObj;	// 이 베이스에서 출발하는 모든 공격명령 저장
+	public List<GameObject> atkObj;
 	private float multipleNum;
 	
 
@@ -27,6 +27,7 @@ public class SlimeBaseSC : Slime_Stat
 		recharging = ReChargeSlime();
 		StartCoroutine(recharging);
 
+		currentTeam = TEAM.NONE;
 		multipleNum = 1;
 		rechargeHP = 1;
 		rechargeDelay = StructorCollector.BASERECHARGEDELAY;
@@ -39,8 +40,8 @@ public class SlimeBaseSC : Slime_Stat
 
 	public override void SlimeScaleChange()
 	{
-		float sizeDummy = (Mathf.Max(5f, Mathf.Min(Health * 0.075f+3f, 10f)));
-		this.transform.localScale = Vector3.one * sizeDummy;
+		base.SlimeScaleChange();
+		float sizeDummy = (Mathf.Max(3f, Mathf.Min(Health * 0.15f, 7.5f)));
 		box.size = Vector3.one * (5 / sizeDummy);
 		//nav.radius = this.transform.localScale.x * 0.5f;
 	}
@@ -93,7 +94,7 @@ public class SlimeBaseSC : Slime_Stat
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f));
+			yield return new WaitForSeconds(rechargeDelay);
 			if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
 			{
 				this.Health+=rechargeHP;
@@ -111,7 +112,7 @@ public class SlimeBaseSC : Slime_Stat
 	// 병사의 공격력 변경
 	public void ChangeSoldierPower(GameObject obj)
 	{
-		this.Attack = Mathf.Max(1, Mathf.CeilToInt(multipleNum /2));
+		this.Attack = Mathf.Max(1, Mathf.CeilToInt(multipleNum - 2 /2));
 		float speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000;
 		float del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000;
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
@@ -126,44 +127,32 @@ public class SlimeBaseSC : Slime_Stat
 			if (Health <= 1 && canChanged)
 			{
 				int visibleNum = 0;
-				bool changeT = (this.state == TEAM.NONE) ? false : true;
-				if (finalAttack != this.state)
+				bool changeT = (currentTeam == TEAM.NONE) ? false : true;
+				switch (finalAttack)
 				{
-					switch (finalAttack)
-					{
-						case TEAM.PLAYER:
-							this.state = TEAM.PLAYER;
-							visibleNum = 1;
-							if (changeT)
-							{ GameManager.Instance.arrEnemy.Remove(this.transform.parent.gameObject); LS_EnemyBaseSC.Instance.RemovePreviousTeamOrder(this.transform.parent.gameObject); }
-							GameManager.Instance.arrPlayer.Add(this.transform.parent.gameObject);
-							break;
-						case TEAM.ENEMY:
-							this.state = TEAM.ENEMY;
-							visibleNum = 2;
-							if (changeT)
-							{ GameManager.Instance.arrPlayer.Remove(this.transform.parent.gameObject); }
-							GameManager.Instance.arrEnemy.Add(this.transform.parent.gameObject);
-							break;
-					}
-					for (int i = 0; i < 3; i++)
-					{
-						if (i == visibleNum) bases[i].SetActive(true);
-						else bases[i].SetActive(false);
-					}
-					StopOrderPreviousTeam();
-					this.Health = 10;
+					case TEAM.PLAYER:
+						this.state = TEAM.PLAYER;
+						visibleNum = 1;
+						if (changeT)
+						{GameManager.Instance.arrEnemy.Remove(this.gameObject);}
+						GameManager.Instance.arrPlayer.Add(this.gameObject);
+						break;
+					case TEAM.ENEMY:
+						this.state = TEAM.ENEMY;
+						visibleNum = 2;
+						if (changeT)
+						{ GameManager.Instance.arrPlayer.Remove(this.gameObject); }
+						GameManager.Instance.arrEnemy.Add(this.gameObject);
+						break;
 				}
+				for (int i = 0; i < 3; i++)
+				{
+					if (i == visibleNum) bases[i].SetActive(true);
+					else bases[i].SetActive(false);
+				}
+				
+				this.Health = 10;
 			}
 		}
-	}
-
-	public void StopOrderPreviousTeam()
-	{
-		foreach (GameObject obj in atkObj)
-		{
-			obj.GetComponent<SlimeBridge>().CancleAttack();
-		}
-		atkObj.Clear();
 	}
 }

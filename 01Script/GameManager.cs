@@ -87,7 +87,6 @@ public class GameManager : MonoBehaviour
 			BridgeManager.Instance.BridgeCalc(playerP,enemyP);
 
 			gameState = GAMESTATE.START;
-			LS_EnemyBaseSC.Instance.StartAI();
 		}
 		else
 		{ Debug.Log("¸¶Ä¿¸¦ ´õ Âï¾îÁÖ¼À"); }

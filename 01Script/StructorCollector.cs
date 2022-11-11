@@ -15,11 +15,9 @@ public enum ENEMYTYPE
 { TUTORIAL, NORMAL }
 public enum ENEMYCHAR
 {DEFENSIVE, AGRESSIVE  }
-public enum ENEMYATTACKTYPE
-{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3 }
 public class StructorCollector : MonoBehaviour
 {
-    public const float BASESPEED = 0.04f;
+    public const float BASESPEED = 0.025f;
     public const float BASEDELAYATTACK = 1.5f;
     public const float BASERECHARGEDELAY = 1.5f;
     [Serializable] public struct SoldierSetting
@@ -39,18 +37,5 @@ public class StructorCollector : MonoBehaviour
         public List<bool> markerExist;
         public List<TEAM> markerTeam;
         public int markerLen;
-    }
-    [SerializeField] public struct AI_Setting
-    {
-        public ENEMYTYPE e_type;
-        public int minEmergencyBase;
-		public int maxAttackCount;
-		public int maxRechargeCount;
-		public ENEMYCHAR e_char;
-		public float delayThink;
-		public int skills;
-		public int emergencyHP; ////
-		public int stopAttackHP;
-		public int maxSupportHP;
     }
 }
