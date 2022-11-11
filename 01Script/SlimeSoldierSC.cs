@@ -16,7 +16,7 @@ public class SlimeSoldierSC : Slime_Stat
 		base.Awake();
 		//nav = this.GetComponent<NavMeshAgent>();
 		anim = this.GetComponent<Animator>();
-		Destroy(this.gameObject, 10f);
+		Destroy(this.gameObject, 20f);
 	}
 
 	protected void Update()
@@ -41,11 +41,9 @@ public class SlimeSoldierSC : Slime_Stat
 	public void Setting(StructorCollector.SoldierSetting bridge_order)
 	{
 		order = bridge_order;
-		//nav.destination = order.Destination_Point.transform.position;
-		//nav.speed = order.Speed;
 		this.destination = order.Destination_Point;
 		this.transform.LookAt(order.Destination_Point.transform.position);
-		Debug.Log(order.Speed);
+		this.Attack = order.AttackDamage;
 	}
 
 	public override IEnumerator Damaged(int damage)

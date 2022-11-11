@@ -215,5 +215,4 @@ public class BridgeManager : MonoBehaviour
 			return bridgeArr[0][i];
 		return null;
 	}
-
 }

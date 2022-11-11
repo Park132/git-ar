@@ -406,6 +406,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefabs:
   - {fileID: 4669415005380806261, guid: 71def6f1f350dce4a83f5e9e47a71284, type: 3}
+  - {fileID: 4519900228340087799, guid: ae7a2b72e10310540972d2bcad289367, type: 3}
   BridgeCube: {fileID: 7474862073635819148, guid: 1f582ed8ffc033a4a80bdf42c3d457d2, type: 3}
 --- !u!1 &301564625
 GameObject:
@@ -1269,6 +1270,8 @@ MonoBehaviour:
   - {fileID: 1032120795}
   - {fileID: 2031819815}
   - {fileID: 852436366}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1736439959}
   area: {fileID: 0}
   nearCount: 0
@@ -1567,6 +1570,8 @@ MonoBehaviour:
   - {fileID: 570444867}
   - {fileID: 876569814}
   - {fileID: 920771274}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1489115834}
   area: {fileID: 0}
   nearCount: 0
@@ -2094,6 +2099,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a504f3bf32bc8649a95a4e57763e59d, type: 3}
+--- !u!1 &1120466836 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7630348550555761477, guid: 4a504f3bf32bc8649a95a4e57763e59d, type: 3}
+  m_PrefabInstance: {fileID: 1120466835}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1120466837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120466836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dec0df1b1e3bf394ba146dc212f78654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackTypeList: 
+  attackListCount: 0
+  des:
+    SetP1: {fileID: 0}
+    SetP2: {fileID: 0}
 --- !u!1 &1133790527
 GameObject:
   m_ObjectHideFlags: 0
@@ -2647,7 +2674,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2789,7 +2816,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3033,9 +3060,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stdPoint: {fileID: 0}
   enePoint: {fileID: 0}
+  stdPointSB: {fileID: 0}
+  enePointSB: {fileID: 0}
   bridgeObjs: {fileID: 661092722}
   attackObjs: {fileID: 1381059652}
   arrNone: []
+  arrPlayer: []
+  arrEnemy: []
   gameState: 0
   distanceEP: 0
   marker:
@@ -3055,6 +3086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0381ea46f9ca71c4fba33539cd89e34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bridge_obj: {fileID: 3458071398558572837, guid: 4c213e0c2ef750d428f224c27edeeb53, type: 3}
   bridgeCount: 0
 --- !u!1001 &1707944646
 PrefabInstance:
@@ -3255,6 +3287,8 @@ MonoBehaviour:
   - {fileID: 311576491}
   - {fileID: 798230493}
   - {fileID: 419033619}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1962429208}
   area: {fileID: 0}
   nearCount: 0
@@ -3442,7 +3476,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3095673667541216669, guid: e55c19069364d3d4ebb4c74fa5f064dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3632,6 +3666,8 @@ MonoBehaviour:
   - {fileID: 1707944648}
   - {fileID: 660802624}
   - {fileID: 1528365495}
+  rechargeDelay: 0
+  rechargeHP: 0
   plate: {fileID: 1533630898}
   area: {fileID: 0}
   nearCount: 0
