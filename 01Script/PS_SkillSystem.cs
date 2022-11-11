@@ -271,7 +271,7 @@ public class PS_SkillSystem : MonoBehaviour
         currentClickType = type;
         currentClickLevel = level;
     }
-    public void SkillUse() // 클릭 2번
+    public void SkillUse() // 클릭 2번 , 스킬 사용
     {
         Ray ray;
         RaycastHit hit;
@@ -318,7 +318,7 @@ public class PS_SkillSystem : MonoBehaviour
                 }
             }
 
-        }
+        } // 스킬 사용
 
         switch (currentClickType)
         {
@@ -343,7 +343,13 @@ public class PS_SkillSystem : MonoBehaviour
 
     public void OnSkButton1()
     {
-        
+        Debug.Log("check1");
+        BuffSkillClick(skill_type_storage[0], skill_level_storage[0]);
+        Debug.Log("check2");
+        skill_type_storage[0] = 0;
+        Debug.Log("check3");
+        skill_level_storage[0] = 0;
+        Debug.Log("check4");
     }
 
     public void OnSkButton2()
