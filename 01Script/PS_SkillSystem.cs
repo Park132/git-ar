@@ -250,7 +250,6 @@ public class PS_SkillSystem : MonoBehaviour
         switch(type)
         {
             case 1:
-
                 break;
             case 2:
                 break;
@@ -261,16 +260,28 @@ public class PS_SkillSystem : MonoBehaviour
         }
     }
 
-    public void BuffSkillClick(int type, int level) // 클릭 1번
+    public void BuffSkillClick(int type, int level) // 클릭 1번, 버프 디버프
     {
         for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
         {
-            SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponent<SlimeBaseSC>();
+            SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
             dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
         }
         currentClickType = type;
         currentClickLevel = level;
     }
+
+    public void DebuffSkillClick(int type, int level) // 클릭 1번 버프 디버프
+    {
+        for(int i = 0; i<GameManager.Instance.arrEnemy.Count; i++)
+        {
+            SlimeBaseSC dummy_base = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+            dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
+        }
+        currentClickType = type;
+        currentClickType = level;
+    }
+
     public void SkillUse() // 클릭 2번 , 스킬 사용
     {
         Ray ray;
@@ -287,15 +298,35 @@ public class PS_SkillSystem : MonoBehaviour
                 {
                     case 1:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.2f));
+                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 2:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.0f));
+                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 3:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 0.8f));
+                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 4:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 0.6f));
+                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
 
                 } 
@@ -305,25 +336,47 @@ public class PS_SkillSystem : MonoBehaviour
                 {
                     case 1:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.8f));
+                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 2:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 2.1f));
+                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 3:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 2.4f));
+                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                     case 4:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 3.0f));
+                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+                        {
+                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+                        }
                         break;
                 }
             }
+
+            
 
         } // 스킬 사용
 
         switch (currentClickType)
         {
             case 1:// 버프(생산)
-                GameObject dummy_effect1 = Instantiate(skillEffect_prefabs[0], hit.transform.position, hit.transform.rotation); // 이펙트 생성
+                GameObject dummy_effect1 = Instantiate(skillEffect_prefabs[0], hit.transform.position, hit.transform.rotation); 
                 StartCoroutine(PassiveSkill(dummy_effect1)); // 이펙트 생성 후 5초 뒤 삭제
                 break;
             case 2: // 디버프(생산
@@ -338,38 +391,43 @@ public class PS_SkillSystem : MonoBehaviour
                 GameObject dummy_effect4 = Instantiate(skillEffect_prefabs[3], hit.transform.position, hit.transform.rotation);
                 StartCoroutine(PassiveSkill(dummy_effect4));
                 break;
-        }
+        }// 스킬 타입 이펙트 생성
+
+
     }
 
     public void OnSkButton1()
     {
-        Debug.Log("check1");
         BuffSkillClick(skill_type_storage[0], skill_level_storage[0]);
-        Debug.Log("check2");
         skill_type_storage[0] = 0;
-        Debug.Log("check3");
         skill_level_storage[0] = 0;
-        Debug.Log("check4");
+        skill_storage[0] = 0;
     }
 
     public void OnSkButton2()
     {
-
+        BuffSkillClick(skill_type_storage[1], skill_level_storage[1]);
+        skill_type_storage[1] = 0;
+        skill_level_storage[1] = 0;
+        skill_storage[1] = 0;
     }
 
     public void OnSkButton3()
     {
-
+        BuffSkillClick(skill_type_storage[2], skill_level_storage[2]);
+        skill_type_storage[2] = 0;
+        skill_level_storage[2] = 0;
+        skill_storage[2] = 0;
     }
 
-    IEnumerator PassiveSkill(GameObject obj)
+    IEnumerator PassiveSkill(GameObject obj) // 이펙트
     {
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(10f);
         Destroy(obj.gameObject);
         StopCoroutine("PassiveSkill");
     }
 
-    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val)
+    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val) // 효과
     {
         sc.rechargeDelay = val;
         yield return new WaitForSecondsRealtime(10f);
