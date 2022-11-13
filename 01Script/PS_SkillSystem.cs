@@ -278,7 +278,6 @@ public class PS_SkillSystem : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
-            // SlimeBridge dummy_test = hit.transform.gameObject.Getcomponent
             
             if(currentClickType ==1)
             {
