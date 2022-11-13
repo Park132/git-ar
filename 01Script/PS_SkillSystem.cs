@@ -245,42 +245,29 @@ public class PS_SkillSystem : MonoBehaviour
 
     //---------------------------스킬 사용 함수
     
-    public void SkillClick(int type, int level) // 구현중
-    {
-        switch(type)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }
-    }
 
     public void BuffSkillClick(int type, int level) // 클릭 1번, 버프 디버프
     {
-        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
-        {
-            SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
-            dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
-        }
-        currentClickType = type;
         currentClickLevel = level;
+        currentClickType = type;
+
+        if(type == 1 || type == 3)
+        {
+            for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+            {
+                SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+                dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
+            }
+        } else if (type == 2 || type == 4)
+        {
+            for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+            {
+                SlimeBaseSC dummy_base = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+                dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
+            }
+        }
     }
 
-    public void DebuffSkillClick(int type, int level) // 클릭 1번 버프 디버프
-    {
-        for(int i = 0; i<GameManager.Instance.arrEnemy.Count; i++)
-        {
-            SlimeBaseSC dummy_base = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
-            dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
-        }
-        currentClickType = type;
-        currentClickType = level;
-    }
 
     public void SkillUse() // 클릭 2번 , 스킬 사용
     {
