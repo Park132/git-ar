@@ -278,6 +278,7 @@ public class PS_SkillSystem : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
+            // SlimeBridge dummy_test = hit.transform.gameObject.Getcomponent
             
             if(currentClickType ==1)
             {
@@ -354,6 +355,14 @@ public class PS_SkillSystem : MonoBehaviour
                         }
                         break;
                 }
+            } else if(currentClickType == 3)
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+
+                        break;
+                }
             }
 
             
@@ -377,6 +386,18 @@ public class PS_SkillSystem : MonoBehaviour
             case 4: // 디버프 (이동속도)
                 GameObject dummy_effect4 = Instantiate(skillEffect_prefabs[3], hit.transform.position, hit.transform.rotation);
                 StartCoroutine(PassiveSkill(dummy_effect4));
+                break;
+            case 5: // 기지공격 
+                GameObject dummy_effect5 = Instantiate(skillEffect_prefabs[4], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect5));
+                break;
+            case 6: // 경로공격 
+                GameObject dummy_effect6 = Instantiate(skillEffect_prefabs[5], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect6));
+                break;
+            case 7: // 다리잠금
+                GameObject dummy_effect7 = Instantiate(skillEffect_prefabs[6], hit.transform.position, hit.transform.rotation);
+                StartCoroutine(PassiveSkill(dummy_effect7));
                 break;
         }// 스킬 타입 이펙트 생성
 
@@ -420,5 +441,10 @@ public class PS_SkillSystem : MonoBehaviour
         yield return new WaitForSecondsRealtime(10f);
         sc.rechargeDelay = StructorCollector.BASERECHARGEDELAY;
         StopCoroutine("ApplyingSkillProduce");
+    }
+
+    IEnumerator ApplyingSkillSpeed(SlimeBaseSC sc, float val)
+    {
+        yield return new WaitForSecondsRealtime(10f);
     }
 }
