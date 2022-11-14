@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -538,6 +538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefabs:
   - {fileID: 4669415005380806261, guid: 71def6f1f350dce4a83f5e9e47a71284, type: 3}
+  - {fileID: 4519900228340087799, guid: ae7a2b72e10310540972d2bcad289367, type: 3}
   BridgeCube: {fileID: 7474862073635819148, guid: 1f582ed8ffc033a4a80bdf42c3d457d2, type: 3}
 --- !u!1 &290202829
 GameObject:
@@ -943,6 +944,28 @@ RectTransform:
   m_AnchoredPosition: {x: 388, y: -154}
   m_SizeDelta: {x: 120, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &417825764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7605371670462619147, guid: a88f02b4392e4494e9ac3afa39eb2651, type: 3}
+  m_PrefabInstance: {fileID: 31459953956639453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &417825770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417825764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dec0df1b1e3bf394ba146dc212f78654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackTypeList: 
+  attackListCount: 0
+  des:
+    SetP1: {fileID: 0}
+    SetP2: {fileID: 0}
 --- !u!1 &462382846
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,7 +3288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0381ea46f9ca71c4fba33539cd89e34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bridge_obj: {fileID: 0}
+  bridge_obj: {fileID: 3458071398558572837, guid: 4c213e0c2ef750d428f224c27edeeb53, type: 3}
   bridgeCount: 0
 --- !u!1 &1732001351
 GameObject:
