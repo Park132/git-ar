@@ -127,6 +127,21 @@ public class PS_SkillSystem : MonoBehaviour
                         skill_level = 4;
                     break;
                 }
+
+                if(skill_storage[index] >= 17 && skill_storage[index] <= 18)
+                {
+                    skill_type = 5;
+                    skill_level = skill_storage[index] % 4;
+                    break;
+                }
+
+                if(skill_storage[index] >= 19 && skill_storage[index] <= 20) {
+                    skill_type = 6;
+                    skill_level = skill_storage[index] % 4;
+                    if (skill_level % 4 == 0)
+                        skill_level = 2;
+                    break;
+                }
             }
         }
     } // 스킬 타입과 레벨을 skilltype, skilllevel에 저장
@@ -147,6 +162,12 @@ public class PS_SkillSystem : MonoBehaviour
                     break;
                 case 4:
                     btn1_txt.text = "Debuff (Speed)";
+                    break;
+                case 5:
+                    btn1_txt.text = "Attack (Base)";
+                    break;
+                case 6:
+                    btn1_txt.text = "Attack (Bridge)";
                     break;
             }
 
@@ -181,6 +202,12 @@ public class PS_SkillSystem : MonoBehaviour
                 case 4:
                     btn2_txt.text = "Debuff (Speed)";
                     break;
+                case 5:
+                    btn2_txt.text = "Attack (Base)";
+                    break;
+                case 6:
+                    btn2_txt.text = "Attack (Bridge)";
+                    break;
             }
             switch (key2)
             {
@@ -214,6 +241,12 @@ public class PS_SkillSystem : MonoBehaviour
                     break;
                 case 4:
                     btn3_txt.text = "Debuff (Speed)";
+                    break;
+                case 5:
+                    btn3_txt.text = "Attack (Base)";
+                    break;
+                case 6:
+                    btn3_txt.text = "Attack (Bridge)";
                     break;
             }
 
@@ -251,6 +284,7 @@ public class PS_SkillSystem : MonoBehaviour
         currentClickLevel = level;
         currentClickType = type;
 
+        // 스킬 타입에 따른 베이스 강조
         if(type == 1 || type == 3)
         {
             for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
@@ -258,7 +292,7 @@ public class PS_SkillSystem : MonoBehaviour
                 SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
                 dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
             }
-        } else if (type == 2 || type == 4)
+        } else if (type == 2 || type == 4 || type == 5)
         {
             for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
             {
@@ -279,87 +313,76 @@ public class PS_SkillSystem : MonoBehaviour
         {
             SlimeBaseSC dummy_base = hit.transform.gameObject.GetComponentInChildren<SlimeBaseSC>();
             
-            if(currentClickType ==1)
+            if(currentClickType ==1) // 생산 버프
             {
                 switch (currentClickLevel)
                 {
                     case 1:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.2f));
-                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 2:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.0f));
-                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 3:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 0.8f));
-                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 4:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 0.6f));
-                        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
-
-                } 
-            } else if(currentClickType == 2)
+                }
+                PlayerBaseColorInit();
+            } else if(currentClickType == 2) // 생산 디버프
             {
                 switch (currentClickLevel)
                 {
                     case 1:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 1.8f));
-                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 2:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 2.1f));
-                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 3:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 2.4f));
-                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                     case 4:
                         StartCoroutine(ApplyingSkillProduce(dummy_base, 3.0f));
-                        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
-                        {
-                            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
-                            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
-                        }
                         break;
                 }
-            } else if(currentClickType == 3)
+                EnemyBaseColorInit();
+            } else if(currentClickType == 3) // 병사 보내는 시간 줄어듬
             {
                 switch (currentClickLevel)
                 {
                     case 1:
 
+                        break;
+                }
+                PlayerBaseColorInit();
+            } else if(currentClickType == 4) // 병사 보내는 시간 늘어남
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        break;
+                }
+                EnemyBaseColorInit();
+            } else if(currentClickType == 5) // 기지 공격
+            {
+                switch (currentClickLevel)
+                {
+                    case 1:
+                        dummy_base.Health -= 20;
+                        break;
+                    case 2:
+                        dummy_base.Health -= 30;
+                        break;
+                }
+                EnemyBaseColorInit();
+            } else if(currentClickType == 6)
+            {
+                switch(currentClickLevel) // 경로공격
+                {
+                    case 1:
                         break;
                 }
             }
@@ -427,6 +450,24 @@ public class PS_SkillSystem : MonoBehaviour
         skill_storage[2] = 0;
     }
 
+    void EnemyBaseColorInit() // 스킬 사용시 베이스 색깔 바꾸기
+    {
+        for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
+        {
+            SlimeBaseSC dummy_base1 = GameManager.Instance.arrEnemy[i].GetComponentInChildren<SlimeBaseSC>();
+            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+        }
+    }
+
+    void PlayerBaseColorInit() // 스킬 사용시 베이스 색깔 바꾸기
+    {
+        for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
+        {
+            SlimeBaseSC dummy_base1 = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
+            dummy_base1.ChangeState(PLATESTATE.UNCLICKED);
+        }
+    }
+
     IEnumerator PassiveSkill(GameObject obj) // 이펙트
     {
         yield return new WaitForSecondsRealtime(10f);
@@ -440,10 +481,5 @@ public class PS_SkillSystem : MonoBehaviour
         yield return new WaitForSecondsRealtime(10f);
         sc.rechargeDelay = StructorCollector.BASERECHARGEDELAY;
         StopCoroutine("ApplyingSkillProduce");
-    }
-
-    IEnumerator ApplyingSkillSpeed(SlimeBaseSC sc, float val)
-    {
-        yield return new WaitForSecondsRealtime(10f);
     }
 }
