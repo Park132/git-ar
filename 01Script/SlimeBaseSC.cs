@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SlimeBaseSC : Slime_Stat
 {
-	// 깃허브 테스트ggggg
     public PLATESTATE clickState;
 	public GameObject[] bases;
 	public float rechargeDelay; // 속도
@@ -18,10 +17,12 @@ public class SlimeBaseSC : Slime_Stat
 	[SerializeField]private int nearCount, currentNearCount;
 	public List<GameObject> atkObj;	// 이 베이스에서 출발하는 모든 공격명령 저장
 	private float multipleNum;
+	public float[] arrSAD;
 	
 
 	protected override void Start()
 	{
+		arrSAD = new float[3];
 		base.Start();
 		if (this.state == TEAM.NONE) canChanged = true;
 		recharging = ReChargeSlime();
@@ -111,9 +112,9 @@ public class SlimeBaseSC : Slime_Stat
 	// 병사의 공격력 변경
 	public void ChangeSoldierPower(GameObject obj)
 	{
-		this.Attack = Mathf.Max(1, Mathf.CeilToInt(multipleNum /2));
-		float speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000;
-		float del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000;
+		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /2)) *arrSAD[1]);
+		float speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000 *arrSAD[0];
+		float del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000 *arrSAD[2];
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 
@@ -165,5 +166,10 @@ public class SlimeBaseSC : Slime_Stat
 			obj.GetComponent<SlimeBridge>().CancleAttack();
 		}
 		atkObj.Clear();
+	}
+
+	public void settingSkillSAD(float speed, float attack, float delay)
+	{
+		arrSAD[0] = speed; arrSAD[1] = attack; arrSAD[2] = delay;
 	}
 }

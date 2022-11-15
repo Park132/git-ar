@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 // struct와 enum의 모음집
 
@@ -52,5 +53,19 @@ public class StructorCollector : MonoBehaviour
 		public int emergencyHP; ////
 		public int stopAttackHP;
 		public int maxSupportHP;
+    }
+    [SerializeField] public struct AI_CampCheck
+    {
+        public GameObject obj;
+        public SlimeBaseSC obj_sc;
+        public List<Bridge_Info> connectedObj;
+        public AI_CampCheck(GameObject h, SlimeBaseSC t, List<Bridge_Info> b)
+        { obj = h; obj_sc = t; connectedObj = b.ToList(); }
+    }
+    [SerializeField] public struct Bridge_Info
+    {
+        public GameObject obj;
+        public SlimeBaseSC obj_sc;
+        public Bridge_Info(GameObject o, SlimeBaseSC t) { obj = o; obj_sc = t; }
     }
 }

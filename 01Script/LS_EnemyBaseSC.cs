@@ -31,6 +31,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	[SerializeField] private List<ENEMYATTACKTYPE> attackTypeList;
 	[SerializeField] private int attackListCount;
 	[SerializeField] private StructorCollector.DestinationSet des;
+	List<StructorCollector.AI_CampCheck> allDummy = new List<StructorCollector.AI_CampCheck>();
 
 	public StructorCollector.AI_Setting ai;
 
@@ -52,6 +53,20 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 	public void StartAI()
 	{
+		// 모든 진영을 저장.
+		List<StructorCollector.Bridge_Info> dummy = new List<StructorCollector.Bridge_Info>();
+		foreach (GameObject obj in GameManager.Instance.arrNone)
+		{
+			TargetEnable TE_dummy = obj.GetComponent<TargetEnable>();
+			dummy.Clear();
+			for (int i = 0; i < BridgeManager.Instance.bridgeCount; i++)
+			{
+				GameObject dummy_obj = BridgeManager.Instance.CheckConnect(obj, i);
+				if (!ReferenceEquals(dummy_obj, null))
+					dummy.Add(new StructorCollector.Bridge_Info(dummy_obj, dummy_obj.GetComponentInChildren<SlimeBaseSC>()));
+			}
+			allDummy.Add(new StructorCollector.AI_CampCheck(obj, TE_dummy.slSC, dummy));
+		}
 		switch (ai.e_type)
 		{
 			case ENEMYTYPE.TUTORIAL:
@@ -345,6 +360,19 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				return true;
 		}
 		return false;
+	}
+
+	private void AttackAI2()
+	{
+		int dummy_health;
+		List<int> indexs = new List<int>();
+		for (int i = 0; i < allDummy.Count; i++)
+		{
+			indexs.Clear();
+			dummy_health = allDummy[i].obj_sc.Health;
+
+		}
+		
 	}
 
 	// 체크체크
