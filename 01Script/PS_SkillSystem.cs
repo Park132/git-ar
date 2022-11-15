@@ -405,6 +405,14 @@ public class PS_SkillSystem : MonoBehaviour
                         break;
                 }
                 EnemyBaseColorInit();
+            } else if(currentClickType == 7)
+            {
+                switch(currentClickLevel)
+                {
+                    case 1:
+
+                        break;
+                }
             }
 
             

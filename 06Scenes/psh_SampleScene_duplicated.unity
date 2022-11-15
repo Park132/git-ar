@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f06fea95232285469a7eda2425c3818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skill_code: 11
+  skill_code: 17
 --- !u!114 &1126162627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3582,7 +3582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a19269d7d7eaf46b0b991c584adbed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skill_code: 12
+  skill_code: 18
 --- !u!114 &1740574661
 MonoBehaviour:
   m_ObjectHideFlags: 0
