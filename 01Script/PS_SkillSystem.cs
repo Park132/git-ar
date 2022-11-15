@@ -482,4 +482,13 @@ public class PS_SkillSystem : MonoBehaviour
         sc.rechargeDelay = StructorCollector.BASERECHARGEDELAY;
         StopCoroutine("ApplyingSkillProduce");
     }
+
+    IEnumerator ApplyingSkillDelaySpeed(SlimeBaseSC sc, float val)
+    {
+        sc.settingSkillSAD(1, 1, val);
+        yield return new WaitForSecondsRealtime(10f);
+        sc.settingSkillSAD(1, 1, 1);
+        StopCoroutine("ApplyingSkillDelaySpeed");
+
+    }
 }

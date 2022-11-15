@@ -22,7 +22,7 @@ public class SlimeBaseSC : Slime_Stat
 
 	protected override void Start()
 	{
-		arrSAD = new float[3];
+		arrSAD = new float[] { 1,1,1};
 		base.Start();
 		if (this.state == TEAM.NONE) canChanged = true;
 		recharging = ReChargeSlime();

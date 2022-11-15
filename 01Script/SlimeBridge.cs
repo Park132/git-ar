@@ -66,8 +66,9 @@ public class SlimeBridge : MonoBehaviour
 
     public void SettingAtkSpeedDelay(int atk, float speed, float delay)
     {
-        soldierOrder.Speed = speed;
-        soldierOrder.AttackDamage = atk;
+
+        soldierOrder.Speed = (speed != -1)? speed:soldierOrder.Speed;
+        soldierOrder.AttackDamage = (atk != -1)? atk:soldierOrder.AttackDamage;
         this.DelayAttack = delay;
     }
 
