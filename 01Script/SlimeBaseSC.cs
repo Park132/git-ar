@@ -6,11 +6,11 @@ public class SlimeBaseSC : Slime_Stat
 {
     public PLATESTATE clickState;
 	public GameObject[] bases;
-	public float rechargeDelay; // 속도
+	public float rechargeDelay, woundRechargeDelay; // 속도
 	public int rechargeHP; // 양
 	private TEAM finalAttack;
 	private bool canChanged = false;
-	private IEnumerator recharging;
+	private IEnumerator recharging, recoverRecharge;
 	public MeshRenderer plate;
 	public GameObject area;
 	private Color32[] arrColor;
@@ -18,6 +18,7 @@ public class SlimeBaseSC : Slime_Stat
 	public List<GameObject> atkObj;	// 이 베이스에서 출발하는 모든 공격명령 저장
 	private float multipleNum;
 	public float[] arrSAD;
+	float speed, del;
 	
 
 	protected override void Start()
@@ -26,6 +27,7 @@ public class SlimeBaseSC : Slime_Stat
 		base.Start();
 		if (this.state == TEAM.NONE) canChanged = true;
 		recharging = ReChargeSlime();
+		recoverRecharge = RecoverDelay();
 		StartCoroutine(recharging);
 
 		multipleNum = 1;
@@ -94,7 +96,7 @@ public class SlimeBaseSC : Slime_Stat
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f));
+			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f) + woundRechargeDelay);
 			if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
 			{
 				this.Health+=rechargeHP;
@@ -113,8 +115,8 @@ public class SlimeBaseSC : Slime_Stat
 	public void ChangeSoldierPower(GameObject obj)
 	{
 		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /2)) *arrSAD[1]);
-		float speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000 *arrSAD[0];
-		float del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000 *arrSAD[2];
+		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000 *arrSAD[0];
+		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000 *arrSAD[2];
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 
@@ -124,7 +126,7 @@ public class SlimeBaseSC : Slime_Stat
 		if (other.transform.CompareTag("Slime"))
 		{
 			finalAttack=other.GetComponent<SlimeSoldierSC>().state;
-			if (Health <= 1 && canChanged)
+			if (Health-other.GetComponent<SlimeSoldierSC>().Attack <= 0 && canChanged)
 			{
 				int visibleNum = 0;
 				bool changeT = (this.state == TEAM.NONE) ? false : true;
@@ -168,10 +170,28 @@ public class SlimeBaseSC : Slime_Stat
 		atkObj.Clear();
 	}
 
+	public override IEnumerator Damaged(int damage)
+	{
+		StopCoroutine(recoverRecharge);
+		StartCoroutine(recoverRecharge);
+		return base.Damaged(damage);
+	}
+
+	private IEnumerator RecoverDelay()
+	{
+		woundRechargeDelay = 2f;
+		yield return new WaitForSeconds(2f);
+		woundRechargeDelay = 0;
+	}
+
 	public void settingSkillSAD(float speed, float attack, float delay)
 	{
 		arrSAD[0] = speed; arrSAD[1] = attack; arrSAD[2] = delay;
 		for (int i = 0; i < atkObj.Count; i++)
 		{ ChangeSoldierPower(atkObj[i]); }
+	}
+	public float[] GetSAD()
+	{
+		return new float[] { this.speed, this.Attack, this.del };
 	}
 }

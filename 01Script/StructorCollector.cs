@@ -13,7 +13,7 @@ public enum GAMESTATE
 public enum PLATESTATE
 { UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, CANCLE = 4 }
 public enum ENEMYTYPE
-{ TUTORIAL, NORMAL }
+{ TUTORIAL, NORMAL, HARD }
 public enum ENEMYCHAR
 {DEFENSIVE, AGRESSIVE  }
 public enum ENEMYATTACKTYPE
@@ -41,20 +41,47 @@ public class StructorCollector : MonoBehaviour
         public List<TEAM> markerTeam;
         public int markerLen;
     }
-    [SerializeField] public struct AI_Setting
+    [Serializable] public struct AI_Setting
     {
         public ENEMYTYPE e_type;
         public int minEmergencyBase;
 		public int maxAttackCount;
-		public int maxRechargeCount;
+        public float delayThink;
+        public int skills;
+        
 		public ENEMYCHAR e_char;
-		public float delayThink;
-		public int skills;
-		public int emergencyHP; ////
+        public int maxRechargeCount;
+        public int emergencyHP; ////
 		public int stopAttackHP;
 		public int maxSupportHP;
+
+        public AI_Setting(ENEMYTYPE et, int mine, int maxa, float delayt, int sk, ENEMYCHAR ch)
+        {
+            e_type = et; minEmergencyBase = mine; maxAttackCount = maxa; delayThink = delayt; skills = sk;
+            e_char = ch;
+            
+            switch (ch)
+            {
+                case ENEMYCHAR.AGRESSIVE:
+                    maxRechargeCount = 2;
+                    emergencyHP = 10;
+                    stopAttackHP = 13;
+                    maxSupportHP = 25;
+                    break;
+                case ENEMYCHAR.DEFENSIVE:
+                    maxRechargeCount = 2;
+                    emergencyHP = 17;
+                    stopAttackHP = 20;
+                    maxSupportHP = 40;
+                    break;
+                default:
+                    maxRechargeCount = 1; emergencyHP = 1; stopAttackHP = 1; maxSupportHP = 1;
+                    break;
+            }
+        }
+
     }
-    [SerializeField] public struct AI_CampCheck
+    [Serializable] public struct AI_CampCheck
     {
         public GameObject obj;
         public SlimeBaseSC obj_sc;
@@ -62,10 +89,18 @@ public class StructorCollector : MonoBehaviour
         public AI_CampCheck(GameObject h, SlimeBaseSC t, List<Bridge_Info> b)
         { obj = h; obj_sc = t; connectedObj = b.ToList(); }
     }
-    [SerializeField] public struct Bridge_Info
+    [Serializable] public struct Bridge_Info
     {
         public GameObject obj;
         public SlimeBaseSC obj_sc;
         public Bridge_Info(GameObject o, SlimeBaseSC t) { obj = o; obj_sc = t; }
+    }
+    [Serializable] public struct AI_StateofAttack
+    {
+        public int index;
+        public int enoughHealth;
+        public int playerHealth;
+        public AI_StateofAttack(int i, int e, int p) { index = i; enoughHealth = e; playerHealth = p; }
+
     }
 }

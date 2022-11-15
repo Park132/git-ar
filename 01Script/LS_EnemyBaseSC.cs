@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class LS_EnemyBaseSC : MonoBehaviour
 {
@@ -18,22 +19,23 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			if (null == instance) { return null; }
 			return instance;
 		}
-	}	
+	}
 	/////
-	
+
 	//public ENEMYTYPE e_type;
 	//[SerializeField]private ENEMYCHAR e_char;
 	//[SerializeField] private int minEmergencyBase, maxAttackCount, maxRechargeCount, maxSupportHP;
 	//private int skills;
 	//[SerializeField] private int emergencyHP, stopAttackHP;
 	//[SerializeField] private float delayThink;
+	public ENEMYTYPE e_type;
 	[SerializeField] private List<List<GameObject>> attackList;
 	[SerializeField] private List<ENEMYATTACKTYPE> attackTypeList;
 	[SerializeField] private int attackListCount;
 	[SerializeField] private StructorCollector.DestinationSet des;
 	List<StructorCollector.AI_CampCheck> allDummy = new List<StructorCollector.AI_CampCheck>();
 
-	public StructorCollector.AI_Setting ai;
+	[SerializeField]public StructorCollector.AI_Setting ai;
 
 
 	private void Start()
@@ -43,12 +45,12 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		attackList.Add(new List<GameObject>());
 		attackTypeList = new List<ENEMYATTACKTYPE>();
 		attackListCount = 0;
-		ai = new StructorCollector.AI_Setting();
+		//ai = new StructorCollector.AI_Setting();
 	}
 
 	public void SettingEnemyType(ENEMYTYPE t)
 	{
-		ai.e_type = t;
+		e_type = t;
 	}
 
 	public void StartAI()
@@ -67,29 +69,43 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			}
 			allDummy.Add(new StructorCollector.AI_CampCheck(obj, TE_dummy.slSC, dummy));
 		}
-		switch (ai.e_type)
+		TargetEnable TE_dummy_ = GameManager.Instance.arrPlayer[0].GetComponent<TargetEnable>();
+		dummy.Clear();
+		for (int i = 0; i < BridgeManager.Instance.bridgeCount; i++)
+		{
+			GameObject dummy_obj = BridgeManager.Instance.CheckConnect(GameManager.Instance.arrPlayer[0], i);
+			if (!ReferenceEquals(dummy_obj, null))
+				dummy.Add(new StructorCollector.Bridge_Info(dummy_obj, dummy_obj.GetComponentInChildren<SlimeBaseSC>()));
+		}
+		allDummy.Add(new StructorCollector.AI_CampCheck(GameManager.Instance.arrPlayer[0], TE_dummy_.slSC, dummy));
+		//////////
+		///
+		switch (e_type)
 		{
 			case ENEMYTYPE.TUTORIAL:
-				ai.minEmergencyBase = 1;
-				ai.maxAttackCount = 2;
-				ai.maxRechargeCount = 2;
-				ai.e_char = ENEMYCHAR.DEFENSIVE;
-				ai.delayThink = 4f;
-				ai.skills = 1;
-				ai.emergencyHP = 8; ////
-				ai.stopAttackHP = 20;
-				ai.maxSupportHP = 30;
+				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 4f, 1, ENEMYCHAR.DEFENSIVE);
+				//ai.maxRechargeCount = 2;
+				//ai.e_char = ENEMYCHAR.DEFENSIVE;
+				//ai.emergencyHP = 8; ////
+				//ai.stopAttackHP = 20;
+				//ai.maxSupportHP = 30;
 				break;
 			case ENEMYTYPE.NORMAL:
-				ai.minEmergencyBase = 1;
-				ai.maxAttackCount = 3;
-				ai.maxRechargeCount = 2;
-				ai.e_char = ENEMYCHAR.DEFENSIVE;
-				ai.delayThink = 3f;
-				ai.skills = 2;
-				ai.emergencyHP = 10;
-				ai.stopAttackHP = 12;
-				ai.maxSupportHP = 40;
+				ai = new StructorCollector.AI_Setting(e_type, 1, 3, 3f, 2, ENEMYCHAR.DEFENSIVE);
+				//ai.maxRechargeCount = 2;
+				//ai.e_char = ENEMYCHAR.DEFENSIVE;
+				//ai.emergencyHP = 10;
+				//ai.stopAttackHP = 12;
+				//ai.maxSupportHP = 40;
+				break;
+
+			case ENEMYTYPE.HARD:
+				ai = new StructorCollector.AI_Setting(e_type, 1, 4, 1f, 2, ENEMYCHAR.AGRESSIVE);
+				//ai.maxRechargeCount = 3;
+				//ai.e_char = ENEMYCHAR.AGRESSIVE;
+				//ai.emergencyHP = 13;
+				//ai.stopAttackHP = 10;
+				//ai.maxSupportHP = 30;
 				break;
 		}
 		StartCoroutine(UpdateAI());
@@ -116,39 +132,17 @@ public class LS_EnemyBaseSC : MonoBehaviour
 					this.emergencyAttack();
 			}
 			else if (this.attackListCount < ai.maxAttackCount)
-				this.AttackAI();
+				this.AttackAI2();
 
 			emergencyCheck();
 
-			// 공격 정지. -> 일정 피 이하일 경우, 일정 피 이상 회복 시켜주었다면 
-			for (int i = this.attackListCount-1; i >= 0 ; i--)
-			{
-				bool dummy_stop = false;
-				SlimeBaseSC dummy_sl_s = attackList[0][i].GetComponentInChildren<SlimeBaseSC>();
-				SlimeBaseSC dummy_sl_d = attackList[1][i].GetComponentInChildren<SlimeBaseSC>();
-				// 공격하는 진영의 피가 일정 피 이하일 경우 종료
-				if (dummy_sl_s.Health < ai.stopAttackHP && attackTypeList[i] != ENEMYATTACKTYPE.RECHARGING)
-					dummy_stop = true;
-				else if (dummy_sl_s.Health <= ai.maxSupportHP / 2 && attackTypeList[i] == ENEMYATTACKTYPE.RECHARGING)
-					dummy_stop = true;
-				// 현재 자기 자신의 팀을 공격하고, 일정 피 이상이면 종료
-				if (dummy_sl_d.state == TEAM.ENEMY)
-				{
-					if (dummy_sl_d.Health > ai.emergencyHP && attackTypeList[i] != ENEMYATTACKTYPE.RECHARGING)
-						dummy_stop = true;
-					else if (dummy_sl_d.Health > ai.maxSupportHP && attackTypeList[i] == ENEMYATTACKTYPE.RECHARGING)
-						dummy_stop = true;
-				}
-				if (dummy_stop)
-				{ this.OrderStopAttack(attackList[0][i], attackList[1][i]); }
-			}
-
 			// 만약 공격을 한번도 안한다면 이유 찾기
 			if (attackListCount == 0)
-			{
-				CheckState();
-			}
-			// 상시로 하나 서포터 하게 작성해야겠음.
+			{CheckState();}
+
+			// 공격 정지
+			StopAttack();
+			
 			yield return new WaitForSeconds(ai.delayThink);
 		}
 	}
@@ -311,16 +305,19 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 	}
 
+
 	// 공격 명령 내리기 전 확인
 	private void CheckBeforeOrder(GameObject destP, GameObject startP, ENEMYATTACKTYPE t)
 	{
-		if (!ReferenceEquals(destP, null) && !ReferenceEquals(startP, null) && !ReferenceEquals(destP,startP))
+		if (!ReferenceEquals(destP, null) && !ReferenceEquals(startP, null) && !ReferenceEquals(destP, startP))
 		{
 			attackList[0].Add(startP); attackList[1].Add(destP);
 			attackTypeList.Add(t);
 			attackListCount++;
 			OrderAttack(startP, destP);
 		}
+		else
+			Debug.Log("Error: Error in CheckBeforeOrder start = " +startP +"  dest = " +destP);
 	}
 
 	// 현재 적의 성격에 따라 피공격자의 팀에 따라서 반환 값이 달라짐.
@@ -366,16 +363,84 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	{
 		int dummy_health;
 		List<int> indexs = new List<int>();
+		List<StructorCollector.AI_StateofAttack> canAttackIndex = new List<StructorCollector.AI_StateofAttack>();
+		
+		// 모든 지점에 대하여 계산.
+		// 공격 지점의 피를 확인. 그 진영에 연결된 진영 중 적팀(우리팀)이 존재하는지 확인.
+		// 존재한다면 그 진영을 공격할 때 소모되는 피, 체력 등을 확인.
 		for (int i = 0; i < allDummy.Count; i++)
 		{
+			if (allDummy[i].obj_sc.state == TEAM.ENEMY)
+				continue;
 			indexs.Clear();
 			dummy_health = allDummy[i].obj_sc.Health;
+			for (int j = 0; j < allDummy[i].connectedObj.Count; j++)
+			{
+				if (allDummy[i].connectedObj[j].obj_sc.state == TEAM.ENEMY)
+					indexs.Add(j);
+			}
 
+			if (indexs.Count > 0)
+			{
+				List<float> timeForBreaksArr = new List<float>();
+				float totalDamageTIme = 0;
+				foreach (int dummy_index in indexs)
+				{
+					float[] dummyarr = allDummy[i].connectedObj[dummy_index].obj_sc.GetSAD();
+					// 1초에 공격 가능한 데미지와 공격 가능한 시간.
+					float distance_dummy = Vector3.Distance(allDummy[i].obj.transform.position, allDummy[i].connectedObj[dummy_index].obj.transform.position);
+					float speed_dummy = dummyarr[0] * (1 / Time.deltaTime);
+					float firstAttackTime = distance_dummy / speed_dummy;   // 맨 처음 한마리가 닿는데 걸리는 시간
+					float DamagePerSec = ((firstAttackTime - dummyarr[2]) + dummyarr[2] * 100) / 100;   // 100초를 기준으로 1초에 몇 데미지를 주는지 확인
+					// 모든 피를 깍는데 걸리는 시간
+					timeForBreaksArr.Add(allDummy[i].obj_sc.Health / DamagePerSec);
+					totalDamageTIme += allDummy[i].obj_sc.Health / DamagePerSec;
+				}
+				int enoughDamage = 0;
+				float eachAttackTime = (allDummy[i].obj_sc.Health / totalDamageTIme);
+				for(int j = 0; j < indexs.Count; j++)
+				{enoughDamage += (allDummy[i].connectedObj[indexs[j]].obj_sc.Health - ai.stopAttackHP) 
+						- Mathf.CeilToInt(eachAttackTime * timeForBreaksArr[j]);}
+
+				if (enoughDamage >= 0)
+				{
+					if (allDummy[i].obj_sc.state == TEAM.PLAYER)
+						if (enoughDamage < totalDamageTIme / 2)
+							continue;
+					canAttackIndex.Add(new StructorCollector.AI_StateofAttack(i, enoughDamage, dummy_health));
+				}
+			}
+			else
+				continue;
 		}
-		
+
+		float maxPhEh = float.MinValue;
+		int dummy_index_pheh = -1;
+		// 가장 공격하기 적합한 곳을 고르는 알고리즘
+		// - desthealth + enoughHP * 2
+		for (int i = canAttackIndex.Count-1; i >= 0; i--)
+		{
+			float dummy_max = (canAttackIndex[i].enoughHealth * 2)-allDummy[canAttackIndex[i].index].obj_sc.Health;
+			if (maxPhEh < dummy_max)
+			{ maxPhEh = dummy_max; dummy_index_pheh = i; }
+		}
+
+		if (dummy_index_pheh != -1)
+		{
+			StructorCollector.AI_CampCheck dummy_check = allDummy[canAttackIndex[dummy_index_pheh].index];
+			Debug.Log("Attack pheh = " + maxPhEh + "\nattack dummy team = " +dummy_check.obj.name);
+			for (int i = 0; i < dummy_check.connectedObj.Count; i++)
+			{
+				if (dummy_check.connectedObj[i].obj_sc.state == TEAM.ENEMY)
+				{
+					Debug.Log(dummy_check.obj.name + "       start = " +dummy_check.connectedObj[i].obj.name);
+					CheckBeforeOrder(dummy_check.obj, dummy_check.connectedObj[i].obj, ENEMYATTACKTYPE.ATTACK);
+				}
+			}
+		}
 	}
 
-	// 체크체크
+	// 체크체크 왜 공격을 안하나! 빠져가지곤
 	private void CheckState()
 	{
 		// 홀로 남은 기지
@@ -437,22 +502,71 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 	}
 
+	private void StopAttack()
+	{
+		// 공격 정지. -> 일정 피 이하일 경우, 일정 피 이상 회복 시켜주었다면 
+		for (int i = this.attackListCount - 1; i >= 0; i--)
+		{
+			bool dummy_stop = false;
+			SlimeBaseSC dummy_sl_s = attackList[0][i].GetComponentInChildren<SlimeBaseSC>();
+			SlimeBaseSC dummy_sl_d = attackList[1][i].GetComponentInChildren<SlimeBaseSC>();
+			// 공격하는 진영의 피가 일정 피 이하일 경우 종료
+			if (dummy_sl_s.Health < ai.stopAttackHP && attackTypeList[i] != ENEMYATTACKTYPE.RECHARGING && attackTypeList[i] != ENEMYATTACKTYPE.EMERGENCY)
+				dummy_stop = true;
+			else if (dummy_sl_s.Health <= ai.maxSupportHP / 2 && attackTypeList[i] == ENEMYATTACKTYPE.RECHARGING)
+				dummy_stop = true;
+			// 현재 자기 자신의 팀을 공격하고, 일정 피 이상이면 종료
+			if (dummy_sl_d.state == TEAM.ENEMY)
+			{
+				if (attackTypeList[i] == ENEMYATTACKTYPE.EMERGENCY)
+					dummy_stop = true;
+				if (dummy_sl_d.Health > ai.emergencyHP && attackTypeList[i] != ENEMYATTACKTYPE.RECHARGING)
+					dummy_stop = true;
+				else if ((dummy_sl_d.Health > ai.maxSupportHP || dummy_sl_d.Health >= dummy_sl_s.Health) && attackTypeList[i] == ENEMYATTACKTYPE.RECHARGING)
+					dummy_stop = true;
+			}
+			// 만약 공격 당하는 진영이 적(플레이어)이다.
+			else if (dummy_sl_d.state == TEAM.PLAYER)
+			{
+				if (dummy_sl_d.Health >= dummy_sl_s.Health * 1.5f)
+					dummy_stop = true;
+			}
 
-	
+			if (dummy_stop)
+			{ this.OrderStopAttack(attackList[0][i], attackList[1][i]); }
+		}
+
+	}
+
 	// 특정 조건 때 두개의 지점을 잇는 다리가 존재하며, 공격을 하지 않음을 전제로 실행.
+	// 혹시 모르니 공격 했음을 확인하는 스크립트 제작 2022.11.15
 	private void OrderAttack(GameObject P1, GameObject P2)
 	{
 		des.SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
 		des.SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
-		string dummy_name = des.SetP1.name + "_attack_" + des.SetP2.name;
 
-		GameObject dummy = GameObject.Instantiate(BridgeManager.Instance.bridge_obj);
-		dummy.name = dummy_name;
+		SlimeBaseSC p1_sc = des.SetP1.GetComponent<SlimeBaseSC>();
+		bool exist = false;
+		for (int i = 0; i < p1_sc.atkObj.Count; i++)
+		{
+			if (p1_sc.atkObj[i].name.Equals(des.SetP1.name + "_attack_" + des.SetP2.name))
+			{ exist = true; break; }
+		}
 
-		dummy.transform.parent = GameManager.Instance.attackObjs.transform;
-		dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
-		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
-		des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
+		if (!exist)
+		{
+			string dummy_name = des.SetP1.name + "_attack_" + des.SetP2.name;
+
+			GameObject dummy = GameObject.Instantiate(BridgeManager.Instance.bridge_obj);
+			dummy.name = dummy_name;
+
+			dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+			dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
+			des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
+			des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
+		}
+		else
+			Debug.Log("Error: Error in OrderAttack P1 = " +P1 + "  P2 = " +P2);
 	}
 
 	// 특정 조건 때 두개의 지점을 잇는 다리가 존재한다는 전제로 실행.

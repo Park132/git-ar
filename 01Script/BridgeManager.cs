@@ -50,6 +50,7 @@ public class BridgeManager : MonoBehaviour
 		int PEbridgelen = 0;
 		for (int i = 0; i < GameManager.Instance.marker.markerLen; i++)
 		{ if (GameManager.Instance.marker.markerExist[i] && GameManager.Instance.marker.markerTeam[i] == TEAM.NONE) PEbridgelen++; }
+		// 
 		int[] arrBridge = new int[PEbridgelen];
 		float[] arrBridgeDist = new float[PEbridgelen];
 
@@ -66,9 +67,41 @@ public class BridgeManager : MonoBehaviour
 	{
 		DistanceCalc(GameManager.Instance.marker.markerObj[P], P, ref arrBridge, ref arrBridgeDist);
 		DistanceSorting(ref arrBridge, ref arrBridgeDist, bridgelen);
-		for (int i = 0; i < bridgelen - 1; i++)
-			CreateBridge(GameManager.Instance.marker.markerObj[P], GameManager.Instance.marker.markerObj[arrBridge[i]]);
+		int j = 0, max_create = Mathf.CeilToInt(bridgelen/2);
+		for (int i = 0; i < bridgelen; i++)
+		{
+			if (j < max_create)
+			{
+				if (CheckRay(GameManager.Instance.marker.markerObj[P], GameManager.Instance.marker.markerObj[arrBridge[i]]))
+				{
+					CreateBridge(GameManager.Instance.marker.markerObj[P], GameManager.Instance.marker.markerObj[arrBridge[i]]);
+					j++;
+				}
+			}
+			else break;
+		}
 	}
+
+	// 다리 체크 -> 레이를 발사해서 그 레이 안에 다른 기지가 존재한다면 다리는 생성 X
+	private bool CheckRay(GameObject SetP1, GameObject SetP2)
+	{
+		float dummy_dist = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
+		//bool hit_check= Physics.BoxCast(SetP1.transform.position, new Vector3(3f, 3f, 3f),
+		//(SetP2.transform.position - SetP1.transform.position).normalized, out hit, Quaternion.identity, dummy_dist,3);
+		RaycastHit[] hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(1f, 1f, 1f),
+			(SetP2.transform.position - SetP1.transform.position).normalized, Quaternion.identity, dummy_dist);
+		foreach (RaycastHit hit in hits)
+		{
+			GameObject dummy = hit.transform.GetComponentInParent<TargetEnable>().gameObject;
+
+			if (!dummy.Equals(SetP1) && !dummy.Equals(SetP2) && !ReferenceEquals(dummy, null))
+			{Debug.Log("Hit! hitobj = " +dummy.gameObject +"\nStart = " +SetP1 +"  dest = " +SetP2); return false; }
+		}
+		
+		Debug.DrawRay(SetP1.transform.position, (SetP2.transform.position - SetP1.transform.position).normalized * dummy_dist, Color.green, 3, false);
+		return true;
+	}
+
 
 	// 다리 생성
 	private void CreateBridge(GameObject SetP1, GameObject SetP2)
@@ -126,15 +159,6 @@ public class BridgeManager : MonoBehaviour
 	private void CreateBridge_For_MidlePoints(int bridgeLen)
 	{
 		int maxCreate = 0;
-		//GameObject[] arrNone = new GameObject[bridgeLen];
-		/*
-		int k = 0;
-		// 중립 지형을 저장하는 배열 생성
-		for (int i = 0; i < GameManager.Instance.marker.markerLen; i++)
-		{
-			if (GameManager.Instance.marker.markerTeam[i] == TEAM.NONE && GameManager.Instance.marker.markerExist[i])
-			{ arrNone[k] = GameManager.Instance.marker.markerObj[i]; k++; }
-		}*/
 
 		for (int i = 1; i < bridgeLen; i++) { maxCreate += i; }
 
@@ -155,9 +179,8 @@ public class BridgeManager : MonoBehaviour
 
 		for (int i = 0; i < maxCreate; i++)
 		{
-			//if (i == fixedCreate) CreateBridge(bridgeCreateCases[i,0],bridgeCreateCases[i,1]);
-			//else if (7 > UnityEngine.Random.Range(0,10))
-			CreateBridge(bridgeCreateCases[i, 0], bridgeCreateCases[i, 1]);
+			if (CheckRay(bridgeCreateCases[i,0], bridgeCreateCases[i,1]))
+				CreateBridge(bridgeCreateCases[i, 0], bridgeCreateCases[i, 1]);
 		}
 	}
 
