@@ -171,5 +171,7 @@ public class SlimeBaseSC : Slime_Stat
 	public void settingSkillSAD(float speed, float attack, float delay)
 	{
 		arrSAD[0] = speed; arrSAD[1] = attack; arrSAD[2] = delay;
+		for (int i = 0; i < atkObj.Count; i++)
+		{ ChangeSoldierPower(atkObj[i]); }
 	}
 }

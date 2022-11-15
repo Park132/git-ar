@@ -292,7 +292,7 @@ public class PS_SkillSystem : MonoBehaviour
                 SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
                 dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
             }
-        } else if (type == 2 || type == 4 || type == 5)
+        } else if (type == 2 || type == 4 || type == 5 || type == 6)
         {
             for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
             {
@@ -354,7 +354,16 @@ public class PS_SkillSystem : MonoBehaviour
                 switch (currentClickLevel)
                 {
                     case 1:
-
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 0.8f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 0.6f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 0.4f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 0.2f));
                         break;
                 }
                 PlayerBaseColorInit();
@@ -363,6 +372,16 @@ public class PS_SkillSystem : MonoBehaviour
                 switch (currentClickLevel)
                 {
                     case 1:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 1.2f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 1.4f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 1.7f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillDelaySpeed(dummy_base, 2.0f));
                         break;
                 }
                 EnemyBaseColorInit();
@@ -385,6 +404,7 @@ public class PS_SkillSystem : MonoBehaviour
                     case 1:
                         break;
                 }
+                EnemyBaseColorInit();
             }
 
             
@@ -475,7 +495,7 @@ public class PS_SkillSystem : MonoBehaviour
         StopCoroutine("PassiveSkill");
     }
 
-    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val) // 효과
+    IEnumerator ApplyingSkillProduce(SlimeBaseSC sc, float val) // 생산 효과
     {
         sc.rechargeDelay = val;
         yield return new WaitForSecondsRealtime(10f);
@@ -483,7 +503,7 @@ public class PS_SkillSystem : MonoBehaviour
         StopCoroutine("ApplyingSkillProduce");
     }
 
-    IEnumerator ApplyingSkillDelaySpeed(SlimeBaseSC sc, float val)
+    IEnumerator ApplyingSkillDelaySpeed(SlimeBaseSC sc, float val) // 딜레이 효과
     {
         sc.settingSkillSAD(1, 1, val);
         yield return new WaitForSecondsRealtime(10f);
