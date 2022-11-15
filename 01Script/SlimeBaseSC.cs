@@ -9,8 +9,8 @@ public class SlimeBaseSC : Slime_Stat
 	public float rechargeDelay, woundRechargeDelay; // 속도
 	public int rechargeHP; // 양
 	private TEAM finalAttack;
-	private bool canChanged = false;
-	private IEnumerator recharging, recoverRecharge;
+	public bool canChanged = false;
+	private IEnumerator recharging, recoverRecharge, bloodingCalc;
 	public MeshRenderer plate;
 	public GameObject area;
 	private Color32[] arrColor;
@@ -19,6 +19,9 @@ public class SlimeBaseSC : Slime_Stat
 	private float multipleNum;
 	public float[] arrSAD;
 	float speed, del;
+
+	private int previousHP;
+	public float regenePerSec = 0f;
 	
 
 	protected override void Start()
@@ -26,12 +29,13 @@ public class SlimeBaseSC : Slime_Stat
 		arrSAD = new float[] { 1,1,1};
 		base.Start();
 		if (this.state == TEAM.NONE) canChanged = true;
-		recharging = ReChargeSlime();
+		recharging = ReChargeSlime(); StartCoroutine(recharging);
+		bloodingCalc = BloodingCalc(); StartCoroutine(bloodingCalc);
 		recoverRecharge = RecoverDelay();
-		StartCoroutine(recharging);
 
 		multipleNum = 1;
 		rechargeHP = 1;
+		previousHP = this.Health;
 		rechargeDelay = StructorCollector.BASERECHARGEDELAY;
 		atkObj = new List<GameObject>();
 		arrColor = new Color32[] { new Color32(43, 97, 19, 255),
@@ -114,13 +118,13 @@ public class SlimeBaseSC : Slime_Stat
 	// 병사의 공격력 변경
 	public void ChangeSoldierPower(GameObject obj)
 	{
-		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /2)) *arrSAD[1]);
-		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 3)*1000)/1000 *arrSAD[0];
-		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.2f*multipleNum) * 1000) / 1000 *arrSAD[2];
+		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /4)) *arrSAD[1]);
+		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 4)*1000)/1000 *arrSAD[0];
+		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.1f*multipleNum) * 1000) / 1000 *arrSAD[2];
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 
-	// 마지막으로 공격을 한 슬라임의 팀으로 변경. 초기 체력 10 지급.
+	// 마지막으로 공격을 한 슬라임의 팀으로 변경. 초기 체력 3 지급.
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.transform.CompareTag("Slime"))
@@ -155,7 +159,8 @@ public class SlimeBaseSC : Slime_Stat
 						else bases[i].SetActive(false);
 					}
 					StopOrderPreviousTeam();
-					this.Health = 10;
+					this.Health = 3;
+					this.previousHP = this.Health; this.regenePerSec = 0;
 				}
 			}
 		}
@@ -193,5 +198,19 @@ public class SlimeBaseSC : Slime_Stat
 	public float[] GetSAD()
 	{
 		return new float[] { this.speed, this.Attack, this.del };
+	}
+	public IEnumerator BloodingCalc()
+	{
+		int sumHealth;
+		while (true)
+		{
+			yield return new WaitForSeconds(1f);
+			if (GameManager.Instance.gameState == GAMESTATE.START)
+			{
+				sumHealth = this.Health - previousHP;
+				previousHP = this.Health;
+				regenePerSec = (sumHealth + regenePerSec) / 2f;
+			}
+		}
 	}
 }

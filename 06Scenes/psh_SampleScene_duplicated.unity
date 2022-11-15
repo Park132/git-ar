@@ -961,11 +961,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec0df1b1e3bf394ba146dc212f78654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  e_type: 2
   attackTypeList: 
   attackListCount: 0
   des:
     SetP1: {fileID: 0}
     SetP2: {fileID: 0}
+  allDummy: []
+  baseConnectedArr: []
+  ai:
+    e_type: 0
+    minEmergencyBase: 0
+    maxAttackCount: 0
+    delayThink: 0
+    skills: 0
+    e_char: 0
+    maxRechargeCount: 0
+    emergencyHP: 0
+    stopAttackHP: 0
+    maxSupportHP: 0
 --- !u!1 &462382846
 GameObject:
   m_ObjectHideFlags: 0

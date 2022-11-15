@@ -88,7 +88,7 @@ public class BridgeManager : MonoBehaviour
 		float dummy_dist = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
 		//bool hit_check= Physics.BoxCast(SetP1.transform.position, new Vector3(3f, 3f, 3f),
 		//(SetP2.transform.position - SetP1.transform.position).normalized, out hit, Quaternion.identity, dummy_dist,3);
-		RaycastHit[] hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(1f, 1f, 1f),
+		RaycastHit[] hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(0.5f, 0.5f, 0.5f),
 			(SetP2.transform.position - SetP1.transform.position).normalized, Quaternion.identity, dummy_dist);
 		foreach (RaycastHit hit in hits)
 		{

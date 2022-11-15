@@ -28,7 +28,7 @@ public class TargetEnable : MonoBehaviour
 	{
 		if (targetStatus.Status == Status.TRACKED || targetStatus.Status == Status.EXTENDED_TRACKED)
 		{
-			Debug.Log(this.gameObject.name + "enabled");
+			//Debug.Log(this.gameObject.name + "enabled");
 			if (markerNum == -1)
 				markerNum = GameManager.Instance.SettingMarkerList(this.gameObject, slSC.state);
 			else

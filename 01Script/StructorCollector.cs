@@ -17,7 +17,7 @@ public enum ENEMYTYPE
 public enum ENEMYCHAR
 {DEFENSIVE, AGRESSIVE  }
 public enum ENEMYATTACKTYPE
-{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3 }
+{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4 }
 public class StructorCollector : MonoBehaviour
 {
     public const float BASESPEED = 0.04f;
@@ -65,13 +65,13 @@ public class StructorCollector : MonoBehaviour
                 case ENEMYCHAR.AGRESSIVE:
                     maxRechargeCount = 2;
                     emergencyHP = 10;
-                    stopAttackHP = 13;
-                    maxSupportHP = 25;
+                    stopAttackHP = 7;
+                    maxSupportHP = 30;
                     break;
                 case ENEMYCHAR.DEFENSIVE:
                     maxRechargeCount = 2;
                     emergencyHP = 17;
-                    stopAttackHP = 20;
+                    stopAttackHP = 13;
                     maxSupportHP = 40;
                     break;
                 default:
