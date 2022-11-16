@@ -128,15 +128,26 @@ public class PS_SkillSystem : MonoBehaviour
                     break;
                 }
 
-                if(skill_storage[index] >= 17 && skill_storage[index] <= 18)
+                if(skill_storage[index] >= 17 && skill_storage[index] <= 20)
                 {
                     skill_type = 5;
                     skill_level = skill_storage[index] % 4;
+                    if (skill_level % 4 == 0)
+                        skill_level = 4;
                     break;
                 }
-
+                /*
                 if(skill_storage[index] >= 19 && skill_storage[index] <= 20) {
                     skill_type = 6;
+                    skill_level = skill_storage[index] % 4;
+                    if (skill_level % 4 == 0)
+                        skill_level = 2;
+                    break;
+                }
+                */
+                if(skill_storage[index] >= 21 && skill_storage[index] <= 24)
+                {
+                    skill_type = 7;
                     skill_level = skill_storage[index] % 4;
                     if (skill_level % 4 == 0)
                         skill_level = 2;
@@ -168,6 +179,9 @@ public class PS_SkillSystem : MonoBehaviour
                     break;
                 case 6:
                     btn1_txt.text = "Attack (Bridge)";
+                    break;
+                case 7:
+                    btn1_txt.text = "Lock (Base)";
                     break;
             }
 
@@ -208,6 +222,9 @@ public class PS_SkillSystem : MonoBehaviour
                 case 6:
                     btn2_txt.text = "Attack (Bridge)";
                     break;
+                case 7:
+                    btn2_txt.text = "Lock (Base)";
+                    break;
             }
             switch (key2)
             {
@@ -246,7 +263,10 @@ public class PS_SkillSystem : MonoBehaviour
                     btn3_txt.text = "Attack (Base)";
                     break;
                 case 6:
-                    btn3_txt.text = "Attack (Bridge)";
+                    btn3_txt.text = "Attack (Base)";
+                    break;
+                case 7:
+                    btn3_txt.text = "Lock (Base)";
                     break;
             }
 
@@ -292,7 +312,7 @@ public class PS_SkillSystem : MonoBehaviour
                 SlimeBaseSC dummy_base = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();
                 dummy_base.ChangeState(PLATESTATE.CANUSESKILL);
             }
-        } else if (type == 2 || type == 4 || type == 5 || type == 6)
+        } else if (type == 2 || type == 4 || type == 5 || type == 6 || type == 7)
         {
             for (int i = 0; i < GameManager.Instance.arrEnemy.Count; i++)
             {
@@ -395,24 +415,39 @@ public class PS_SkillSystem : MonoBehaviour
                     case 2:
                         dummy_base.Health -= 30;
                         break;
+                    case 3:
+                        dummy_base.Health -= 35;
+                        break;
+                    case 4:
+                        dummy_base.Health -= 40;
+                        break;
                 }
                 EnemyBaseColorInit();
             } else if(currentClickType == 6)
             {
                 switch(currentClickLevel) // 경로공격
                 {
-                    case 1:
-                        break;
+                    
                 }
                 EnemyBaseColorInit();
-            } else if(currentClickType == 7)
+            } else if(currentClickType == 7) // 기지 잠금
             {
                 switch(currentClickLevel)
                 {
                     case 1:
-
+                        StartCoroutine(ApplyingSkillLockBase(dummy_base, 5f));
+                        break;
+                    case 2:
+                        StartCoroutine(ApplyingSkillLockBase(dummy_base, 7f));
+                        break;
+                    case 3:
+                        StartCoroutine(ApplyingSkillLockBase(dummy_base, 10f));
+                        break;
+                    case 4:
+                        StartCoroutine(ApplyingSkillLockBase(dummy_base, 15f));
                         break;
                 }
+                EnemyBaseColorInit();
             }
 
             
@@ -517,6 +552,13 @@ public class PS_SkillSystem : MonoBehaviour
         yield return new WaitForSecondsRealtime(10f);
         sc.settingSkillSAD(1, 1, 1);
         StopCoroutine("ApplyingSkillDelaySpeed");
+    }
 
+    IEnumerator ApplyingSkillLockBase(SlimeBaseSC sc, float val)
+    {
+        sc.settingSkillSAD(1, 1, 999);
+        yield return new WaitForSecondsRealtime(val);
+        sc.settingSkillSAD(1, 1, 1);
+        StopCoroutine("ApplyingSkillLockBase");
     }
 }
