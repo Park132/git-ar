@@ -311,6 +311,7 @@ MonoBehaviour:
   wall_marker1: {fileID: 1473920112}
   c1: {fileID: 877199501}
   c2: {fileID: 182506568}
+  ground_prefab: {fileID: 0}
 --- !u!4 &580192339
 Transform:
   m_ObjectHideFlags: 0

@@ -12,11 +12,28 @@ public class PS_MapMake : MonoBehaviour
     public Transform c1; // 정점 1
     public Transform c2; // 정점 2
 
+    public GameObject ground_prefab;
+
+    private int i = 0;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        MapInit3(c1, c2, 10, 7);
+        //MapInit3(c1, c2, 10, 7);
+    }
+
+    private void Update()
+    {
+        if(GameManager.Instance.distanceEP != 0)
+        {
+            while ( i<1)
+            {
+                MapInit3(c1, c2, 16, 12);
+                i++;
+            }
+        }
+
     }
 
     public void MapInit3(Transform o1, Transform o2, float a, float b) // 3안
@@ -25,6 +42,7 @@ public class PS_MapMake : MonoBehaviour
         // 삼각함수로 구현해내는 방안
 
         centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, 0, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
+        Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
 
         for (int i = 0; i <= 360; i += 20) //19개 생성
         {
