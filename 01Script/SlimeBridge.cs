@@ -6,9 +6,9 @@ public class SlimeBridge : MonoBehaviour
 {
     
     
-    private StructorCollector.SoldierSetting soldierOrder;
+    [SerializeField]private StructorCollector.SoldierSetting soldierOrder;
     private SlimeBaseSC SPB, DPB;
-    private float DelayAttack;
+    [SerializeField]private float DelayAttack;
     private bool once;
 
     public IEnumerator SpawnIE;

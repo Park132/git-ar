@@ -54,9 +54,17 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		//ai = new StructorCollector.AI_Setting();
 	}
 
-	public void SettingEnemyType(ENEMYTYPE t)
+	public void SettingEnemyTypeHard()
 	{
-		e_type = t;
+		e_type = ENEMYTYPE.HARD;
+	}
+	public void SettingEnemyTypeNormal()
+	{
+		e_type = ENEMYTYPE.NORMAL;
+	}
+	public void SettingEnemyTypeTutorial()
+	{
+		e_type = ENEMYTYPE.TUTORIAL;
 	}
 
 	public void StartAI()
@@ -91,9 +99,9 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 		///
 		switch (e_type)
-		{
+		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, skills, character);
 			case ENEMYTYPE.TUTORIAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 4f, 1, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1, ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 8; ////
@@ -101,7 +109,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				//ai.maxSupportHP = 30;
 				break;
 			case ENEMYTYPE.NORMAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 3, 3f, 2, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 2, ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 10;
@@ -110,7 +118,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				break;
 
 			case ENEMYTYPE.HARD:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 1f, 2, ENEMYCHAR.AGRESSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 2, ENEMYCHAR.AGRESSIVE);
 				//ai.maxRechargeCount = 3;
 				//ai.e_char = ENEMYCHAR.AGRESSIVE;
 				//ai.emergencyHP = 13;
@@ -141,6 +149,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				if (!dummy_emergency_act)
 					this.emergencyAttack();
 			}
+
 			else if (!this.attack_once)
 			{
 				if (ai.e_char == ENEMYCHAR.AGRESSIVE)
@@ -199,7 +208,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				}
 			}
 		}
-		CheckBeforeOrder(destP, startP, ENEMYATTACKTYPE.ATTACK);
+		CheckBeforeOrder(destP, startP, ENEMYATTACKTYPE.EMERGENCY);
 	}
 
 	// 가장 가까이에 있는 진영을 공격하는 구문
@@ -261,7 +270,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		{
 			if (allDummy[i].obj_sc.state == TEAM.ENEMY)
 			{
-				if (allDummy[i].obj_sc.Health <= ai.emergencyHP || allDummy[i].obj_sc.regenePerSec <= -1.2f)
+				if (allDummy[i].obj_sc.Health <= ai.emergencyHP || allDummy[i].obj_sc.regenePerSec <= -1.2f || allDummy[i].obj_sc.woundRechargeDelay != 0)
 				{
 					if (minHP > allDummy[i].obj_sc.Health)
 					{ index = i; minHP = allDummy[i].obj_sc.Health; }
@@ -514,7 +523,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			if (dummy_stop)
 			{ this.OrderStopAttack(attackList[0][i], attackList[1][i]); }
 		}
-		if (attackCount <= 0)
+		if (attackCount <= 1)
 			attack_once = false;
 	}
 

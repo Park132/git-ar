@@ -18,7 +18,7 @@ public class SlimeBaseSC : Slime_Stat
 	public List<GameObject> atkObj;	// 이 베이스에서 출발하는 모든 공격명령 저장
 	private float multipleNum;
 	public float[] arrSAD;
-	float speed, del;
+	float speed, del, setting_prevTimer;
 
 	private int previousHP;
 	public float regenePerSec = 0f;
@@ -86,8 +86,9 @@ public class SlimeBaseSC : Slime_Stat
 				}
 			}
 
-			if (currentNearCount != nearCount)
+			if (currentNearCount != nearCount || ( LS_TimerSC.Instance.timer-setting_prevTimer >= 10.0f))
 			{
+				setting_prevTimer = LS_TimerSC.Instance.timer;
 				multipleNum = GameManager.Instance.marker.markerLen - nearCount;
 				for (int i = 0; i < atkObj.Count; i++)
 				{ ChangeSoldierPower(atkObj[i]); }
@@ -118,9 +119,10 @@ public class SlimeBaseSC : Slime_Stat
 	// 병사의 공격력 변경
 	public void ChangeSoldierPower(GameObject obj)
 	{
-		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /4)) *arrSAD[1]);
-		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 4)*1000)/1000 *arrSAD[0];
-		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * (1.5f - 0.1f*multipleNum) * 1000) / 1000 *arrSAD[2];
+		float dummy_timer = LS_TimerSC.Instance.timer; // 50초마다 공격력 1상승, 10초마다 이동속도 0.01f퍼센트 상승,  10초마다 공격딜레이 0.01f퍼센트 하락
+		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /4) + dummy_timer / 50) *arrSAD[1]);
+		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 4 +dummy_timer/1000)*1000)/1000 *arrSAD[0];
+		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * Mathf.Max(0.2f,1.5f - 0.1f*multipleNum - dummy_timer/1000) * 1000) / 1000 *arrSAD[2];
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 

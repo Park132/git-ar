@@ -25,7 +25,7 @@ public class SlimeSoldierSC : Slime_Stat
 		if (!ReferenceEquals(destination, null))
 		{
 			moveVec = (destination.transform.position - this.transform.position).normalized;
-			this.transform.position += moveVec * order.Speed;
+			this.transform.position += moveVec * order.Speed * Time.deltaTime;
 		}
 	}
 
