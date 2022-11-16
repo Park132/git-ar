@@ -10,6 +10,8 @@ public class PS_ShowHP : MonoBehaviour
 
     public GameObject this_hp_target;
 
+    
+
     SlimeBaseSC sc;
 
     private void Awake()
