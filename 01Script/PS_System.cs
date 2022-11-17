@@ -8,6 +8,27 @@ public class PS_System : MonoBehaviour
 {
     public Image fadeImg;
 
+    // 싱글톤 ///
+    private static PS_System instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(this.gameObject);
+    }
+
+    public static PS_System Instance
+    {
+        get
+        {
+            if (instance != null)
+                return instance;
+            return null;
+        }
+    }
+    ///////////////
     /*
     private void Update()
     {
@@ -33,20 +54,15 @@ public class PS_System : MonoBehaviour
         SceneManager.LoadScene("psh_MainScene");
     }
 
-    public void FadeScene(int key) // key 1 -> 페이드 인 / key 2 -> 페이드 아웃
+    public void FadeScene(bool key) // key 1 -> 페이드 인 / key 2 -> 페이드 아웃
     {
-        switch (key)
-        {
-            case 1:
-                StartCoroutine(FadeInCoroutine());
-                break;
-            case 2:
-                StartCoroutine(FadeOutCoroutine());
-                break;
-        }
+        if (key)
+            StartCoroutine(FadeInCoroutine());
+        else
+            StartCoroutine(FadeOutCoroutine());
     }
 
-    IEnumerator FadeInCoroutine()
+    IEnumerator FadeOutCoroutine()
     {
         float fadeCount = 0;
         while (fadeCount <1.0f)
@@ -57,7 +73,7 @@ public class PS_System : MonoBehaviour
         }
     }
 
-    IEnumerator FadeOutCoroutine()
+    IEnumerator FadeInCoroutine()
     {
         float fadeCount = 1.0f;
         while (fadeCount > 0.0f)
