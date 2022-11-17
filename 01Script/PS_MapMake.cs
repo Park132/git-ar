@@ -11,6 +11,7 @@ public class PS_MapMake : MonoBehaviour
 
     public Transform c1; // 정점 1
     public Transform c2; // 정점 2
+    public Transform c3;
 
     public GameObject ground_prefab;
 
@@ -37,6 +38,7 @@ public class PS_MapMake : MonoBehaviour
             }
             centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, (c1.transform.position.y + c2.transform.position.y)/2, (c1.transform.position.z + c2.transform.position.z) / 2); // 중점
             ground.transform.position = centerm1.transform.position;
+            ground.transform.rotation = Quaternion.Euler(PlaneNVec());
         }
     }
 
@@ -55,6 +57,30 @@ public class PS_MapMake : MonoBehaviour
             wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), (o1.transform.position.y + o2.transform.position.y) / 2, centerm1.transform.position.z + b * Mathf.Sin(i));
             Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
         }
+
+    }
+
+    public Vector3 PlaneNVec()
+    {
+        Vector3[] c = new Vector3[3];
+
+        for(int i = 0; i < 3; i++)
+        {
+            c[i] = GameManager.Instance.marker.markerObj[i].transform.position;
+        }
+
+        // vector 1
+        Vector3 a1 = new Vector3((c[2].x - c[0].x),
+                                 (c[2].y - c[0].y),
+                                 (c[2].z - c[0].z));
+        // vector2
+        Vector3 a2 = new Vector3((c[1].x - c[0].x),
+                                 (c[1].y - c[0].y),
+                                 (c[1].z - c[0].z));
+
+        // vector3 a1과 a2를 외적한 a3
+        Vector3 a3 = Vector3.Cross(a1, a2).normalized;
+        return a3;
     }
 
 }
