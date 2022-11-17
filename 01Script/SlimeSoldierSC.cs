@@ -33,7 +33,7 @@ public class SlimeSoldierSC : Slime_Stat
 	public override void SlimeScaleChange()
 	{
 		base.SlimeScaleChange();
-		box.size = Vector3.one *0.7f;
+		box.size = Vector3.one;
 		//nav.radius = this.transform.localScale.x * 0.5f;
 	}
 

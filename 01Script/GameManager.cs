@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
 	// Start BUtton으로 버튼 클릭 시 다리 생성 및 게임 조작이 가능.
 	public void BridgeButton()
 	{
+		if (BridgeManager.Instance.creatingBridge)
+			return;
 		if (gameState != GAMESTATE.MAIN && gameState != GAMESTATE.READY)
 			return;
 
@@ -87,7 +89,7 @@ public class GameManager : MonoBehaviour
 				{ arrEnemy.Add(marker.markerObj[i]); }
 			}
 
-			BridgeManager.Instance.BridgeCalc(playerP,enemyP);
+			StartCoroutine(BridgeManager.Instance.BridgeCalc(playerP,enemyP));
 
 			gameState = GAMESTATE.READY;
 			

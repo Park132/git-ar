@@ -16,6 +16,7 @@ public class BridgeManager : MonoBehaviour
 	public List<List<GameObject>> bridgeArr;
 	public GameObject bridge_obj;
 	public int bridgeCount;
+	public bool creatingBridge;
 	
 	private void Awake()
 	{
@@ -41,12 +42,19 @@ public class BridgeManager : MonoBehaviour
 		bridgeCount = 0;
 	}
 
-	public void BridgeCalc(int playerP, int enemyP)
+	public IEnumerator BridgeCalc(int playerP, int enemyP)
 	{
+		creatingBridge = true;
 		bridgeArr[0].Clear(); bridgeArr[1].Clear();
 		bridgeCount = 0;
-		for (int i = 0; i < GameManager.Instance.bridgeObjs.transform.childCount; i++)
-			Destroy(GameManager.Instance.bridgeObjs.transform.GetChild(i).gameObject);
+		//for (int i = GameManager.Instance.bridgeObjs.transform.childCount-1; i >= 0 ; i--)
+		//Destroy(GameManager.Instance.bridgeObjs.transform.GetChild(i).gameObject);
+		BridgeLook[] arr_child = GameManager.Instance.bridgeObjs.GetComponentsInChildren<BridgeLook>();
+		foreach (BridgeLook tr in arr_child)
+		{Destroy(tr.gameObject,0); }
+
+		yield return new WaitForSeconds(0.5f);
+
 		int PEbridgelen = 0;
 		for (int i = 0; i < GameManager.Instance.marker.markerLen; i++)
 		{ if (GameManager.Instance.marker.markerExist[i] && GameManager.Instance.marker.markerTeam[i] == TEAM.NONE) PEbridgelen++; }
@@ -56,18 +64,25 @@ public class BridgeManager : MonoBehaviour
 
 		// 플레이어 진영과 중립 사이의 다리 생성
 		CreateBridgeCode_for_PE(playerP, ref arrBridge, ref arrBridgeDist, PEbridgelen);
+
 		// 적 진영과 중립 사이의 다리 생성
+		arrBridge = new int[PEbridgelen];
+		arrBridgeDist = new float[PEbridgelen];
 		CreateBridgeCode_for_PE(enemyP, ref arrBridge, ref arrBridgeDist, PEbridgelen);
 
+		arrBridge = new int[PEbridgelen];
+		arrBridgeDist = new float[PEbridgelen];
 		CreateBridge_For_MidlePoints(PEbridgelen);
+		creatingBridge = false;
 	}
+
 
 	// 플레이어, 적의 구문 반복을 줄이기 위한 코드
 	private void CreateBridgeCode_for_PE(int P, ref int[] arrBridge, ref float[] arrBridgeDist, int bridgelen)
 	{
 		DistanceCalc(GameManager.Instance.marker.markerObj[P], P, ref arrBridge, ref arrBridgeDist);
 		DistanceSorting(ref arrBridge, ref arrBridgeDist, bridgelen);
-		int j = 0, max_create = Mathf.CeilToInt(bridgelen/2);
+		int j = 0, max_create = Mathf.CeilToInt(bridgelen);
 		for (int i = 0; i < bridgelen; i++)
 		{
 			if (j < max_create)
@@ -85,11 +100,13 @@ public class BridgeManager : MonoBehaviour
 	// 다리 체크 -> 레이를 발사해서 그 레이 안에 다른 기지가 존재한다면 다리는 생성 X
 	private bool CheckRay(GameObject SetP1, GameObject SetP2)
 	{
+		RaycastHit[] hits;
 		float dummy_dist = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
 		//bool hit_check= Physics.BoxCast(SetP1.transform.position, new Vector3(3f, 3f, 3f),
 		//(SetP2.transform.position - SetP1.transform.position).normalized, out hit, Quaternion.identity, dummy_dist,3);
-		RaycastHit[] hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(0.5f, 0.5f, 0.5f),
-			(SetP2.transform.position - SetP1.transform.position).normalized, Quaternion.identity, dummy_dist);
+		hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(0.3f, 0.3f, 0.3f),
+			(SetP2.transform.position - SetP1.transform.position).normalized, Quaternion.identity, dummy_dist * 0.8f);
+		Debug.DrawRay(SetP1.transform.position, (SetP2.transform.position - SetP1.transform.position).normalized * dummy_dist * 0.9f, Color.green, 3, false);
 		foreach (RaycastHit hit in hits)
 		{
 			GameObject dummy = hit.transform.GetComponentInParent<TargetEnable>().gameObject;
@@ -98,7 +115,7 @@ public class BridgeManager : MonoBehaviour
 			{Debug.Log("Hit! hitobj = " +dummy.gameObject +"\nStart = " +SetP1 +"  dest = " +SetP2); return false; }
 		}
 		
-		Debug.DrawRay(SetP1.transform.position, (SetP2.transform.position - SetP1.transform.position).normalized * dummy_dist, Color.green, 3, false);
+		
 		return true;
 	}
 
