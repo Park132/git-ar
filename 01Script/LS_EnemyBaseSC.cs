@@ -143,10 +143,12 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				bool dummy_emergency_act = false;
 				for (int i = attackListCount - 1; i >= 0; i--)
 				{
-					if (attackTypeList[i] != ENEMYATTACKTYPE.EMERGENCY)
-						this.OrderStopAttack(attackList[0][i], attackList[1][i]);
-					else
+					if (attackTypeList[i] == ENEMYATTACKTYPE.EMERGENCY)
 						dummy_emergency_act = true;
+					else if (attackTypeList[i] != ENEMYATTACKTYPE.CHECKATTACK)
+						this.OrderStopAttack(attackList[0][i], attackList[1][i]);
+					
+						
 				}
 				if (!dummy_emergency_act)
 					this.emergencyAttack();
@@ -162,10 +164,11 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			if (ai.maxAttackCount > attackListCount)
 			{
 				SuddenAttackAI();
+				CheckAttackAI();
 			}
 			DefenseAI();
 			EmergencyBase();
-			CheckAttackAI();
+			
 
 			// 만약 공격을 한번도 안한다면 이유 찾기
 			if (attackListCount == 0)
@@ -430,7 +433,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			{
 				maxHP = int.MinValue;
 				index = -1;
-				if (allDummy[i].obj_sc.state == TEAM.ENEMY)
+				if (allDummy[i].obj_sc.state == TEAM.ENEMY || allDummy[i].obj_sc.state == TEAM.NONE)
 					continue;
 				for (int j = 0; j < allDummy[i].connectedObj.Count; j++) {
 					if (allDummy[i].connectedObj[j].obj_sc.state == TEAM.ENEMY)
