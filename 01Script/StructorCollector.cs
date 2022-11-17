@@ -9,7 +9,7 @@ using System.Linq;
 public enum TEAM
 { PLAYER, ENEMY, NONE }
 public enum GAMESTATE
-{ READY, START, PAUSE }
+{ MAIN, READY, START, PAUSE }
 public enum PLATESTATE
 { UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, CANCLE = 4 }
 public enum ENEMYTYPE

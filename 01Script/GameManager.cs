@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{ Destroy(this.gameObject); }
-		gameState = GAMESTATE.READY;
+		gameState = GAMESTATE.MAIN;
 	}
 	public static GameManager Instance { 
 		get { return instance; }
@@ -56,8 +56,11 @@ public class GameManager : MonoBehaviour
 	}
 
 	// Start BUtton으로 버튼 클릭 시 다리 생성 및 게임 조작이 가능.
-	public void StartButton()
+	public void BridgeButton()
 	{
+		if (gameState != GAMESTATE.MAIN && gameState != GAMESTATE.READY)
+			return;
+
 		int playerP = -1, enemyP = -1;
 
 		// 적군과 아군의 베이스캠프를 확인
@@ -73,7 +76,7 @@ public class GameManager : MonoBehaviour
 		// 아군 적군 베이스캠프 확인 완료시
 		if (playerP != -1 && enemyP != -1)
 		{
-			arrNone.Clear();
+			arrNone.Clear(); arrPlayer.Clear(); arrEnemy.Clear();
 			for (int i = 0; i < marker.markerLen; i++)
 			{
 				if (marker.markerTeam[i] == TEAM.NONE && marker.markerExist[i])
@@ -86,11 +89,19 @@ public class GameManager : MonoBehaviour
 
 			BridgeManager.Instance.BridgeCalc(playerP,enemyP);
 
-			gameState = GAMESTATE.START;
-			LS_EnemyBaseSC.Instance.StartAI();
+			gameState = GAMESTATE.READY;
+			
 		}
 		else
 		{ Debug.Log("마커를 더 찍어주셈"); }
+	}
+	public void StartButton()
+	{
+		if (gameState == GAMESTATE.READY)
+		{
+			gameState = GAMESTATE.START;
+			LS_EnemyBaseSC.Instance.StartAI();
+		}
 	}
 
 	// 마커 인식 시 한번만 실행하게 제작.
