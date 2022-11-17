@@ -16,6 +16,7 @@ public class PS_MapMake : MonoBehaviour
 
     private int i = 0;
 
+    GameObject ground;
 
     // Start is called before the first frame update
     void Start()
@@ -31,9 +32,12 @@ public class PS_MapMake : MonoBehaviour
             {
                 MapInit3(c1, c2, 16, 12);
                 i++;
-            }
-        }
 
+                ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
+            }
+            centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, -1, (c1.transform.position.z + c2.transform.position.z) / 2); // 중점
+            ground.transform.position = centerm1.transform.position;
+        }
     }
 
     public void MapInit3(Transform o1, Transform o2, float a, float b) // 3안
@@ -41,8 +45,9 @@ public class PS_MapMake : MonoBehaviour
         // 물체1의 위치, 물체2의 위치, x축 가중치, z축 가중치
         // 삼각함수로 구현해내는 방안
 
-        centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, 0, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
-        Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
+        centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, -1, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
+        // ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
+
 
         for (int i = 0; i <= 360; i += 20) //19개 생성
         {
@@ -51,4 +56,5 @@ public class PS_MapMake : MonoBehaviour
             Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
         }
     }
+
 }
