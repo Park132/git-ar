@@ -38,6 +38,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	[SerializeField]List<StructorCollector.AI_CampCheck> allDummy = new List<StructorCollector.AI_CampCheck>();
 	[SerializeField]List<StructorCollector.Bridge_Info> baseConnectedArr = new List<StructorCollector.Bridge_Info>();
 	bool attack_once;
+	private float prevCheckTime;
 
 	[SerializeField]public StructorCollector.AI_Setting ai;
 
@@ -99,9 +100,9 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 		///
 		switch (e_type)
-		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, skills, character);
+		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, skills, delayCheck, character);
 			case ENEMYTYPE.TUTORIAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1, 10f ,ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 8; ////
@@ -109,7 +110,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				//ai.maxSupportHP = 30;
 				break;
 			case ENEMYTYPE.NORMAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 2, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 2, 8f, ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 10;
@@ -118,7 +119,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				break;
 
 			case ENEMYTYPE.HARD:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 2, ENEMYCHAR.AGRESSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 2, 3f, ENEMYCHAR.AGRESSIVE);
 				//ai.maxRechargeCount = 3;
 				//ai.e_char = ENEMYCHAR.AGRESSIVE;
 				//ai.emergencyHP = 13;
@@ -126,6 +127,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				//ai.maxSupportHP = 30;
 				break;
 		}
+		prevCheckTime = 0;
 		StartCoroutine(UpdateAI());
 	}
 
@@ -163,6 +165,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			}
 			DefenseAI();
 			EmergencyBase();
+			CheckAttackAI();
 
 			// 만약 공격을 한번도 안한다면 이유 찾기
 			if (attackListCount == 0)
@@ -194,7 +197,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 					GameObject dummy_connect_obj = BridgeManager.Instance.CheckConnect(GameManager.Instance.arrEnemy[i], j);
 					// 만약 현재 Enemy 진영과 연결된 진영이라면
 					if (!ReferenceEquals(dummy_connect_obj, null) &&
-						!CheckAttack(GameManager.Instance.arrEnemy[i], dummy_connect_obj))
+						!AttackCheck(GameManager.Instance.arrEnemy[i], dummy_connect_obj))
 					{
 						float dummy_dist = Vector3.Distance(dummy_connect_obj.transform.position, GameManager.Instance.arrEnemy[i].transform.position);
 						int dummy_health = dummy_connect_obj.GetComponentInChildren<SlimeBaseSC>().Health;
@@ -232,7 +235,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 					// 만약 현재 Enemy 진영과 연결된 진영이라면
 					// 공격 중인가 확인.
 					if (!ReferenceEquals(dummy_connect_obj, null) &&
-						!CheckAttack(GameManager.Instance.arrEnemy[i], dummy_connect_obj))
+						!AttackCheck(GameManager.Instance.arrEnemy[i], dummy_connect_obj))
 					{
 						SlimeBaseSC dummySSC = dummy_connect_obj.GetComponentInChildren<SlimeBaseSC>();
 						int dummy_hp = dummySSC.Health;
@@ -416,7 +419,39 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 	}
 
+	// 견제 공격 -> 견제공격을 한다면 공격 받은 기지의 체력 재생 속도가 느려짐.
+	// 연결된 자신의 팀 중 가장 체력이 높은 기지가 한대 톡 치기.
+	private void CheckAttackAI()
+	{
+		if (LS_TimerSC.Instance.timer - prevCheckTime >= ai.delayCheckAttack)
+		{
+			int maxHP = int.MinValue, index = -1;
+			for (int i = 0; i < allDummy.Count; i++)
+			{
+				maxHP = int.MinValue;
+				index = -1;
+				if (allDummy[i].obj_sc.state == TEAM.ENEMY)
+					continue;
+				for (int j = 0; j < allDummy[i].connectedObj.Count; j++) {
+					if (allDummy[i].connectedObj[j].obj_sc.state == TEAM.ENEMY)
+					{
+						if (allDummy[i].connectedObj[j].obj_sc.Health > maxHP)
+						{ index = j; maxHP = allDummy[i].connectedObj[j].obj_sc.Health; }
+					}
+				}
+				if (index != -1)
+				{
+					CheckBeforeOrder(allDummy[i].obj, allDummy[i].connectedObj[index].obj, ENEMYATTACKTYPE.CHECKATTACK);
+				}
+			}
+		}
+	}
 
+	private IEnumerator CheckDestroy(GameObject P1, GameObject P2)
+	{
+		yield return new WaitForSeconds(2f);
+		OrderStopAttack(P1, P2);
+	}
 
 	// 체크체크 왜 공격을 안 하나! 빠져가지곤
 	private void CheckState()
@@ -457,7 +492,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 						// 만약 현재 Enemy 진영과 연결된 진영이라면
 						// 공격 중인가 확인.
 						if (BridgeManager.Instance.CheckBridge(GameManager.Instance.arrEnemy[i], GameManager.Instance.arrEnemy[index]) &&
-							!CheckAttack(dummy_obj, destP))
+							!AttackCheck(dummy_obj, destP))
 						{
 							
 							float dummy_dist = (GameManager.Instance.distanceEP * 2) -
@@ -528,21 +563,26 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	}
 
 	// 특정 조건 때 두개의 지점을 잇는 다리가 존재하며, 공격을 하지 않음을 전제로 실행.
-	private void OrderAttack(GameObject P1, GameObject P2)
+	private void OrderAttack(GameObject P1, GameObject P2, ENEMYATTACKTYPE t)
 	{
 		des.SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
 		des.SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
 
 
-			string dummy_name = des.SetP1.name + "_attack_" + des.SetP2.name;
+		string dummy_name = des.SetP1.name + "_attack_" + des.SetP2.name;
 
-			GameObject dummy = GameObject.Instantiate(BridgeManager.Instance.bridge_obj);
-			dummy.name = dummy_name;
+		GameObject dummy = GameObject.Instantiate(BridgeManager.Instance.bridge_obj);
+		dummy.name = dummy_name;
 
-			dummy.transform.parent = GameManager.Instance.attackObjs.transform;
-			dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
-			des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
-			des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
+		dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+		dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
+		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
+		des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);
+
+		if (t == ENEMYATTACKTYPE.CHECKATTACK)
+		{
+			StartCoroutine(CheckDestroy(des.SetP1, des.SetP2));
+		}
 	}
 
 	// 특정 조건 때 두개의 지점을 잇는 다리가 존재한다는 전제로 실행.
@@ -584,7 +624,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				attackList[0].Add(startP); attackList[1].Add(destP);
 				attackTypeList.Add(t);
 				attackListCount++;
-				OrderAttack(startP, destP);
+				OrderAttack(startP, destP, t);
 			}
 			else
 				Debug.Log("Error: Error in OrderAttack P1 = " + startP + "  P2 = " + destP);
@@ -622,7 +662,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	}
 
 	// P1이 P2를 공격하는 리스트가 있는지 확인.
-	private bool CheckAttack(GameObject P1, GameObject P2)
+	private bool AttackCheck(GameObject P1, GameObject P2)
 	{
 		for (int i = 0; i < attackListCount; i++)
 		{

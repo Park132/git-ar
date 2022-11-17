@@ -17,7 +17,7 @@ public enum ENEMYTYPE
 public enum ENEMYCHAR
 {DEFENSIVE, AGRESSIVE  }
 public enum ENEMYATTACKTYPE
-{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4 }
+{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4, CHECKATTACK = 5 }
 public class StructorCollector : MonoBehaviour
 {
     public const float BASESPEED = 5f;
@@ -29,6 +29,11 @@ public class StructorCollector : MonoBehaviour
         public TEAM team;
         public int AttackDamage;
         public float Speed;
+        public SoldierSetting(SoldierSetting s)
+        {
+            this.Start_Point = s.Start_Point; this.Destination_Point = s.Destination_Point;
+            this.team = s.team; this.AttackDamage = s.AttackDamage; this.Speed = s.Speed;
+        }
     }
 
     [Serializable] public struct DestinationSet
@@ -46,8 +51,10 @@ public class StructorCollector : MonoBehaviour
         public ENEMYTYPE e_type;
         public int minEmergencyBase;
 		public int maxAttackCount;
-        public float delayThink;
         public int skills;
+        public float delayCheckAttack;
+        public float delayThink;
+        
         
 		public ENEMYCHAR e_char;
         public int maxRechargeCount;
@@ -55,9 +62,9 @@ public class StructorCollector : MonoBehaviour
 		public int stopAttackHP;
 		public int maxSupportHP;
 
-        public AI_Setting(ENEMYTYPE et, int mine, int maxa, float delayt, int sk, ENEMYCHAR ch)
+        public AI_Setting(ENEMYTYPE et, int mine, int maxa, float delayt, int sk, float dca,ENEMYCHAR ch)
         {
-            e_type = et; minEmergencyBase = mine; maxAttackCount = maxa; delayThink = delayt; skills = sk;
+            e_type = et; minEmergencyBase = mine; maxAttackCount = maxa; delayThink = delayt; skills = sk; delayCheckAttack = dca;
             e_char = ch;
             
             switch (ch)

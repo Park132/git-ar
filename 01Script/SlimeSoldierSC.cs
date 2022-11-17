@@ -16,6 +16,7 @@ public class SlimeSoldierSC : Slime_Stat
 		base.Awake();
 		//nav = this.GetComponent<NavMeshAgent>();
 		anim = this.GetComponent<Animator>();
+		anim.SetBool("Move", true);
 		Destroy(this.gameObject, 20f);
 	}
 
@@ -40,7 +41,8 @@ public class SlimeSoldierSC : Slime_Stat
 	//
 	public void Setting(StructorCollector.SoldierSetting bridge_order)
 	{
-		order = bridge_order;
+		// 구조체 깊은 복사
+		order = new StructorCollector.SoldierSetting(bridge_order);
 		this.destination = order.Destination_Point;
 		this.transform.LookAt(order.Destination_Point.transform.position);
 		this.Attack = order.AttackDamage;
@@ -67,7 +69,7 @@ public class SlimeSoldierSC : Slime_Stat
 			if (desSB.state != order.team)
 			{
 				desSB.Damage_Start(order.AttackDamage);
-				Destroy(this.gameObject);
+				StartCoroutine(AttackAnim());
 			}
 			else
 			{
@@ -76,5 +78,13 @@ public class SlimeSoldierSC : Slime_Stat
 				Destroy(this.gameObject);
 			}
 		}
+	}
+
+	private IEnumerator AttackAnim()
+	{
+		order.Speed = 0;
+		anim.SetTrigger("Attack");
+		yield return new WaitForSeconds(0.5f);
+		Destroy(this.gameObject);
 	}
 }
