@@ -7,20 +7,28 @@ public class PS_ShowHP : MonoBehaviour
 {
     private int hp;
     public TextMeshProUGUI this_hp_txt;
-
     public GameObject this_hp_target;
-
-    
 
     SlimeBaseSC sc;
 
     private void Awake()
     {
         sc = gameObject.GetComponentInParent<SlimeBaseSC>();
+        
     }
 
+    private void Start()
+    {
+        this_hp_target = GameObject.Instantiate(PrefabManager.Instance.imgHP);
+        this_hp_target.transform.parent = PrefabManager.Instance.canvas.transform;
+        this_hp_txt = this_hp_target.GetComponentInChildren<TextMeshProUGUI>();
+    }
     private void Update()
     {
+        if (GameManager.Instance.gameState == GAMESTATE.START)
+            this_hp_target.SetActive(true);
+        else this_hp_target.SetActive(false);
+
         this_hp_target.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 0.8f, 0));
         hp = sc.Health;
         this_hp_txt.text = "HP : " + hp.ToString();

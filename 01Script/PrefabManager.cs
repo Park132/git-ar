@@ -6,6 +6,8 @@ public class PrefabManager : MonoBehaviour
 {
 	public GameObject[] Prefabs;
 	public GameObject BridgeCube;
+	public GameObject imgHP;
+	public GameObject canvas;
 
 	private static PrefabManager instance;
 	private void Awake()
