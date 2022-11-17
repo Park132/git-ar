@@ -18,11 +18,12 @@ public class PS_MapMake : MonoBehaviour
     private int i = 0;
 
     GameObject ground;
+    GameObject[] props;
 
     // Start is called before the first frame update
     void Start()
     {
-        //MapInit3(c1, c2, 10, 7);
+        props = new GameObject[40];
     }
 
     private void Update()
@@ -31,10 +32,10 @@ public class PS_MapMake : MonoBehaviour
         {
             while ( i<1)
             {
+                ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
+                
                 MapInit3(c1, c2, 16, 12);
                 i++;
-
-                ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
             }
             centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, (c1.transform.position.y + c2.transform.position.y)/2 -2, (c1.transform.position.z + c2.transform.position.z) / 2); // 중점
             ground.transform.position = centerm1.transform.position;
@@ -48,16 +49,19 @@ public class PS_MapMake : MonoBehaviour
         // 삼각함수로 구현해내는 방안
 
         centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2,(o1.transform.position.y + o2.transform.position.y)/2 -2, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
-        // ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
-
-
+        int j = 0;
         for (int i = 0; i <= 360; i += 20) //19개 생성
         {
             int index = Random.Range(0, 26);
             wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), (o1.transform.position.y + o2.transform.position.y) / 2 -2, centerm1.transform.position.z + b * Mathf.Sin(i));
             Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
+            /*
+            props[j] = Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
+            props[j].transform.position += new Vector3(0, 40, 0);
+            props[j].transform.parent = ground.transform;
+            j++;
+            */
         }
-
     }
 
     public Vector3 PlaneNVec()
