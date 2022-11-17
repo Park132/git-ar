@@ -530,7 +530,8 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			SlimeBaseSC dummy_sl_d = attackList[1][i].GetComponentInChildren<SlimeBaseSC>();
 			if (attackTypeList[i] == ENEMYATTACKTYPE.ATTACK)
 				attackCount++;
-
+			else if (attackTypeList[i] == ENEMYATTACKTYPE.CHECKATTACK)
+				continue;
 			// 공격하는 진영의 피가 일정 피 이하일 경우 종료
 			if (dummy_sl_s.Health < ai.stopAttackHP && attackTypeList[i] != ENEMYATTACKTYPE.RECHARGING && attackTypeList[i] != ENEMYATTACKTYPE.EMERGENCY)
 				dummy_stop = true;
