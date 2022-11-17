@@ -51,7 +51,7 @@ public class StructorCollector : MonoBehaviour
         public ENEMYTYPE e_type;
         public int minEmergencyBase;
 		public int maxAttackCount;
-        public int skills;
+        public float multipler;
         public float delayCheckAttack;
         public float delayThink;
         
@@ -62,9 +62,9 @@ public class StructorCollector : MonoBehaviour
 		public int stopAttackHP;
 		public int maxSupportHP;
 
-        public AI_Setting(ENEMYTYPE et, int mine, int maxa, float delayt, int sk, float dca,ENEMYCHAR ch)
+        public AI_Setting(ENEMYTYPE et, int mine, int maxa, float delayt, float sk, float dca,ENEMYCHAR ch)
         {
-            e_type = et; minEmergencyBase = mine; maxAttackCount = maxa; delayThink = delayt; skills = sk; delayCheckAttack = dca;
+            e_type = et; minEmergencyBase = mine; maxAttackCount = maxa; delayThink = delayt; multipler = sk; delayCheckAttack = dca;
             e_char = ch;
             
             switch (ch)

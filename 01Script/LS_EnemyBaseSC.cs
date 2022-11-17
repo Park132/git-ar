@@ -100,9 +100,9 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 		///
 		switch (e_type)
-		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, skills, delayCheck, character);
+		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, multipler, delayCheck, character);
 			case ENEMYTYPE.TUTORIAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1, 10f ,ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1.2f, 10f ,ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 8; ////
@@ -110,7 +110,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				//ai.maxSupportHP = 30;
 				break;
 			case ENEMYTYPE.NORMAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 2, 8f, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 1f, 8f, ENEMYCHAR.DEFENSIVE);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 10;
@@ -119,7 +119,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				break;
 
 			case ENEMYTYPE.HARD:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 2, 3f, ENEMYCHAR.AGRESSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 0.7f, 3f, ENEMYCHAR.AGRESSIVE);
 				//ai.maxRechargeCount = 3;
 				//ai.e_char = ENEMYCHAR.AGRESSIVE;
 				//ai.emergencyHP = 13;
@@ -128,6 +128,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				break;
 		}
 		prevCheckTime = 0;
+		baseSC.difficultyMultipler = ai.multipler;
 		StartCoroutine(UpdateAI());
 	}
 

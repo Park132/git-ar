@@ -6,7 +6,7 @@ public class SlimeBaseSC : Slime_Stat
 {
     public PLATESTATE clickState;
 	public GameObject[] bases;
-	public float rechargeDelay, woundRechargeDelay; // 속도
+	public float rechargeDelay, woundRechargeDelay, difficultyMultipler; // 속도
 	public int rechargeHP; // 양
 	private TEAM finalAttack;
 	public bool canChanged = false;
@@ -19,6 +19,7 @@ public class SlimeBaseSC : Slime_Stat
 	private float multipleNum;
 	public float[] arrSAD;
 	float speed, del, setting_prevTimer;
+	
 
 	private int previousHP;
 	public float regenePerSec = 0f;
@@ -27,6 +28,7 @@ public class SlimeBaseSC : Slime_Stat
 	protected override void Start()
 	{
 		arrSAD = new float[] { 1,1,1};
+		difficultyMultipler = 1f;
 		base.Start();
 		if (this.state == TEAM.NONE) canChanged = true;
 		recharging = ReChargeSlime(); StartCoroutine(recharging);
@@ -79,9 +81,11 @@ public class SlimeBaseSC : Slime_Stat
 				{
 					case TEAM.PLAYER:
 						nearCount = GameManager.Instance.stdPointSB.currentNearCount;
+						difficultyMultipler = GameManager.Instance.stdPointSB.difficultyMultipler;
 						break;
 					case TEAM.ENEMY:
 						nearCount = GameManager.Instance.enePointSB.currentNearCount;
+						difficultyMultipler = GameManager.Instance.enePointSB.difficultyMultipler;
 						break;
 				}
 			}
@@ -101,7 +105,7 @@ public class SlimeBaseSC : Slime_Stat
 	{
 		while (true)
 		{
-			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f) + woundRechargeDelay);
+			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f) * difficultyMultipler + woundRechargeDelay);
 			if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
 			{
 				this.Health+=rechargeHP;
@@ -122,7 +126,7 @@ public class SlimeBaseSC : Slime_Stat
 		float dummy_timer = LS_TimerSC.Instance.timer; // 50초마다 공격력 1상승, 10초마다 이동속도 0.01f퍼센트 상승,  10초마다 공격딜레이 0.01f퍼센트 하락
 		this.Attack = Mathf.RoundToInt(Mathf.Max(1, Mathf.CeilToInt(multipleNum /4) + dummy_timer / 50) *arrSAD[1]);
 		speed = Mathf.Round(StructorCollector.BASESPEED * Mathf.Max(0.5f, multipleNum / 4 +dummy_timer/1000)*1000)/1000 *arrSAD[0];
-		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * Mathf.Max(0.2f,1.5f - 0.1f*multipleNum - dummy_timer/1000) * 1000) / 1000 *arrSAD[2];
+		del = Mathf.Round(StructorCollector.BASEDELAYATTACK * Mathf.Max(0.2f,(1.5f - 0.1f*multipleNum - dummy_timer/1000) *difficultyMultipler) * 1000) / 1000 *arrSAD[2];
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 

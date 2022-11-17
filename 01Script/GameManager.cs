@@ -105,6 +105,24 @@ public class GameManager : MonoBehaviour
 			LS_EnemyBaseSC.Instance.StartAI();
 		}
 	}
+	
+	
+
+	public void PausedButton()
+	{
+		switch (GameManager.instance.gameState)
+		{
+			case GAMESTATE.START:
+				Time.timeScale = 0.0f;
+				GameManager.instance.gameState = GAMESTATE.PAUSE;
+				break;
+			case GAMESTATE.PAUSE:
+				Time.timeScale = 1.0f;
+				GameManager.instance.gameState = GAMESTATE.START;
+				break;
+		}
+		
+	}
 
 	// 마커 인식 시 한번만 실행하게 제작.
 	// 구조체에 각 오브젝트, 인식, 팀을 저장
