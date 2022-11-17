@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
 		marker.markerTeam = new List<TEAM>();
 		arrNone = new List<GameObject>();
 		marker.markerLen = 0;
+		PS_System.Instance.FadeScene(true);
 	}
 
 	private void Update()
@@ -101,11 +102,20 @@ public class GameManager : MonoBehaviour
 	{
 		if (gameState == GAMESTATE.READY)
 		{
-			gameState = GAMESTATE.START;
-			LS_EnemyBaseSC.Instance.StartAI();
+			StartCoroutine(StartCoroutine());
 		}
 	}
-	
+
+	private IEnumerator StartCoroutine()
+	{
+		yield return StartCoroutine(PS_System.Instance.FadeOutCoroutine());
+		distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
+		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine());
+
+
+		gameState = GAMESTATE.START;
+		LS_EnemyBaseSC.Instance.StartAI();
+	}
 	
 
 	public void PausedButton()

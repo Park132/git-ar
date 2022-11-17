@@ -62,7 +62,7 @@ public class PS_System : MonoBehaviour
             StartCoroutine(FadeOutCoroutine());
     }
 
-    IEnumerator FadeOutCoroutine()
+    public IEnumerator FadeOutCoroutine()
     {
         float fadeCount = 0;
         while (fadeCount <1.0f)
@@ -73,7 +73,7 @@ public class PS_System : MonoBehaviour
         }
     }
 
-    IEnumerator FadeInCoroutine()
+    public IEnumerator FadeInCoroutine()
     {
         float fadeCount = 1.0f;
         while (fadeCount > 0.0f)

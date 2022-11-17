@@ -16,7 +16,7 @@ public class Click_ctrl : MonoBehaviour
 	public StructorCollector.DestinationSet des;
 	public GameObject bridge;
 	public GameObject stdPoint;
-
+	
 	// ½Ì±ÛÅæ ÁöÁ¤ //////
 	private static Click_ctrl instance;
 
