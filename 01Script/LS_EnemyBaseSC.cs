@@ -429,6 +429,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	{
 		if (LS_TimerSC.Instance.timer - prevCheckTime >= ai.delayCheckAttack)
 		{
+			prevCheckTime = LS_TimerSC.Instance.timer;
 			int maxHP = int.MinValue, index = -1;
 			for (int i = 0; i < allDummy.Count; i++)
 			{
@@ -453,7 +454,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 	private IEnumerator CheckDestroy(GameObject P1, GameObject P2)
 	{
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(0.3f);
 		OrderStopAttack(P1, P2);
 	}
 

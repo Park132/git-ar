@@ -33,7 +33,7 @@ public class SlimeSoldierSC : Slime_Stat
 	public override void SlimeScaleChange()
 	{
 		base.SlimeScaleChange();
-		box.size = Vector3.one;
+		box.size = Vector3.one * 1.5f;
 		//nav.radius = this.transform.localScale.x * 0.5f;
 	}
 
@@ -82,6 +82,7 @@ public class SlimeSoldierSC : Slime_Stat
 
 	private IEnumerator AttackAnim()
 	{
+		this.box.enabled = false;
 		order.Speed = 0;
 		anim.SetTrigger("Attack");
 		yield return new WaitForSeconds(0.5f);

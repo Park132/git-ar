@@ -130,7 +130,7 @@ public class SlimeBaseSC : Slime_Stat
 		obj.GetComponent<SlimeBridge>().SettingAtkSpeedDelay(this.Attack, speed, del);
 	}
 
-	// 마지막으로 공격을 한 슬라임의 팀으로 변경. 초기 체력 3 지급.
+	// 마지막으로 공격을 한 슬라임의 팀으로 변경. 초기 체력 5 지급.
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.transform.CompareTag("Slime"))
@@ -165,7 +165,7 @@ public class SlimeBaseSC : Slime_Stat
 						else bases[i].SetActive(false);
 					}
 					StopOrderPreviousTeam();
-					this.Health = 3;
+					this.Health = 5;
 					this.previousHP = this.Health; this.regenePerSec = 0;
 				}
 			}

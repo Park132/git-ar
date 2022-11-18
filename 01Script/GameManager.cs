@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class GameManager : MonoBehaviour
 	public SlimeBaseSC stdPointSB, enePointSB;
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
+	public TextMeshProUGUI Counting;
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
+
 	public float distanceEP = 0;
 	
 	public StructorCollector.Markers marker;
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
 		arrNone = new List<GameObject>();
 		marker.markerLen = 0;
 		PS_System.Instance.FadeScene(true);
+		Counting.enabled = false;
 	}
 
 	private void Update()
@@ -112,6 +116,17 @@ public class GameManager : MonoBehaviour
 		distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
 		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine());
 
+		yield return new WaitForSeconds(0.5f);
+		Counting.enabled = true;
+		Counting.text = "3";
+		yield return new WaitForSeconds(1f);
+		Counting.text = "2";
+		yield return new WaitForSeconds(1f);
+		Counting.text = "1";
+		yield return new WaitForSeconds(1f);
+		Counting.text = "Start!";
+		yield return new WaitForSeconds(0.5f);
+		Counting.enabled = false;
 
 		gameState = GAMESTATE.START;
 		LS_EnemyBaseSC.Instance.StartAI();
