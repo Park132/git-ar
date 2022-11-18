@@ -55,7 +55,8 @@ public class PS_MapMake : MonoBehaviour
             int index = Random.Range(0, 26);
             wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), (o1.transform.position.y + o2.transform.position.y) / 2 -2, centerm1.transform.position.z + b * Mathf.Sin(i));
             Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
-            /*
+            
+            /* ±×³É µÖµµ ±¦Âú°Ô º¸ÀÌ´Â °Í °°Àºµ¥¿ä..?
             props[j] = Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
             props[j].transform.position += new Vector3(0, 40, 0);
             props[j].transform.parent = ground.transform;
