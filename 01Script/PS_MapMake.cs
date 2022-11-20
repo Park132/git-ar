@@ -30,6 +30,8 @@ public class PS_MapMake : MonoBehaviour
     {
         if(GameManager.Instance.distanceEP != 0)
         {
+            centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, (c1.transform.position.y + c2.transform.position.y)/2 -2, (c1.transform.position.z + c2.transform.position.z) / 2); // 중점
+
             while ( i<1)
             {
                 ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
@@ -37,7 +39,6 @@ public class PS_MapMake : MonoBehaviour
                 MapInit3(c1, c2, 16, 12);
                 i++;
             }
-            centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, (c1.transform.position.y + c2.transform.position.y)/2 -2, (c1.transform.position.z + c2.transform.position.z) / 2); // 중점
             ground.transform.position = centerm1.transform.position;
             ground.transform.rotation = Quaternion.Euler(PlaneNVec());
         }
@@ -48,20 +49,21 @@ public class PS_MapMake : MonoBehaviour
         // 물체1의 위치, 물체2의 위치, x축 가중치, z축 가중치
         // 삼각함수로 구현해내는 방안
 
-        centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2,(o1.transform.position.y + o2.transform.position.y)/2 -2, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
+        
+        centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, (o1.transform.position.y + o2.transform.position.y) / 2 - 2, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
         int j = 0;
-        for (int i = 0; i <= 360; i += 20) //19개 생성
+        for (int i = 0; i <= 200; i += 20) //19개 생성 <- 깔끔하게 생성하기 위하여 i를 360까지 바꿈
         {
             int index = Random.Range(0, 26);
-            wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), (o1.transform.position.y + o2.transform.position.y) / 2 -2, centerm1.transform.position.z + b * Mathf.Sin(i));
-            Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
-            
-            /* 그냥 둬도 괜찮게 보이는 것 같은데요..?
+            wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), centerm1.transform.position.y, centerm1.transform.position.z + b * Mathf.Sin(i));
             props[j] = Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
-            props[j].transform.position += new Vector3(0, 40, 0);
+            
+            // props[j] = Instantiate(wall[index], wall_marker1.transform.position, Quaternion.Euler(Random.Range(1f, 179f), Random.Range(1f, 179f), Random.Range(1f, 179f)));
+
+            props[j].transform.position += new Vector3(0, 3, 0);
             props[j].transform.parent = ground.transform;
             j++;
-            */
+            
         }
     }
 
