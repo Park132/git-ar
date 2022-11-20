@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 	public TextMeshProUGUI Counting;
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
+	public GameObject[] gamePanels;
 
 	public float distanceEP = 0;
 	
@@ -118,14 +119,10 @@ public class GameManager : MonoBehaviour
 
 		yield return new WaitForSeconds(0.5f);
 		Counting.enabled = true;
-		Counting.text = "3";
-		yield return new WaitForSeconds(1f);
-		Counting.text = "2";
-		yield return new WaitForSeconds(1f);
-		Counting.text = "1";
-		yield return new WaitForSeconds(1f);
+		for (int i = 3; i >= 1; i--)
+		{ Counting.text = i.ToString(); yield return StartCoroutine(CountDownText(Counting.gameObject, 1)); }
 		Counting.text = "Start!";
-		yield return new WaitForSeconds(0.5f);
+		yield return StartCoroutine(CountDownText(Counting.gameObject, 0.5f));
 		Counting.enabled = false;
 
 		gameState = GAMESTATE.START;
@@ -162,8 +159,30 @@ public class GameManager : MonoBehaviour
 		return markerlen;
 	}
 
-	private void CountDownText(GameObject obj)
+	private IEnumerator CountDownText(GameObject obj, float time)
 	{
+		obj.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,(1-time));
+		obj.transform.localScale = Vector3.one * (0.06f * 3);
+		for (int i = Mathf.RoundToInt(20/(20*time)); i < 20; i++) {
+			yield return new WaitForSeconds(0.05f);
+			obj.transform.localScale = Vector3.one * (0.05f *(i+4));
+			if (i <= 15)
+            {obj.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1, (0.5f/15) * i+0.5f);}
 
+		}
 	}
+
+	// 게임 종료,정지에 대한 판넬 띄우기
+	private IEnumerator GameMenuEnable(GAMESTATE state)
+    {
+		int index = 0;
+        switch (state)
+        {
+			case GAMESTATE.PAUSE: index = 0;break;
+			case GAMESTATE.WIN: index = 1; break;
+			case GAMESTATE.OVER: index = 2; break;
+		}
+		gamePanels[index].SetActive(true);
+		yield return new WaitForSeconds(1f);
+    }
 }
