@@ -161,4 +161,9 @@ public class GameManager : MonoBehaviour
 		marker.markerLen = markerlen + 1;
 		return markerlen;
 	}
+
+	private void CountDownText(GameObject obj)
+	{
+
+	}
 }
