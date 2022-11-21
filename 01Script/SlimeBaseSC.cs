@@ -169,6 +169,14 @@ public class SlimeBaseSC : Slime_Stat
 					this.previousHP = this.Health; this.regenePerSec = 0;
 				}
 			}
+
+			else if (Health-other.GetComponent<SlimeSoldierSC>().Attack <= 0 && !canChanged)
+            {
+				if (other.GetComponent<SlimeSoldierSC>().state != this.state)
+				{
+					GameManager.Instance.GameEnding(this.state);
+				}
+            }
 		}
 	}
 
@@ -190,8 +198,8 @@ public class SlimeBaseSC : Slime_Stat
 
 	private IEnumerator RecoverDelay()
 	{
-		woundRechargeDelay = 2f;
-		yield return new WaitForSeconds(5f * ((canChanged) ? 1f: 0.5f));
+		woundRechargeDelay = 4f * ((canChanged) ? 1f : 0.5f);
+		yield return new WaitForSeconds(5f);
 		woundRechargeDelay = 0;
 	}
 

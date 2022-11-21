@@ -20,7 +20,7 @@ public enum ENEMYATTACKTYPE
 { ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4, CHECKATTACK = 5 }
 public class StructorCollector : MonoBehaviour
 {
-    public const float BASESPEED = 2f;
+    public const float BASESPEED = 3.5f;
     public const float BASEDELAYATTACK = 1.5f;
     public const float BASERECHARGEDELAY = 1.5f;
     [Serializable] public struct SoldierSetting

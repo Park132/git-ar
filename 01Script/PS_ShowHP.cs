@@ -20,7 +20,7 @@ public class PS_ShowHP : MonoBehaviour
     private void Start()
     {
         this_hp_target = GameObject.Instantiate(PrefabManager.Instance.imgHP);
-        this_hp_target.transform.parent = PrefabManager.Instance.canvas.transform;
+        this_hp_target.transform.parent = GameManager.Instance.endGameObjects.transform;
         this_hp_txt = this_hp_target.GetComponentInChildren<TextMeshProUGUI>();
     }
     private void Update()
@@ -32,5 +32,9 @@ public class PS_ShowHP : MonoBehaviour
         this_hp_target.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 0.8f, 0));
         hp = sc.Health;
         this_hp_txt.text = "HP : " + hp.ToString();
+    }
+    public void DestroyThis()
+    {
+        Destroy(this_hp_target);
     }
 }

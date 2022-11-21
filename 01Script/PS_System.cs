@@ -19,6 +19,11 @@ public class PS_System : MonoBehaviour
             Destroy(this.gameObject);
     }
 
+    private void Start()
+    {
+        PS_System.Instance.FadeScene(true, 1.5f);
+    }
+
     public static PS_System Instance
     {
         get
@@ -41,44 +46,47 @@ public class PS_System : MonoBehaviour
 
     public void GameStart()
     {
-        // SceneManager.LoadScene("");
+        PS_System.Instance.FadeScene(false, 1.5f);
+         SceneManager.LoadScene("psh_SampleScene_duplicated");
     }
 
     public void ShowInformation()
     {
+        PS_System.Instance.FadeScene(false, 1.5f);
         SceneManager.LoadScene("psh_GameInfoScene");
     }
 
     public void GoMain()
     {
+        PS_System.Instance.FadeScene(false, 1.5f);
         SceneManager.LoadScene("psh_MainScene");
     }
 
-    public void FadeScene(bool key) // key 1 -> 페이드 인 / key 2 -> 페이드 아웃
+    public void FadeScene(bool key, float times) // key 1 -> 페이드 인 / key 2 -> 페이드 아웃
     {
         if (key)
-            StartCoroutine(FadeInCoroutine());
+            StartCoroutine(FadeInCoroutine(times));
         else
-            StartCoroutine(FadeOutCoroutine());
+            StartCoroutine(FadeOutCoroutine(times));
     }
 
-    public IEnumerator FadeOutCoroutine()
+    public IEnumerator FadeOutCoroutine(float times)
     {
         float fadeCount = 0;
         while (fadeCount <1.0f)
         {
-            fadeCount += 0.01f;
+            fadeCount += 0.01f*times;
             yield return new WaitForSecondsRealtime(0.01f);
             fadeImg.color = new Color(0, 0, 0, fadeCount);
         }
     }
 
-    public IEnumerator FadeInCoroutine()
+    public IEnumerator FadeInCoroutine(float times)
     {
         float fadeCount = 1.0f;
         while (fadeCount > 0.0f)
         {
-            fadeCount -= 0.01f;
+            fadeCount -= 0.01f * times;
             yield return new WaitForSecondsRealtime(0.01f);
             fadeImg.color = new Color(0, 0, 0, fadeCount);
         }

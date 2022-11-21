@@ -15,7 +15,6 @@ public class PrefabManager : MonoBehaviour
 		if (null == instance)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject);
 }
 		else
 		{ Destroy(this.gameObject); }

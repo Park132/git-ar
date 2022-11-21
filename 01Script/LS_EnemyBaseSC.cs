@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using TMPro;
 
 public class LS_EnemyBaseSC : MonoBehaviour
 {
@@ -30,6 +31,9 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	//[SerializeField] private int emergencyHP, stopAttackHP;
 	//[SerializeField] private float delayThink;
 	public ENEMYTYPE e_type;
+	public ENEMYCHAR e_char;
+	public TextMeshProUGUI difficultyT;
+	public int enemytypeIndex = 0;
 	private SlimeBaseSC baseSC;
 	[SerializeField] private List<List<GameObject>> attackList;
 	[SerializeField] private List<ENEMYATTACKTYPE> attackTypeList;
@@ -53,19 +57,32 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		attackListCount = 0;
 		attack_once = false;
 		//ai = new StructorCollector.AI_Setting();
+		SettingEnemyTypeAndChar();
 	}
 
-	public void SettingEnemyTypeHard()
-	{
-		e_type = ENEMYTYPE.HARD;
+	public void SettingEnemyTypeAndChar()
+    {
+		if (enemytypeIndex < 0) enemytypeIndex = 6+enemytypeIndex;
+		else if (enemytypeIndex > 5) enemytypeIndex = enemytypeIndex-6;
+
+		if (enemytypeIndex <= 1) { e_type = ENEMYTYPE.TUTORIAL; difficultyT.text = "Tutorial\n"; }
+		else if (enemytypeIndex <= 3) { e_type = ENEMYTYPE.NORMAL; difficultyT.text = "Normal\n"; }
+		else if (enemytypeIndex <= 5) { e_type = ENEMYTYPE.HARD; difficultyT.text = "Hard\n"; }
+
+		if (enemytypeIndex % 2 == 0)
+		{ e_char = ENEMYCHAR.DEFENSIVE; difficultyT.text += "Defensive"; }
+		else { e_char = ENEMYCHAR.AGRESSIVE; difficultyT.text += "Agressive"; }
 	}
-	public void SettingEnemyTypeNormal()
+
+	public void SettingIndexMinus()
 	{
-		e_type = ENEMYTYPE.NORMAL;
+		enemytypeIndex--;
+		SettingEnemyTypeAndChar();
 	}
-	public void SettingEnemyTypeTutorial()
+	public void SettingIndexPlus()
 	{
-		e_type = ENEMYTYPE.TUTORIAL;
+		enemytypeIndex++;
+		SettingEnemyTypeAndChar();
 	}
 
 	public void StartAI()
@@ -102,7 +119,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		switch (e_type)
 		{	//AI_Setting(enemyType, minEmergency, maxAttack, delayThink, multipler, delayCheck, character);
 			case ENEMYTYPE.TUTORIAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1.2f, 10f ,ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 2, 5f, 1.2f, 10f ,e_char);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 8; ////
@@ -110,7 +127,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				//ai.maxSupportHP = 30;
 				break;
 			case ENEMYTYPE.NORMAL:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 1f, 8f, ENEMYCHAR.DEFENSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 5, 3f, 1f, 8f, e_char);
 				//ai.maxRechargeCount = 2;
 				//ai.e_char = ENEMYCHAR.DEFENSIVE;
 				//ai.emergencyHP = 10;
@@ -119,7 +136,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				break;
 
 			case ENEMYTYPE.HARD:
-				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 0.7f, 3f, ENEMYCHAR.AGRESSIVE);
+				ai = new StructorCollector.AI_Setting(e_type, 1, 7, 0.5f, 0.7f, 3f, e_char);
 				//ai.maxRechargeCount = 3;
 				//ai.e_char = ENEMYCHAR.AGRESSIVE;
 				//ai.emergencyHP = 13;
@@ -694,7 +711,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	{
 		for (int i = attackListCount-1; i >= 0; i--)
 		{
-			if (attackList[0][i].Equals(P1))
+			if (attackList[0][i].Equals(P1) && attackTypeList[i] != ENEMYATTACKTYPE.CHECKATTACK)
 			{
 				attackList[0].RemoveAt(i);attackList[1].RemoveAt(i);
 				attackTypeList.RemoveAt(i);

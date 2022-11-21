@@ -10,10 +10,12 @@ public class GameManager : MonoBehaviour
 	public SlimeBaseSC stdPointSB, enePointSB;
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
+	public GameObject errorObj;
 	public TextMeshProUGUI Counting;
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
 	public GameObject[] gamePanels;
+	public GameObject beforeGameObjects, endGameObjects;
 
 	public float distanceEP = 0;
 	
@@ -27,7 +29,6 @@ public class GameManager : MonoBehaviour
 		if (null == instance)
 		{
 			instance = this;
-			DontDestroyOnLoad(gameObject);
 		}
 		else
 		{ Destroy(this.gameObject); }
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
 	
 	private void Start()
 	{
+		gameState = GAMESTATE.MAIN;
 		stdPoint = GameObject.FindGameObjectWithTag("StandardPoint");
 		enePoint = GameObject.FindGameObjectWithTag("EnemyPoint");
 		stdPointSB = stdPoint.GetComponentInChildren<SlimeBaseSC>();
@@ -49,8 +51,10 @@ public class GameManager : MonoBehaviour
 		marker.markerTeam = new List<TEAM>();
 		arrNone = new List<GameObject>();
 		marker.markerLen = 0;
-		PS_System.Instance.FadeScene(true);
+
 		Counting.enabled = false;
+		endGameObjects.SetActive(false);
+		errorObj.SetActive(false);
 	}
 
 	private void Update()
@@ -82,7 +86,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		// 아군 적군 베이스캠프 확인 완료시
-		if (playerP != -1 && enemyP != -1)
+		if (playerP != -1 && enemyP != -1 && marker.markerLen >= 4)
 		{
 			arrNone.Clear(); arrPlayer.Clear(); arrEnemy.Clear();
 			for (int i = 0; i < marker.markerLen; i++)
@@ -101,7 +105,7 @@ public class GameManager : MonoBehaviour
 			
 		}
 		else
-		{ Debug.Log("마커를 더 찍어주셈"); }
+		{ StartCoroutine(ErrorToast("Please take more markers!")); }
 	}
 	public void StartButton()
 	{
@@ -109,13 +113,17 @@ public class GameManager : MonoBehaviour
 		{
 			StartCoroutine(StartCoroutine());
 		}
+		else
+			StartCoroutine(ErrorToast("Create Bridge first!"));
 	}
 
 	private IEnumerator StartCoroutine()
 	{
-		yield return StartCoroutine(PS_System.Instance.FadeOutCoroutine());
+		yield return StartCoroutine(PS_System.Instance.FadeOutCoroutine(1.5f));
 		distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
-		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine());
+		beforeGameObjects.SetActive(false);
+		endGameObjects.SetActive(true);
+		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine(1.5f));
 
 		yield return new WaitForSeconds(0.5f);
 		Counting.enabled = true;
@@ -132,16 +140,20 @@ public class GameManager : MonoBehaviour
 
 	public void PausedButton()
 	{
-		switch (GameManager.instance.gameState)
+		if (GameManager.instance.gameState == GAMESTATE.START || GameManager.instance.gameState == GAMESTATE.PAUSE)
 		{
-			case GAMESTATE.START:
-				Time.timeScale = 0.0f;
-				GameManager.instance.gameState = GAMESTATE.PAUSE;
-				break;
-			case GAMESTATE.PAUSE:
-				Time.timeScale = 1.0f;
-				GameManager.instance.gameState = GAMESTATE.START;
-				break;
+			switch (GameManager.instance.gameState)
+			{
+				case GAMESTATE.START:
+					StartCoroutine(GameMenuEnable(GAMESTATE.PAUSE, true));
+					GameManager.instance.gameState = GAMESTATE.PAUSE;
+					break;
+				case GAMESTATE.PAUSE:
+					StartCoroutine(GameMenuEnable(GAMESTATE.PAUSE, false));
+					Time.timeScale = 1.0f;
+					GameManager.instance.gameState = GAMESTATE.START;
+					break;
+			}
 		}
 		
 	}
@@ -172,9 +184,24 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	// 게임 종료,정지에 대한 판넬 띄우기
-	private IEnumerator GameMenuEnable(GAMESTATE state)
+	public void GameEnding(TEAM t)
     {
+        switch (t)
+        {
+			case TEAM.PLAYER:
+				gameState = GAMESTATE.OVER;
+				break;
+			case TEAM.ENEMY:
+				gameState = GAMESTATE.WIN;
+				break;
+        }
+		StartCoroutine(GameMenuEnable(gameState, true));
+	}
+
+	// 게임 종료,정지에 대한 판넬 띄우기
+	private IEnumerator GameMenuEnable(GAMESTATE state, bool toggle)
+    {
+		yield return new WaitForSeconds(0.1f);
 		int index = 0;
         switch (state)
         {
@@ -182,7 +209,26 @@ public class GameManager : MonoBehaviour
 			case GAMESTATE.WIN: index = 1; break;
 			case GAMESTATE.OVER: index = 2; break;
 		}
-		gamePanels[index].SetActive(true);
-		yield return new WaitForSeconds(1f);
+		gamePanels[index].SetActive(toggle);
+		yield return new WaitForSeconds(0.2f);
+		if (state != GAMESTATE.PAUSE)
+        {
+			endGameObjects.SetActive(false);
+			Time.timeScale = 0;
+        }
+        else
+        {
+			if (toggle) Time.timeScale = 0.0f;
+			else Time.timeScale = 1.0f;
+		}
+    }
+
+	private IEnumerator ErrorToast(string msg)
+    {
+		TextMeshProUGUI t = errorObj.GetComponentInChildren<TextMeshProUGUI>();
+		errorObj.SetActive(true);
+		t.text = msg;
+		yield return new WaitForSeconds(0.8f);
+		errorObj.SetActive(false);
     }
 }
