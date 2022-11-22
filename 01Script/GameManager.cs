@@ -247,6 +247,7 @@ public class GameManager : MonoBehaviour
 
 	public void SkillSelected()
 	{
+		defaultSkillObj.SetActive(false);
 		gameState = GAMESTATE.START;
 		Time.timeScale = 1;
 	}

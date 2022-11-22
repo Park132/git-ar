@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1586,7 +1586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &194988401
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1667,7 +1667,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill18
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4209361220373714063, guid: 3d67a706c303c0d44ad023697ab08e4d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3d67a706c303c0d44ad023697ab08e4d, type: 3}
 --- !u!1 &223592258
 GameObject:
@@ -1704,11 +1705,11 @@ RectTransform:
   m_Father: {fileID: 194988401}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 259, y: -154}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -190, y: 60}
   m_SizeDelta: {x: 120, y: 90}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &223592260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1908,7 +1909,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill7
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5376763535096778321, guid: 946a5ba14a55f8c4a9ad60cbb28a461e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 946a5ba14a55f8c4a9ad60cbb28a461e, type: 3}
 --- !u!1 &271810804
 GameObject:
@@ -2450,7 +2452,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill22
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8600846887348519777, guid: 7f09278b1f779974cb82881a303168ed, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7f09278b1f779974cb82881a303168ed, type: 3}
 --- !u!1 &338238500
 GameObject:
@@ -2642,7 +2645,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill16
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8549432431868021777, guid: ba16eaebf6d99b046990feea66724062, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ba16eaebf6d99b046990feea66724062, type: 3}
 --- !u!1 &363567400
 GameObject:
@@ -2773,11 +2777,11 @@ RectTransform:
   m_Father: {fileID: 194988401}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 388, y: -154}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -30, y: 60}
   m_SizeDelta: {x: 120, y: 90}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!1 &417825764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7605371670462619147, guid: a88f02b4392e4494e9ac3afa39eb2651, type: 3}
@@ -3672,7 +3676,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill10
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4367546339408596542, guid: 8f3ce01ae745782488837ba3e420a587, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8f3ce01ae745782488837ba3e420a587, type: 3}
 --- !u!1 &558554213
 GameObject:
@@ -4326,7 +4331,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill24
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5688836112307567442, guid: aa9b1a1489b609843a6aecb45308ff71, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: aa9b1a1489b609843a6aecb45308ff71, type: 3}
 --- !u!1 &650998953
 GameObject:
@@ -4465,7 +4471,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3497012235264068051, guid: 57019382109d1cd4c90b2b17dde5a125, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 57019382109d1cd4c90b2b17dde5a125, type: 3}
 --- !u!1 &716073804
 GameObject:
@@ -5331,7 +5338,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill23
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4417209605026905508, guid: cd9b1b7426ee25c41b79c0e13920e4a9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd9b1b7426ee25c41b79c0e13920e4a9, type: 3}
 --- !u!1 &951650081
 GameObject:
@@ -5523,7 +5531,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5439836795780393254, guid: f9b95c540e95a1f47b7e2792c2834ed3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f9b95c540e95a1f47b7e2792c2834ed3, type: 3}
 --- !u!1 &1010685179
 GameObject:
@@ -5715,7 +5724,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7766239198966523139, guid: 2c285241b00190448a6e7f168ab5da09, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2c285241b00190448a6e7f168ab5da09, type: 3}
 --- !u!1 &1072889741
 GameObject:
@@ -6046,7 +6056,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5601514601560717957, guid: 9dc6983009454904a885b70c998e17ac, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9dc6983009454904a885b70c998e17ac, type: 3}
 --- !u!1 &1126162621
 GameObject:
@@ -6693,7 +6704,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill20
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5673474852436659324, guid: c0ee304e43d479147a7b4fd82fa79926, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c0ee304e43d479147a7b4fd82fa79926, type: 3}
 --- !u!1 &1231796535
 GameObject:
@@ -6885,7 +6897,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4441774187702819350, guid: 2703fe1a1a43c574b999972fa07938dc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2703fe1a1a43c574b999972fa07938dc, type: 3}
 --- !u!1 &1239291964
 GameObject:
@@ -7406,7 +7419,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill21
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6529897989200962651, guid: 8eb063f24f4264f48aa78e1f62bf63f6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8eb063f24f4264f48aa78e1f62bf63f6, type: 3}
 --- !u!1 &1401025324
 GameObject:
@@ -8769,7 +8783,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill9
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2169882679975831788, guid: 5f46102497092be4f84b069f771fee65, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5f46102497092be4f84b069f771fee65, type: 3}
 --- !u!1 &1740574656
 GameObject:
@@ -8964,7 +8979,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2329528647944517576, guid: 13fe9cf98fabbfa4ab40c8d6e6cd1894, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13fe9cf98fabbfa4ab40c8d6e6cd1894, type: 3}
 --- !u!1 &1815608961
 GameObject:
@@ -9336,7 +9352,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill14
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3203128798519264418, guid: d6ec0f5081d8578449d8cb2cad8d08f9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d6ec0f5081d8578449d8cb2cad8d08f9, type: 3}
 --- !u!1 &1845741151
 GameObject:
@@ -9675,11 +9692,11 @@ RectTransform:
   m_Father: {fileID: 194988401}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 126, y: -154}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -350, y: 60}
   m_SizeDelta: {x: 120, y: 90}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &1877765005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9964,7 +9981,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9132214219685045874, guid: 19c39eb5c6e8bf341a76cb42ca84fb66, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 19c39eb5c6e8bf341a76cb42ca84fb66, type: 3}
 --- !u!1 &1929456885
 GameObject:

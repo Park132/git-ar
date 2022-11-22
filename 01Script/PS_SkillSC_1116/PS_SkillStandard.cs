@@ -23,12 +23,13 @@ public class PS_SkillStandard : MonoBehaviour
 
 	void OnObserverStatusChanged(ObserverBehaviour behavior, TargetStatus targetStatus)
 	{
-		if (targetStatus.Status == Status.TRACKED)
+		if (GameManager.Instance.gameState == GAMESTATE.SKILLTIME)
 			Skill1();
 	}
 
 	void Skill1()
 	{
+		bool saved = false;
 		// 스킬 저장 배열에 skillex1의 스킬 코드를 저장
 		PS_SkillSystem s = GameObject.FindGameObjectWithTag("Skill").GetComponent<PS_SkillSystem>();
 		for (int i = 0; i < 3; i++)
@@ -37,6 +38,7 @@ public class PS_SkillStandard : MonoBehaviour
 			{
 				s.skill_storage[i] = skill_code;
 				stored_skill_index = i;
+				saved = true;
 				break;
 			}
 			else if (s.skill_storage[i] != 0)
@@ -48,10 +50,14 @@ public class PS_SkillStandard : MonoBehaviour
 				continue;
 		}
 
-		s.ReadSkillDB(stored_skill_index);
-		Debug.Log(s.skill_type + "/" + s.skill_level);
-		s.SkillNameDetermine(s.skill_type, s.skill_level, stored_skill_index);
-		s.SaveSkillKey(stored_skill_index);
+		if (saved)
+		{
+			s.ReadSkillDB(stored_skill_index);
+			Debug.Log(s.skill_type + "/" + s.skill_level);
+			s.SkillNameDetermine(s.skill_type, s.skill_level, stored_skill_index);
+			s.SaveSkillKey(stored_skill_index);
+			GameManager.Instance.SkillSelected();
+		}
 	}
 
 }
