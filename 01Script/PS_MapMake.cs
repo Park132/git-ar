@@ -41,6 +41,12 @@ public class PS_MapMake : MonoBehaviour
             }
             ground.transform.position = centerm1.transform.position;
             ground.transform.rotation = Quaternion.Euler(PlaneNVec());
+
+            float s_val = 0.24f;
+            float x = s_val * Mathf.Sqrt((c2.transform.position.x - c1.transform.position.x) * (c2.transform.position.x - c1.transform.position.x));
+            
+            ground.transform.localScale = new Vector3(x, 3, x);
+            // Debug.Log("ground_x : " + x + ", ground_z : " + z);
         }
     }
 
