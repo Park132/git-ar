@@ -32,20 +32,24 @@ public class PS_MapMake : MonoBehaviour
         {
             centerm1.transform.position = new Vector3((c1.transform.position.x + c2.transform.position.x) / 2, (c1.transform.position.y + c2.transform.position.y)/2 -2, (c1.transform.position.z + c2.transform.position.z) / 2); // ÁßÁ¡
 
+            float s_val = 0.3f;
+            float x = s_val * Mathf.Sqrt((c2.transform.position.x - c1.transform.position.x) * (c2.transform.position.x - c1.transform.position.x));
+            float x1 = 0.8f * Mathf.Sqrt((c2.transform.position.x - c1.transform.position.x) * (c2.transform.position.x - c1.transform.position.x));
+            float z = 0.32f * Mathf.Sqrt((c2.transform.position.z - c1.transform.position.z) * (c2.transform.position.z - c1.transform.position.z));
+
             while ( i<1)
             {
                 ground = Instantiate(ground_prefab, centerm1.transform.position, centerm1.transform.rotation);
                 
-                MapInit3(c1, c2, 16, 12);
+                MapInit3(c1, c2, 11, 9);
                 i++;
             }
             ground.transform.position = centerm1.transform.position;
             ground.transform.rotation = Quaternion.Euler(PlaneNVec());
 
-            float s_val = 0.24f;
-            float x = s_val * Mathf.Sqrt((c2.transform.position.x - c1.transform.position.x) * (c2.transform.position.x - c1.transform.position.x));
-            
-            ground.transform.localScale = new Vector3(x, 3, x);
+
+
+            ground.transform.localScale = new Vector3(x, 3, x*0.8f);
             // Debug.Log("ground_x : " + x + ", ground_z : " + z);
         }
     }

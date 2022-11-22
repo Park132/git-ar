@@ -480,7 +480,22 @@ public class PS_SkillSystem : MonoBehaviour
             case 7: // 다리잠금
                 GameObject dummy_effect7 = Instantiate(skillEffect_prefabs[6], hit.transform.position, hit.transform.rotation);
                 dummy_effect7.transform.parent = hit.transform;
-                StartCoroutine(PassiveSkill(dummy_effect7));
+                switch(currentClickLevel)
+                {
+                    case 1:
+                        StartCoroutine(PassiveSkill(dummy_effect7, 5f));
+                        break;
+                    case 2:
+                        StartCoroutine(PassiveSkill(dummy_effect7, 7f));
+                        break;
+                    case 3:
+                        StartCoroutine(PassiveSkill(dummy_effect7, 10f));
+                        break;
+                    case 4:
+                        StartCoroutine(PassiveSkill(dummy_effect7, 15f));
+                        break;
+                }
+                // StartCoroutine(PassiveSkill(dummy_effect7, ((currentClickLevel == 1)? 5:((currentClickLevel == 2) ? 7: (currentClickLevel == 3) ? 10 : 15))));
                 break;
         }// 스킬 타입 이펙트 생성
 
@@ -533,7 +548,12 @@ public class PS_SkillSystem : MonoBehaviour
 
     IEnumerator PassiveSkill(GameObject obj) // 이펙트
     {
-        yield return new WaitForSecondsRealtime(10f);
+        yield return StartCoroutine(PassiveSkill(obj, 10f));
+    }
+
+    IEnumerator PassiveSkill(GameObject obj, float time) // 이펙트
+    {
+        yield return new WaitForSecondsRealtime(time);
         Destroy(obj.gameObject);
         StopCoroutine("PassiveSkill");
     }
