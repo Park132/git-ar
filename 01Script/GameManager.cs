@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (gameState == GAMESTATE.READY)
 		{
+			gameState = GAMESTATE.READYFORSTART;
 			StartCoroutine(StartCoroutine());
 		}
 		else

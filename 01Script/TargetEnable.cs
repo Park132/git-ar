@@ -31,10 +31,10 @@ public class TargetEnable : MonoBehaviour
 			//Debug.Log(this.gameObject.name + "enabled");
 			if (markerNum == -1)
 			{
-				if (GameManager.Instance.gameState != GAMESTATE.START)
+				if (GameManager.Instance.gameState != GAMESTATE.START && GameManager.Instance.gameState != GAMESTATE.READYFORSTART)
 					markerNum = GameManager.Instance.SettingMarkerList(this.gameObject, slSC.state);
 				else
-				{this.gameObject.GetComponentInChildren<PS_ShowHP>().DestroyThis(); Destroy(this.gameObject,0.1f); }
+				{this.gameObject.GetComponentInChildren<PS_ShowHP>().DestroyThis(); Destroy(this.gameObject); }
 			}
 			else
 				GameManager.Instance.marker.markerExist[markerNum] = true;

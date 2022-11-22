@@ -322,6 +322,13 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		}
 	}
 
+	private void AllAttackAI()
+	{
+		if (GameManager.Instance.arrEnemy.Count > GameManager.Instance.marker.markerLen - 3)
+		{
+
+		}
+	}
 	private void EmergencyBase()
 	{
 		if (baseSC.Health <= ai.emergencyHP * 1.5f && baseSC.regenePerSec <= -1.0f)
