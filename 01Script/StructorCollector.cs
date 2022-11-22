@@ -17,7 +17,7 @@ public enum ENEMYTYPE
 public enum ENEMYCHAR
 {DEFENSIVE, AGRESSIVE  }
 public enum ENEMYATTACKTYPE
-{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4, CHECKATTACK = 5 }
+{ ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4, CHECKATTACK = 5, FINALATTACK }
 public class StructorCollector : MonoBehaviour
 {
     public const float BASESPEED = 3.5f;

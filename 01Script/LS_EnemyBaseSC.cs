@@ -41,7 +41,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	[SerializeField] private StructorCollector.DestinationSet des;
 	[SerializeField]List<StructorCollector.AI_CampCheck> allDummy = new List<StructorCollector.AI_CampCheck>();
 	[SerializeField]List<StructorCollector.Bridge_Info> baseConnectedArr = new List<StructorCollector.Bridge_Info>();
-	bool attack_once;
+	bool attack_once, finalAttack = false;
 	private float prevCheckTime;
 
 	[SerializeField]public StructorCollector.AI_Setting ai;
@@ -165,8 +165,6 @@ public class LS_EnemyBaseSC : MonoBehaviour
 						dummy_emergency_act = true;
 					else if (attackTypeList[i] != ENEMYATTACKTYPE.CHECKATTACK)
 						this.OrderStopAttack(attackList[0][i], attackList[1][i]);
-					
-						
 				}
 				if (!dummy_emergency_act)
 					this.emergencyAttack();
@@ -183,6 +181,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			{
 				SuddenAttackAI();
 				CheckAttackAI();
+				AllAttackAI();
 			}
 			DefenseAI();
 			EmergencyBase();
@@ -324,10 +323,29 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 	private void AllAttackAI()
 	{
-		if (GameManager.Instance.arrEnemy.Count > GameManager.Instance.marker.markerLen - 3)
+		if (GameManager.Instance.arrEnemy.Count >= GameManager.Instance.marker.markerLen - 3)
 		{
-
+			Debug.Log("AllAttackAi Starting!!");
+			finalAttack = true;
+			for (int i = 0; i < allDummy.Count; i++)
+			{
+				if (allDummy[i].obj_sc.state == TEAM.ENEMY)
+					continue;
+				else
+				{
+					for (int j = 0; j < allDummy[i].connectedObj.Count; j++)
+					{
+						if (allDummy[i].connectedObj[j].obj_sc.state == TEAM.ENEMY)
+						{
+							Debug.Log(allDummy[i].connectedObj[j].obj.name + " Attack!! " + allDummy[i].obj.name);
+							CheckBeforeOrder(allDummy[i].obj, allDummy[i].connectedObj[j].obj, ENEMYATTACKTYPE.FINALATTACK);
+						}
+					}
+				}
+			}
 		}
+		else
+			finalAttack = false;
 	}
 	private void EmergencyBase()
 	{
@@ -562,6 +580,8 @@ public class LS_EnemyBaseSC : MonoBehaviour
 				dummy_stop = true;
 			else if (dummy_sl_s.Health <= ai.maxSupportHP / 2 && attackTypeList[i] == ENEMYATTACKTYPE.RECHARGING)
 				dummy_stop = true;
+			if (dummy_sl_s.arrSAD[2] >= 900)
+				dummy_stop = true;
 
 			// 현재 자기 자신의 팀을 공격하고, 일정 피 이상이면 종료
 			if (dummy_sl_d.state == TEAM.ENEMY)
@@ -579,11 +599,14 @@ public class LS_EnemyBaseSC : MonoBehaviour
 			// 만약 공격 당하는 진영이 적(플레이어)이다.
 			else if (dummy_sl_d.state == TEAM.PLAYER)
 			{
-				if (dummy_sl_d.Health >= dummy_sl_s.Health * 1.5f || dummy_sl_d.regenePerSec >= 0.2f)
+				if ((dummy_sl_d.Health >= dummy_sl_s.Health * 1.5f || dummy_sl_d.regenePerSec >= 0.2f) && attackTypeList[i] != ENEMYATTACKTYPE.FINALATTACK)
 					dummy_stop = true;
 				if (attackTypeList[i] == ENEMYATTACKTYPE.SUDDENLY)
 					dummy_stop = true;
 			}
+
+			if (attackTypeList[i] == ENEMYATTACKTYPE.FINALATTACK && !finalAttack)
+				dummy_stop = true;
 
 			if (dummy_stop)
 			{ this.OrderStopAttack(attackList[0][i], attackList[1][i]); }

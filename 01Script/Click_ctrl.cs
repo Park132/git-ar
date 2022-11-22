@@ -119,13 +119,17 @@ public class Click_ctrl : MonoBehaviour
 		// 취소할 기지 선택
 		else if (sbSC.clickState == PLATESTATE.CANCLE)
 		{
-			GameObject dummy = GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + obj.name).gameObject;
-			des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Remove(dummy);
-			dummy.GetComponent<SlimeBridge>().CancleAttack();
-			BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PLATESTATE.UNCLICKED);
-			des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
-			
-			des.SetP1 = null;
+			Transform dummy_t = GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + obj.name);
+			if (!ReferenceEquals(null, dummy_t))
+			{
+				GameObject dummy = dummy_t.gameObject;
+				des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Remove(dummy);
+				dummy.GetComponent<SlimeBridge>().CancleAttack();
+				BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PLATESTATE.UNCLICKED);
+				des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
+
+				des.SetP1 = null;
+			}
 		}
 		else if (sbSC.clickState == PLATESTATE.CANUSESKILL)
         {
