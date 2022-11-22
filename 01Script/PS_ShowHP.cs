@@ -25,7 +25,7 @@ public class PS_ShowHP : MonoBehaviour
     }
     private void Update()
     {
-        if (GameManager.Instance.gameState == GAMESTATE.START)
+        if (GameManager.Instance.gameState == GAMESTATE.START || GameManager.Instance.gameState == GAMESTATE.SKILLTIME)
             this_hp_target.SetActive(true);
         else this_hp_target.SetActive(false);
 

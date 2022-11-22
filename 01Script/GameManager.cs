@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 	public GameObject bridgeObjs;
 	public GameObject attackObjs;
 	public GameObject errorObj;
+	public GameObject defaultSkillObj;
 	public TextMeshProUGUI Counting;
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
 		Counting.enabled = false;
 		endGameObjects.SetActive(false);
 		errorObj.SetActive(false);
+		defaultSkillObj.SetActive(false);
 	}
 
 	private void Update()
@@ -64,11 +66,13 @@ public class GameManager : MonoBehaviour
 		{
 			distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
 
-			if (LS_TimerSC.Instance.timer - delaySkill >= StructorCollector.BASESKILLTIMES)
+			if (LS_TimerSC.Instance.timer - delaySkill > StructorCollector.BASESKILLTIMES && gameState == GAMESTATE.START)
 			{
 				delaySkill = LS_TimerSC.Instance.timer;
 				gameState = GAMESTATE.SKILLTIME;
-
+				Time.timeScale = 0;
+				defaultSkillObj.SetActive(true);
+				defaultSkillObj.GetComponent<LS_DefaultSkill>().ActiveSkillObj();
 			}
 		}
 	}
@@ -240,4 +244,10 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSeconds(0.8f);
 		errorObj.SetActive(false);
     }
+
+	public void SkillSelected()
+	{
+		gameState = GAMESTATE.START;
+		Time.timeScale = 1;
+	}
 }
