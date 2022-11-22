@@ -86,7 +86,6 @@ public class Click_ctrl : MonoBehaviour
 				}
 			}
 		}
-
 	}
 
 	private void SetClickPoint(GameObject obj)

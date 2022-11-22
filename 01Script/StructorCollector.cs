@@ -9,7 +9,7 @@ using System.Linq;
 public enum TEAM
 { PLAYER, ENEMY, NONE }
 public enum GAMESTATE
-{ MAIN, READY, START, PAUSE=0, WIN=1, OVER=2, READYFORSTART }
+{ MAIN, READY, START, PAUSE=0, WIN=1, OVER=2, READYFORSTART, SKILLTIME }
 public enum PLATESTATE
 { UNCLICKED = 0, CLICKED = 1, CANCLICK = 2, CANUSESKILL = 3, CANCLE = 4 }
 public enum ENEMYTYPE
@@ -23,6 +23,8 @@ public class StructorCollector : MonoBehaviour
     public const float BASESPEED = 3.5f;
     public const float BASEDELAYATTACK = 1.5f;
     public const float BASERECHARGEDELAY = 1.5f;
+    public const float BASESKILLTIMES = 15f;
+
     [Serializable] public struct SoldierSetting
     {
         public GameObject Start_Point, Destination_Point;

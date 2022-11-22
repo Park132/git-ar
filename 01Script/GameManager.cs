@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 	public GameObject beforeGameObjects, endGameObjects;
 
 	public float distanceEP = 0;
+	public float delaySkill = 0;
 	
 	public StructorCollector.Markers marker;
 
@@ -62,6 +63,13 @@ public class GameManager : MonoBehaviour
 		if (gameState == GAMESTATE.START)
 		{
 			distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
+
+			if (LS_TimerSC.Instance.timer - delaySkill >= StructorCollector.BASESKILLTIMES)
+			{
+				delaySkill = LS_TimerSC.Instance.timer;
+				gameState = GAMESTATE.SKILLTIME;
+
+			}
 		}
 	}
 
@@ -105,7 +113,7 @@ public class GameManager : MonoBehaviour
 			
 		}
 		else
-		{ StartCoroutine(ErrorToast("Please take more markers!")); }
+		{ StartCoroutine(ErrorToast("마커를 더 등록해주세요!")); }
 	}
 	public void StartButton()
 	{
@@ -115,7 +123,7 @@ public class GameManager : MonoBehaviour
 			StartCoroutine(StartCoroutine());
 		}
 		else
-			StartCoroutine(ErrorToast("Create Bridge first!"));
+			StartCoroutine(ErrorToast("다리를 먼저 생성해주세요!"));
 	}
 
 	private IEnumerator StartCoroutine()
@@ -176,11 +184,11 @@ public class GameManager : MonoBehaviour
 	{
 		obj.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,(1-time));
 		obj.transform.localScale = Vector3.one * (0.06f * 3);
-		for (int i = Mathf.RoundToInt(20/(20*time)); i < 20; i++) {
-			yield return new WaitForSeconds(0.05f);
-			obj.transform.localScale = Vector3.one * (0.05f *(i+4));
-			if (i <= 15)
-            {obj.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1, (0.5f/15) * i+0.5f);}
+		for (int i = Mathf.RoundToInt(50/(50*time)); i < 50; i++) {
+			yield return new WaitForSeconds(0.02f);
+			obj.transform.localScale = Vector3.one * (0.02f *(i+10));
+			if (i <= 43)
+            {obj.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1, (0.8f/43) * i+0.2f);}
 
 		}
 	}
