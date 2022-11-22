@@ -47,6 +47,7 @@ public class PS_System : MonoBehaviour
     public void GameStart()
     {
         PS_System.Instance.FadeScene(false, 1.5f);
+        Time.timeScale = 1;
          SceneManager.LoadScene("psh_SampleScene_duplicated");
     }
 
