@@ -45,7 +45,7 @@ public class Click_ctrl : MonoBehaviour
 
 	private void Update()
 	{
-#if UNITY_EDITOR
+
 		if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -86,7 +86,7 @@ public class Click_ctrl : MonoBehaviour
 				}
 			}
 		}
-#endif
+
 	}
 
 	private void SetClickPoint(GameObject obj)
