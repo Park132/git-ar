@@ -38,7 +38,12 @@ public class PS_Skill1 : MonoBehaviour
 				s.skill_storage[i] = skill_code;
 				stored_skill_index = i;
 				break;
-			}
+			} 
+			else if(s.skill_storage[i] != 0)
+            {
+				if (s.skill_storage[i] == skill_code)
+					break;
+            }
 			else
 				continue;
 		}

@@ -52,7 +52,7 @@ public class PS_MapMake : MonoBehaviour
         
         centerm1.transform.position = new Vector3((o1.transform.position.x + o2.transform.position.x) / 2, (o1.transform.position.y + o2.transform.position.y) / 2 - 2, (o1.transform.position.z + o2.transform.position.z) / 2); // 중점
         int j = 0;
-        for (int i = 0; i <= 200; i += 20) //19개 생성 <- 깔끔하게 생성하기 위하여 i를 360까지 바꿈
+        for (int i = 0; i <= 200; i += 20) //19개 생성 <- 깔끔하게 생성하기 위하여 i를 360에서 220까지 바꿈
         {
             int index = Random.Range(0, 26);
             wall_marker1.transform.position = new Vector3(centerm1.transform.position.x + a * Mathf.Cos(i), centerm1.transform.position.y, centerm1.transform.position.z + b * Mathf.Sin(i));

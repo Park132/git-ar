@@ -136,15 +136,7 @@ public class PS_SkillSystem : MonoBehaviour
                         skill_level = 4;
                     break;
                 }
-                /*
-                if(skill_storage[index] >= 19 && skill_storage[index] <= 20) {
-                    skill_type = 6;
-                    skill_level = skill_storage[index] % 4;
-                    if (skill_level % 4 == 0)
-                        skill_level = 2;
-                    break;
-                }
-                */
+
                 if(skill_storage[index] >= 21 && skill_storage[index] <= 24)
                 {
                     skill_type = 7;
@@ -322,7 +314,6 @@ public class PS_SkillSystem : MonoBehaviour
         }
     }
 
-
     public void SkillUse() // 클릭 2번 , 스킬 사용
     {
         Ray ray;
@@ -457,37 +448,46 @@ public class PS_SkillSystem : MonoBehaviour
         switch (currentClickType)
         {
             case 1:// 버프(생산)
-                GameObject dummy_effect1 = Instantiate(skillEffect_prefabs[0], hit.transform.position, hit.transform.rotation); 
+                GameObject dummy_effect1 = Instantiate(skillEffect_prefabs[0], hit.transform.position, hit.transform.rotation);
+                dummy_effect1.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect1)); // 이펙트 생성 후 5초 뒤 삭제
                 break;
             case 2: // 디버프(생산
                 GameObject dummy_effect2 = Instantiate(skillEffect_prefabs[1], hit.transform.position, hit.transform.rotation);
+                dummy_effect2.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect2));
                 break;
             case 3: // 버프 (이동 속도)
                 GameObject dummy_effect3 = Instantiate(skillEffect_prefabs[2], hit.transform.position, hit.transform.rotation);
+                dummy_effect3.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect3));
                 break;
             case 4: // 디버프 (이동속도)
                 GameObject dummy_effect4 = Instantiate(skillEffect_prefabs[3], hit.transform.position, hit.transform.rotation);
+                dummy_effect4.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect4));
                 break;
             case 5: // 기지공격 
                 GameObject dummy_effect5 = Instantiate(skillEffect_prefabs[4], hit.transform.position, hit.transform.rotation);
+                dummy_effect5.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect5));
                 break;
             case 6: // 경로공격 
                 GameObject dummy_effect6 = Instantiate(skillEffect_prefabs[5], hit.transform.position, hit.transform.rotation);
+                dummy_effect6.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect6));
                 break;
             case 7: // 다리잠금
                 GameObject dummy_effect7 = Instantiate(skillEffect_prefabs[6], hit.transform.position, hit.transform.rotation);
+                dummy_effect7.transform.parent = hit.transform;
                 StartCoroutine(PassiveSkill(dummy_effect7));
                 break;
         }// 스킬 타입 이펙트 생성
 
 
     }
+
+    //----------------------------------- 버튼 함수 및 코루틴 함수들
 
     public void OnSkButton1()
     {
