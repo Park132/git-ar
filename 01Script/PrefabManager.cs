@@ -8,6 +8,8 @@ public class PrefabManager : MonoBehaviour
 	public GameObject BridgeCube;
 	public GameObject imgHP;
 	public GameObject canvas;
+	public GameObject clickParticle;
+	public GameObject slowEffectParticle;
 
 	private static PrefabManager instance;
 	private void Awake()

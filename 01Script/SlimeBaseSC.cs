@@ -13,6 +13,7 @@ public class SlimeBaseSC : Slime_Stat
 	private IEnumerator recharging, recoverRecharge, bloodingCalc;
 	public MeshRenderer plate;
 	public GameObject area;
+	private GameObject sweatyObj;
 	private Color32[] arrColor;
 	[SerializeField]private int nearCount, currentNearCount;
 	public List<GameObject> atkObj;	// 이 베이스에서 출발하는 모든 공격명령 저장
@@ -44,6 +45,11 @@ public class SlimeBaseSC : Slime_Stat
 		new Color32(102, 188, 66, 255),new Color32(50, 152, 186, 255)
 		,new Color32(210, 198, 54, 255), new Color32(174, 34, 41, 255)};
 		this.ChangeState(PLATESTATE.UNCLICKED);
+
+		sweatyObj = GameObject.Instantiate(PrefabManager.Instance.slowEffectParticle);
+		sweatyObj.transform.parent = this.transform;
+		sweatyObj.transform.localPosition = new Vector3(0,0.6f,0);
+		sweatyObj.SetActive(false);
 	}
 
 	public override void SlimeScaleChange()
@@ -192,15 +198,26 @@ public class SlimeBaseSC : Slime_Stat
 	public override IEnumerator Damaged(int damage)
 	{
 		StopCoroutine(recoverRecharge);
+		recoverRecharge = RecoverDelay();
 		StartCoroutine(recoverRecharge);
 		return base.Damaged(damage);
+	}
+
+	public void SkillDamaged(int damage)
+    {
+		if (this.Health - damage < 5)
+			StartCoroutine(Damaged(this.Health - 5));
+		else
+			StartCoroutine(Damaged(damage));
 	}
 
 	private IEnumerator RecoverDelay()
 	{
 		woundRechargeDelay = 4f * ((canChanged) ? 1f : 0.5f);
+		sweatyObj.SetActive(true);
 		yield return new WaitForSeconds(5f);
 		woundRechargeDelay = 0;
+		sweatyObj.SetActive(false);
 	}
 
 	public void settingSkillSAD(float speed, float attack, float delay)

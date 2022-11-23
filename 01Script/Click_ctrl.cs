@@ -9,10 +9,7 @@ public class Click_ctrl : MonoBehaviour
 
 
 	private RaycastHit hit;
-	Material outline;
-	List<Material> matList = new List<Material> ();
 
-	
 	public StructorCollector.DestinationSet des;
 	public GameObject bridge;
 	public GameObject stdPoint;
@@ -36,8 +33,6 @@ public class Click_ctrl : MonoBehaviour
 
 	private void Start()
 	{
-		// outline Material을 생성
-		//outline = new Material(Shader.Find("Mingyu/Outline"));
 		stdPoint = GameObject.FindGameObjectWithTag("StandardPoint");
 
 		des.SetP1 = null; des.SetP2 = null;
@@ -46,7 +41,7 @@ public class Click_ctrl : MonoBehaviour
 	private void Update()
 	{
 
-		if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			Debug.DrawRay(ray.origin, ray.direction * 100, Color.green, 3, false);
@@ -55,7 +50,7 @@ public class Click_ctrl : MonoBehaviour
 			{
 				if (hit.transform.CompareTag("SlimeBase"))
 				{
-
+					GameObject.Instantiate(PrefabManager.Instance.clickParticle, hit.point, Quaternion.identity);
 					GameObject hit_object = hit.transform.gameObject;
 					//디버깅용
 					if (Input.GetMouseButtonDown(0))
@@ -63,10 +58,6 @@ public class Click_ctrl : MonoBehaviour
 						if (GameManager.Instance.gameState == GAMESTATE.START)
 						{
 							SetClickPoint(hit_object);
-
-							//AddOutline(hit_object);
-							//Debug.Log(hit_object.name); hit_object.SendMessage("Damage_Start", 1, SendMessageOptions.DontRequireReceiver);
-							//SetDestination(hit_object);
 						}
 					}
 				}
@@ -189,19 +180,6 @@ public class Click_ctrl : MonoBehaviour
 			des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
 			des.SetP2 = null;
 		}
-	}
-
-	//일시적 오류 -> 다음에 수정
-	// 출처 https://bloodstrawberry.tistory.com/707
-	private void AddOutline(GameObject obj)
-	{
-		MeshRenderer renderer = obj.GetComponentInChildren<MeshRenderer>();
-
-		matList.Clear();
-		matList.AddRange(renderer.materials);
-		matList.Add(outline);
-
-		renderer.materials = matList.ToArray();
 	}
 
 }

@@ -401,16 +401,20 @@ public class PS_SkillSystem : MonoBehaviour
                 switch (currentClickLevel)
                 {
                     case 1:
-                        dummy_base.Health -= 20;
+                        //dummy_base.Health -= 20;
+                        dummy_base.SkillDamaged(20);
                         break;
                     case 2:
-                        dummy_base.Health -= 30;
+                        //dummy_base.Health -= 30;
+                        dummy_base.SkillDamaged(30);
                         break;
                     case 3:
-                        dummy_base.Health -= 35;
+                        //dummy_base.Health -= 35;
+                        dummy_base.SkillDamaged(35);
                         break;
                     case 4:
-                        dummy_base.Health -= 40;
+                        //dummy_base.Health -= 40;
+                        dummy_base.SkillDamaged(40);
                         break;
                 }
                 EnemyBaseColorInit();
