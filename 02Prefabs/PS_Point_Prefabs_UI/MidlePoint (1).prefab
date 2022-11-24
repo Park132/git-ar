@@ -58,7 +58,6 @@ GameObject:
   - component: {fileID: 3183026694131303224}
   - component: {fileID: 3183026694131303231}
   - component: {fileID: 3183026694131303230}
-  - component: {fileID: 2686717929543675048}
   m_Layer: 0
   m_Name: MidlePoint (1)
   m_TagString: Untagged
@@ -108,7 +107,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 2686717929543675048}
+  mPreview: {fileID: 0}
 --- !u!114 &3183026694131303231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,25 +165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slSC: {fileID: 0}
---- !u!114 &2686717929543675048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3183026694131303228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 3183026694131303224}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: NeutralityPoint1
-  mDatasetName: Vuforia/Project.xml
-  mCastedBehaviour: {fileID: 3183026694131303224}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &3183026694285385846
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,12 +250,17 @@ MonoBehaviour:
   - {fileID: 22303677900000889}
   - {fileID: 5668742517001539524}
   rechargeDelay: 0
+  woundRechargeDelay: 0
+  difficultyMultipler: 0
   rechargeHP: 0
+  canChanged: 0
   plate: {fileID: 493824915846886387}
   area: {fileID: 0}
   nearCount: 0
   currentNearCount: 0
   atkObj: []
+  arrSAD: []
+  regenePerSec: 0
 --- !u!1001 &3183026692349845100
 PrefabInstance:
   m_ObjectHideFlags: 0

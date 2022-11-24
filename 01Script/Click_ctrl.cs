@@ -40,7 +40,7 @@ public class Click_ctrl : MonoBehaviour
 
 	private void Update()
 	{
-
+#if UNITY_EDITOR
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -73,6 +73,45 @@ public class Click_ctrl : MonoBehaviour
 					{
 						des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
 						des.SetP2 = null;
+					}
+				}
+			}
+		}
+#endif
+		if (Input.touchCount > 0)
+		{
+			foreach (Touch touch in Input.touches)
+			{
+				Ray ray = Camera.main.ScreenPointToRay(touch.position);
+
+				if (Physics.Raycast(ray, out hit))
+				{
+					if (hit.transform.CompareTag("SlimeBase"))
+					{
+						GameObject.Instantiate(PrefabManager.Instance.clickParticle, hit.point, Quaternion.identity);
+						GameObject hit_object = hit.transform.gameObject;
+						//µð¹ö±ë¿ë
+						if (Input.GetMouseButtonDown(0))
+						{
+							if (GameManager.Instance.gameState == GAMESTATE.START)
+							{
+								SetClickPoint(hit_object);
+							}
+						}
+					}
+					else
+					{
+						if (!ReferenceEquals(des.SetP1, null))
+						{
+							des.SetP1.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
+							BridgeManager.Instance.ConnectedPanChange(des.SetP1.transform.parent.gameObject, PLATESTATE.UNCLICKED);
+							des.SetP1 = null;
+						}
+						if (!ReferenceEquals(des.SetP2, null))
+						{
+							des.SetP2.GetComponent<SlimeBaseSC>().ChangeState(PLATESTATE.UNCLICKED);
+							des.SetP2 = null;
+						}
 					}
 				}
 			}

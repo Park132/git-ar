@@ -8,8 +8,9 @@ public class SlimeSoldierSC : Slime_Stat
 	//private NavMeshAgent nav;
 	protected Animator anim;
 	private StructorCollector.SoldierSetting order;
-	private GameObject destination = null;
+	private GameObject destination = null, spawnpoint = null;
 	private Vector3 moveVec;
+	private Vector3 moveLength = Vector3.zero;
 
 	protected override void Awake()
 	{
@@ -18,6 +19,7 @@ public class SlimeSoldierSC : Slime_Stat
 		anim = this.GetComponent<Animator>();
 		anim.SetBool("Move", true);
 		Destroy(this.gameObject, 20f);
+
 	}
 
 	protected void Update()
@@ -25,8 +27,10 @@ public class SlimeSoldierSC : Slime_Stat
 		//nav.destination = order.Destination_Point.transform.position;
 		if (!ReferenceEquals(destination, null))
 		{
-			moveVec = (destination.transform.position - this.transform.position).normalized;
-			this.transform.position += moveVec * order.Speed * Time.deltaTime;
+			moveVec = (destination.transform.position - spawnpoint.transform.position).normalized;
+			this.transform.rotation = Quaternion.LookRotation(moveVec);
+			moveLength += moveVec * order.Speed * Time.deltaTime;
+			this.transform.position = spawnpoint.transform.position + moveLength;
 		}
 	}
 
@@ -44,6 +48,7 @@ public class SlimeSoldierSC : Slime_Stat
 		// 구조체 깊은 복사
 		order = new StructorCollector.SoldierSetting(bridge_order);
 		this.destination = order.Destination_Point;
+		this.spawnpoint = order.Start_Point;
 		this.transform.LookAt(order.Destination_Point.transform.position);
 		this.Attack = order.AttackDamage;
 	}

@@ -643,7 +643,8 @@ public class LS_EnemyBaseSC : MonoBehaviour
 	{
 		des.SetP1 = P1.GetComponentInChildren<SlimeBaseSC>().gameObject;
 		des.SetP2 = P2.GetComponentInChildren<SlimeBaseSC>().gameObject;
-
+		if (ReferenceEquals(null, GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + des.SetP2.name)))
+		{ Debug.Log("Error StopAttack Exception"); return; }
 		GameObject dummy = GameManager.Instance.attackObjs.transform.Find(des.SetP1.name + "_attack_" + des.SetP2.name).gameObject;
 		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Remove(dummy);
 		dummy.GetComponent<SlimeBridge>().CancleAttack();

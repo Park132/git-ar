@@ -10,7 +10,7 @@ public class LS_DefaultSkill : MonoBehaviour
 
     public void ActiveSkillObj()
     {
-        healing = Mathf.RoundToInt((LS_TimerSC.Instance.timer / 10) * 2 + 3);
+        healing = Mathf.Min(Mathf.RoundToInt((LS_TimerSC.Instance.timer / 10) + 3), 15);
         tmp.text = "+ " + healing;
     }
 
@@ -18,7 +18,7 @@ public class LS_DefaultSkill : MonoBehaviour
     {
         if (GameManager.Instance.gameState == GAMESTATE.SKILLTIME)
         {
-            healing = Mathf.RoundToInt((LS_TimerSC.Instance.timer / 10) * 2 + 3);
+            
             for (int i = 0; i < GameManager.Instance.arrPlayer.Count; i++)
             {
                 SlimeBaseSC dummy_slsc = GameManager.Instance.arrPlayer[i].GetComponentInChildren<SlimeBaseSC>();

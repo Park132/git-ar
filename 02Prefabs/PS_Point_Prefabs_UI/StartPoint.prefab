@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1955597409554018370}
   - component: {fileID: 1955597409554018373}
   - component: {fileID: 1955597409554018368}
-  - component: {fileID: 721465804354148889}
   m_Layer: 0
   m_Name: StartPoint
   m_TagString: StandardPoint
@@ -65,7 +64,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 721465804354148889}
+  mPreview: {fileID: 0}
 --- !u!114 &1955597409554018373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,25 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slSC: {fileID: 0}
---- !u!114 &721465804354148889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955597409554018375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1955597409554018370}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: PlayerPoint
-  mDatasetName: Vuforia/Project.xml
-  mCastedBehaviour: {fileID: 1955597409554018370}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!1 &1955597410046507482
 GameObject:
   m_ObjectHideFlags: 0
