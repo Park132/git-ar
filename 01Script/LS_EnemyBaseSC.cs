@@ -668,10 +668,14 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 			SlimeBaseSC p1_sc = dSetP1.GetComponent<SlimeBaseSC>();
 			bool exist = false;
-			for (int i = 0; i < p1_sc.atkObj.Count; i++)
+			for (int i = p1_sc.atkObj.Count - 1; i >= 0; i--)
 			{
-				if (p1_sc.atkObj[i].name.Equals(dSetP1.name + "_attack_" + dSetP2.name))
-				{ exist = true; break; }
+				try
+				{
+					if (p1_sc.atkObj[i].name.Equals(dSetP1.name + "_attack_" + dSetP2.name))
+					{ exist = true; break; }
+				}
+				catch (NullReferenceException e) { }
 			}
 
 			if (!exist)
