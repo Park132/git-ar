@@ -203,6 +203,7 @@ public class Click_ctrl : MonoBehaviour
 				dummy.name = des.SetP1.name + "_attack_" + des.SetP2.name;
 
 				dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+				dummy.transform.position = des.SetP1.transform.position;
 				dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.PLAYER);
 				des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
 				des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);

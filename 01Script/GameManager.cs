@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
 		endGameObjects.SetActive(false);
 		errorObj.SetActive(false);
 		defaultSkillObj.SetActive(false);
+		LS_AudioManager.Instance.BGM_Setting(1);
 	}
 
 	private void Update()
@@ -139,6 +140,7 @@ public class GameManager : MonoBehaviour
 		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine(1.5f));
 
 		yield return new WaitForSeconds(0.5f);
+		LS_AudioManager.Instance.BGM_Setting(2);
 		Counting.enabled = true;
 		for (int i = 3; i >= 1; i--)
 		{ Counting.text = i.ToString(); yield return StartCoroutine(CountDownText(Counting.gameObject, 1)); }
@@ -189,7 +191,7 @@ public class GameManager : MonoBehaviour
 		obj.GetComponent<TextMeshProUGUI>().color = new Color(1,1,1,(1-time));
 		obj.transform.localScale = Vector3.one * (0.06f * 3);
 		for (int i = Mathf.RoundToInt(50/(50*time)); i < 50; i++) {
-			yield return new WaitForSeconds(0.02f);
+			yield return new WaitForSeconds(0.01f);
 			obj.transform.localScale = Vector3.one * (0.02f *(i+10));
 			if (i <= 43)
             {obj.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 1, (0.8f/43) * i+0.2f);}

@@ -46,6 +46,7 @@ public class SlimeBridge : MonoBehaviour
             yield return new WaitForSeconds(DelayAttack);
             if (SPB.Health > 5 && GameManager.Instance.gameState == GAMESTATE.START)
             {
+                LS_AudioManager.Instance.SFX_spawn(0,this.transform.position);
                 int dummy_t = -1;
                 SPB.Health-=soldierOrder.AttackDamage;
                 SPB.SlimeScaleChange();

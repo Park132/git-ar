@@ -628,6 +628,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 		dummy.name = dummy_name;
 
 		dummy.transform.parent = GameManager.Instance.attackObjs.transform;
+		dummy.transform.position = P1.transform.position;
 		dummy.GetComponent<SlimeBridge>().SetSD(des, TEAM.ENEMY);
 		des.SetP1.GetComponent<SlimeBaseSC>().atkObj.Add(dummy);
 		des.SetP1.GetComponent<SlimeBaseSC>().ChangeSoldierPower(dummy);

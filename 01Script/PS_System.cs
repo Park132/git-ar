@@ -48,7 +48,7 @@ public class PS_System : MonoBehaviour
     {
         PS_System.Instance.FadeScene(false, 1.5f);
         Time.timeScale = 1;
-         SceneManager.LoadScene("psh_SampleScene_duplicated");
+        SceneManager.LoadScene("psh_SampleScene_duplicated");
     }
 
     public void ShowInformation()
@@ -74,6 +74,7 @@ public class PS_System : MonoBehaviour
     public IEnumerator FadeOutCoroutine(float times)
     {
         float fadeCount = 0;
+        StartCoroutine(LS_AudioManager.Instance.BGM_FadeOut(times));
         while (fadeCount <1.0f)
         {
             fadeCount += 0.01f*times;
@@ -85,6 +86,7 @@ public class PS_System : MonoBehaviour
     public IEnumerator FadeInCoroutine(float times)
     {
         float fadeCount = 1.0f;
+        StartCoroutine(LS_AudioManager.Instance.BGM_FadeIn(times));
         while (fadeCount > 0.0f)
         {
             fadeCount -= 0.01f * times;

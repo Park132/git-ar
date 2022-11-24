@@ -90,6 +90,7 @@ public class SlimeSoldierSC : Slime_Stat
 		this.box.enabled = false;
 		order.Speed = 0;
 		anim.SetTrigger("Attack");
+		LS_AudioManager.Instance.SFX_spawn(1, this.transform.position);
 		yield return new WaitForSeconds(0.5f);
 		Destroy(this.gameObject);
 	}
