@@ -81,18 +81,21 @@ public class SlimeBaseSC : Slime_Stat
 				}
 			}
 			// 초반에 중립진영이었으나, 현재 중립이 아닌 각 팀에 속해있을 경우.
-			else if (this.state != TEAM.NONE)
-			{
-				switch (this.state)
+			else {
+				ChangeBaseObj();
+				if (this.state != TEAM.NONE)
 				{
-					case TEAM.PLAYER:
-						nearCount = GameManager.Instance.stdPointSB.currentNearCount;
-						difficultyMultipler = GameManager.Instance.stdPointSB.difficultyMultipler;
-						break;
-					case TEAM.ENEMY:
-						nearCount = GameManager.Instance.enePointSB.currentNearCount;
-						difficultyMultipler = GameManager.Instance.enePointSB.difficultyMultipler;
-						break;
+					switch (this.state)
+					{
+						case TEAM.PLAYER:
+							nearCount = GameManager.Instance.stdPointSB.currentNearCount;
+							difficultyMultipler = GameManager.Instance.stdPointSB.difficultyMultipler;
+							break;
+						case TEAM.ENEMY:
+							nearCount = GameManager.Instance.enePointSB.currentNearCount;
+							difficultyMultipler = GameManager.Instance.enePointSB.difficultyMultipler;
+							break;
+					}
 				}
 			}
 
@@ -170,11 +173,7 @@ public class SlimeBaseSC : Slime_Stat
 							GameManager.Instance.arrEnemy.Add(this.transform.parent.gameObject);
 							break;
 					}
-					for (int i = 0; i < 3; i++)
-					{
-						if (i == visibleNum) bases[i].SetActive(true);
-						else bases[i].SetActive(false);
-					}
+					ChangeBaseObj();
 					StopOrderPreviousTeam();
 					this.Health = 5;
 					this.previousHP = this.Health; this.regenePerSec = 0;
@@ -188,6 +187,16 @@ public class SlimeBaseSC : Slime_Stat
 					GameManager.Instance.GameEnding(this.state);
 				}
             }
+		}
+	}
+
+	private void ChangeBaseObj()
+	{
+		int visibleNum = (int)this.state;
+		for (int i = 0; i < 3; i++)
+		{
+			if (i == visibleNum) bases[i].SetActive(true);
+			else bases[i].SetActive(false);
 		}
 	}
 

@@ -7,7 +7,7 @@ using System.Linq;
 // struct와 enum의 모음집
 
 public enum TEAM
-{ PLAYER, ENEMY, NONE }
+{ PLAYER = 1, ENEMY = 2, NONE = 0 }
 public enum GAMESTATE
 { MAIN, READY, START, PAUSE=0, WIN=1, OVER=2, READYFORSTART, SKILLTIME }
 public enum PLATESTATE

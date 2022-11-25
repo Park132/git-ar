@@ -59,7 +59,8 @@ public class PS_System : MonoBehaviour
 
     public void GoMain()
     {
-        PS_System.Instance.FadeScene(false, 1.5f);
+        LS_AudioManager.Instance.BGM_Setting(0);
+        PS_System.Instance.FadeScene(false, 1.0f);
         SceneManager.LoadScene("psh_MainScene");
     }
 

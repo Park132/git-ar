@@ -106,7 +106,7 @@ public class BridgeManager : MonoBehaviour
 		float dummy_dist = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
 		//bool hit_check= Physics.BoxCast(SetP1.transform.position, new Vector3(3f, 3f, 3f),
 		//(SetP2.transform.position - SetP1.transform.position).normalized, out hit, Quaternion.identity, dummy_dist,3);
-		hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(0.3f, 0.3f, 0.3f),
+		hits = Physics.BoxCastAll(SetP1.transform.position, new Vector3(0.2f, 0.2f, 0.2f),
 			(SetP2.transform.position - SetP1.transform.position).normalized, Quaternion.identity, dummy_dist * 0.8f);
 		Debug.DrawRay(SetP1.transform.position, (SetP2.transform.position - SetP1.transform.position).normalized * dummy_dist * 0.9f, Color.green, 3, false);
 		foreach (RaycastHit hit in hits)
@@ -185,9 +185,9 @@ public class BridgeManager : MonoBehaviour
 
 		// 모든 다리 생성의 경우의 수를 각각 저장.
 		int k = 0;
-		for (int i = 0; i < bridgeLen - 1; i++)
+		for (int i = 0; i < bridgeLen ; i++)
 		{
-			for (int j = i + 1; j < bridgeLen-1; j++)
+			for (int j = i + 1; j < bridgeLen; j++)
 			{
 				bridgeCreateCases[k, 0] = GameManager.Instance.arrNone[i];
 				bridgeCreateCases[k, 1] = GameManager.Instance.arrNone[j];

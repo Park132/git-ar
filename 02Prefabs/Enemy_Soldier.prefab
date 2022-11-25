@@ -212,7 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 1
   Attack: 1
-  state: 1
+  state: 2
 --- !u!54 &1980402512204715256
 Rigidbody:
   m_ObjectHideFlags: 0

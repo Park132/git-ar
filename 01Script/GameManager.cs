@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 	public GameObject[] gamePanels;
 	public TextMeshProUGUI[] gamePanelsDifficulty, gamePanelsTime;
 	public GameObject beforeGameObjects, endGameObjects, hpUIObjects;
+	private bool endOnce = false;
 
 	public float distanceEP = 0;
 	public float delaySkill = 0;
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
 		{
 			distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
 
-			if (LS_TimerSC.Instance.timer - delaySkill > StructorCollector.BASESKILLTIMES && gameState == GAMESTATE.START)
+			if (LS_TimerSC.Instance.timer - delaySkill > StructorCollector.BASESKILLTIMES && gameState == GAMESTATE.START && !endOnce)
 			{
 				delaySkill = LS_TimerSC.Instance.timer;
 				gameState = GAMESTATE.SKILLTIME;
@@ -138,10 +139,9 @@ public class GameManager : MonoBehaviour
 		distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
 		beforeGameObjects.SetActive(false);
 		endGameObjects.SetActive(true); hpUIObjects.SetActive(true);
-		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine(1.5f));
 		LS_AudioManager.Instance.mixer.SetFloat("Background", -80f);
 		LS_AudioManager.Instance.BGM_Setting(2);
-		yield return StartCoroutine(LS_AudioManager.Instance.BGM_FadeIn(1));
+		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine(1.5f));
 
 		Counting.enabled = true;
 		for (int i = 3; i >= 1; i--)
@@ -203,21 +203,25 @@ public class GameManager : MonoBehaviour
 
 	public void GameEnding(TEAM t)
     {
-        switch (t)
-        {
-			case TEAM.PLAYER:
-				gameState = GAMESTATE.OVER;
-				break;
-			case TEAM.ENEMY:
-				gameState = GAMESTATE.WIN;
-				break;
-        }
-		for (int i = 0; i < 2; i++)
+		if (!endOnce)
 		{
-			gamePanelsDifficulty[i].text = LS_EnemyBaseSC.Instance.e_type.ToString();
-			gamePanelsTime[i].text = string.Format("{0:D2} : {1:D2}", LS_TimerSC.Instance.minute, LS_TimerSC.Instance.second);
+			endOnce = true;
+			switch (t)
+			{
+				case TEAM.PLAYER:
+					gameState = GAMESTATE.OVER;
+					break;
+				case TEAM.ENEMY:
+					gameState = GAMESTATE.WIN;
+					break;
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				gamePanelsDifficulty[i].text = LS_EnemyBaseSC.Instance.e_type.ToString();
+				gamePanelsTime[i].text = string.Format("{0:D2} : {1:D2}", LS_TimerSC.Instance.minute, LS_TimerSC.Instance.second);
+			}
+			StartCoroutine(GameMenuEnable(gameState, true));
 		}
-		StartCoroutine(GameMenuEnable(gameState, true));
 	}
 
 	// 게임 종료,정지에 대한 판넬 띄우기

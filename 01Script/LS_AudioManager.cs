@@ -41,7 +41,7 @@ public class LS_AudioManager : MonoBehaviour
 		while(i < 100){
 			mixer.SetFloat("Background", -40+((40f/100)*i));
 			i += times;
-			yield return new WaitForSeconds(0.01f);
+			yield return new WaitForSeconds(Time.deltaTime);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class LS_AudioManager : MonoBehaviour
 		{
 			mixer.SetFloat("Background", ((-40f / 100) * i));
 			i += times;
-			yield return new WaitForSeconds(0.01f);
+			yield return new WaitForSeconds(Time.deltaTime);
 		}
 		mixer.SetFloat("Background", -80f);
 	}
