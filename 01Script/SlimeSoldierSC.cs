@@ -29,7 +29,13 @@ public class SlimeSoldierSC : Slime_Stat
 		{
 			moveVec = (destination.transform.position - spawnpoint.transform.position).normalized;
 			this.transform.rotation = Quaternion.LookRotation(moveVec);
-			moveLength += moveVec * order.Speed * Time.deltaTime;
+			
+			if (Vector3.Distance(moveLength + spawnpoint.transform.position , spawnpoint.transform.position)
+				> Vector3.Distance(spawnpoint.transform.position, destination.transform.position))
+				moveLength -= moveVec * order.Speed * Time.deltaTime;
+			else
+				moveLength += moveVec * order.Speed * Time.deltaTime;
+
 			this.transform.position = spawnpoint.transform.position + moveLength;
 		}
 	}

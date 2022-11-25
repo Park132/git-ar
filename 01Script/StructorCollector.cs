@@ -15,7 +15,7 @@ public enum PLATESTATE
 public enum ENEMYTYPE
 { TUTORIAL, NORMAL, HARD }
 public enum ENEMYCHAR
-{DEFENSIVE, AGRESSIVE  }
+{DEFENSIVE, AGGRESSIVE  }
 public enum ENEMYATTACKTYPE
 { ATTACK = 0, SUPPORT = 1, EMERGENCY = 2, RECHARGING = 3, SUDDENLY = 4, CHECKATTACK = 5, FINALATTACK }
 public class StructorCollector : MonoBehaviour
@@ -71,7 +71,7 @@ public class StructorCollector : MonoBehaviour
             
             switch (ch)
             {
-                case ENEMYCHAR.AGRESSIVE:
+                case ENEMYCHAR.AGGRESSIVE:
                     maxRechargeCount = 2;
                     emergencyHP = 10;
                     stopAttackHP = 7;

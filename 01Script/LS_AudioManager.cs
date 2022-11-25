@@ -54,7 +54,7 @@ public class LS_AudioManager : MonoBehaviour
 			i += times;
 			yield return new WaitForSeconds(0.01f);
 		}
-		mixer.SetFloat("Background", 0);
+		mixer.SetFloat("Background", -80f);
 	}
 
 	public void SFX_spawn(int index,Vector3 position)

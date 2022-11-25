@@ -20,7 +20,7 @@ public class PS_ShowHP : MonoBehaviour
     private void Start()
     {
         this_hp_target = GameObject.Instantiate(PrefabManager.Instance.imgHP);
-        this_hp_target.transform.parent = GameManager.Instance.endGameObjects.transform;
+        this_hp_target.transform.parent = GameManager.Instance.hpUIObjects.transform;
         this_hp_txt = this_hp_target.GetComponentInChildren<TextMeshProUGUI>();
     }
     private void Update()
@@ -30,6 +30,7 @@ public class PS_ShowHP : MonoBehaviour
         else this_hp_target.SetActive(false);
 
         this_hp_target.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 0.8f, 0));
+        this_hp_target.transform.position = new Vector3(this_hp_target.transform.position.x, this_hp_target.transform.position.y,0);
         hp = sc.Health;
         this_hp_txt.text = "HP : " + hp.ToString();
     }

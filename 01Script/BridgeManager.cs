@@ -100,6 +100,8 @@ public class BridgeManager : MonoBehaviour
 	// 다리 체크 -> 레이를 발사해서 그 레이 안에 다른 기지가 존재한다면 다리는 생성 X
 	private bool CheckRay(GameObject SetP1, GameObject SetP2)
 	{
+		if (ReferenceEquals(SetP1, null) || ReferenceEquals(SetP2, null)) return false;
+
 		RaycastHit[] hits;
 		float dummy_dist = Vector3.Distance(SetP1.transform.position, SetP2.transform.position);
 		//bool hit_check= Physics.BoxCast(SetP1.transform.position, new Vector3(3f, 3f, 3f),
@@ -185,7 +187,7 @@ public class BridgeManager : MonoBehaviour
 		int k = 0;
 		for (int i = 0; i < bridgeLen - 1; i++)
 		{
-			for (int j = i + 1; j < bridgeLen; j++)
+			for (int j = i + 1; j < bridgeLen-1; j++)
 			{
 				bridgeCreateCases[k, 0] = GameManager.Instance.arrNone[i];
 				bridgeCreateCases[k, 1] = GameManager.Instance.arrNone[j];

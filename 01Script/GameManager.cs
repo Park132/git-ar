@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 	public GAMESTATE gameState;
 	public GameObject[] gamePanels;
 	public TextMeshProUGUI[] gamePanelsDifficulty, gamePanelsTime;
-	public GameObject beforeGameObjects, endGameObjects;
+	public GameObject beforeGameObjects, endGameObjects, hpUIObjects;
 
 	public float distanceEP = 0;
 	public float delaySkill = 0;
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 		marker.markerLen = 0;
 
 		Counting.enabled = false;
-		endGameObjects.SetActive(false);
+		endGameObjects.SetActive(false); hpUIObjects.SetActive(false);
 		errorObj.SetActive(false);
 		defaultSkillObj.SetActive(false);
 		LS_AudioManager.Instance.BGM_Setting(1);
@@ -137,11 +137,12 @@ public class GameManager : MonoBehaviour
 		yield return StartCoroutine(PS_System.Instance.FadeOutCoroutine(1.5f));
 		distanceEP = Vector3.Distance(stdPoint.transform.position, enePoint.transform.position);
 		beforeGameObjects.SetActive(false);
-		endGameObjects.SetActive(true);
+		endGameObjects.SetActive(true); hpUIObjects.SetActive(true);
 		yield return StartCoroutine(PS_System.Instance.FadeInCoroutine(1.5f));
-
-		yield return new WaitForSeconds(0.5f);
+		LS_AudioManager.Instance.mixer.SetFloat("Background", -80f);
 		LS_AudioManager.Instance.BGM_Setting(2);
+		yield return StartCoroutine(LS_AudioManager.Instance.BGM_FadeIn(1));
+
 		Counting.enabled = true;
 		for (int i = 3; i >= 1; i--)
 		{ Counting.text = i.ToString(); yield return StartCoroutine(CountDownText(Counting.gameObject, 1)); }
@@ -214,7 +215,7 @@ public class GameManager : MonoBehaviour
 		for (int i = 0; i < 2; i++)
 		{
 			gamePanelsDifficulty[i].text = LS_EnemyBaseSC.Instance.e_type.ToString();
-			gamePanelsTime[i].text = LS_TimerSC.Instance.minute + " : " + LS_TimerSC.Instance.second;
+			gamePanelsTime[i].text = string.Format("{0:D2} : {1:D2}", LS_TimerSC.Instance.minute, LS_TimerSC.Instance.second);
 		}
 		StartCoroutine(GameMenuEnable(gameState, true));
 	}
@@ -235,6 +236,8 @@ public class GameManager : MonoBehaviour
 		if (state != GAMESTATE.PAUSE)
         {
 			endGameObjects.SetActive(false);
+			hpUIObjects.SetActive(false);
+			yield return StartCoroutine(LS_AudioManager.Instance.BGM_FadeOut(0.8f));
 			Time.timeScale = 0;
         }
         else

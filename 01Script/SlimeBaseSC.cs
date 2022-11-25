@@ -109,14 +109,19 @@ public class SlimeBaseSC : Slime_Stat
 
 	private IEnumerator ReChargeSlime()
 	{
+		float recharge_timer = 0;
 		while (true)
 		{
-			yield return new WaitForSeconds(rechargeDelay * ((canChanged) ? 1.5f:1f) * difficultyMultipler + woundRechargeDelay);
-			if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
+			if (LS_TimerSC.Instance.timer - recharge_timer > rechargeDelay * ((canChanged) ? 1.5f : 1f) * difficultyMultipler + woundRechargeDelay)
 			{
-				this.Health+=rechargeHP;
-				this.SlimeScaleChange();
+				recharge_timer = LS_TimerSC.Instance.timer;
+				if (this.state != TEAM.NONE && GameManager.Instance.gameState == GAMESTATE.START)
+				{
+					this.Health += rechargeHP;
+					this.SlimeScaleChange();
+				}
 			}
+			yield return new WaitForSeconds(0.1f);
 		}
 	}
 
@@ -205,10 +210,11 @@ public class SlimeBaseSC : Slime_Stat
 
 	public void SkillDamaged(int damage)
     {
-		if (this.Health - damage < 5)
+		int dummy_damage = damage * Mathf.RoundToInt((canChanged) ? 1 : 0.5f);
+		if (this.Health - dummy_damage < 5)
 			StartCoroutine(Damaged(this.Health - 5));
 		else
-			StartCoroutine(Damaged(damage));
+			StartCoroutine(Damaged(dummy_damage));
 	}
 
 	private IEnumerator RecoverDelay()

@@ -70,7 +70,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 		if (enemytypeIndex % 2 == 0)
 		{ e_char = ENEMYCHAR.DEFENSIVE; difficultyT.text += "Defensive"; }
-		else { e_char = ENEMYCHAR.AGRESSIVE; difficultyT.text += "Agressive"; }
+		else { e_char = ENEMYCHAR.AGGRESSIVE; difficultyT.text += "Aggressive"; }
 	}
 
 	public void SettingIndexMinus()
@@ -171,7 +171,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 
 			else if (!this.attack_once)
 			{
-				if (ai.e_char == ENEMYCHAR.AGRESSIVE)
+				if (ai.e_char == ENEMYCHAR.AGGRESSIVE)
 					this.AttackAI2();
 				else if (ai.e_char == ENEMYCHAR.DEFENSIVE)
 					this.AttackAI();
@@ -706,7 +706,7 @@ public class LS_EnemyBaseSC : MonoBehaviour
 						mult = -2; break;
 				}
 				break;
-			case ENEMYCHAR.AGRESSIVE:
+			case ENEMYCHAR.AGGRESSIVE:
 				switch (t)
 				{
 					case TEAM.PLAYER:
