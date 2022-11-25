@@ -7,7 +7,6 @@ using TMPro;
 
 public class LS_EnemyBaseSC : MonoBehaviour
 {
-	// ∞≥∞∞¿∫ ±Í«„∫Í ∏¡«“!
 	// ΩÃ±€≈Ê /////
 	private static LS_EnemyBaseSC instance;
 

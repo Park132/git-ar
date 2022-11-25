@@ -22,7 +22,7 @@ public class LS_TimerSC : MonoBehaviour
 
     public float timer = 0;
     public TextMeshProUGUI timerText;
-    int minute = 0, second = 0;
+    public int minute = 0, second = 0;
 
     private void Start()
     {

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 	public List<GameObject> arrNone, arrPlayer, arrEnemy;
 	public GAMESTATE gameState;
 	public GameObject[] gamePanels;
+	public TextMeshProUGUI[] gamePanelsDifficulty, gamePanelsTime;
 	public GameObject beforeGameObjects, endGameObjects;
 
 	public float distanceEP = 0;
@@ -210,6 +211,11 @@ public class GameManager : MonoBehaviour
 				gameState = GAMESTATE.WIN;
 				break;
         }
+		for (int i = 0; i < 2; i++)
+		{
+			gamePanelsDifficulty[i].text = LS_EnemyBaseSC.Instance.e_type.ToString();
+			gamePanelsTime[i].text = LS_TimerSC.Instance.minute + " : " + LS_TimerSC.Instance.second;
+		}
 		StartCoroutine(GameMenuEnable(gameState, true));
 	}
 
